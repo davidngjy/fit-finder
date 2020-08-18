@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@+id/navigation_search">
+
+    <fragment
+        android:id="@+id/navigation_search"
+        android:name="com.sample.fitfinder.ui.search.SearchFragment"
+        android:label="@string/app_name"
+        tools:layout="@layout/fragment_search" />
+
+    <fragment
+        android:id="@+id/navigation_session"
+        android:name="com.sample.fitfinder.ui.session.SessionFragment"
+        android:label="@string/nav_session"
+        tools:layout="@layout/fragment_session" />
+
+    <fragment
+        android:id="@+id/navigation_message"
+        android:name="com.sample.fitfinder.ui.message.MessageFragment"
+        android:label="@string/nav_message"
+        tools:layout="@layout/fragment_message" />
+
+    <fragment
+        android:id="@+id/navigation_profile"
+        android:name="com.sample.fitfinder.ui.profile.ProfileFragment"
+        android:label="@string/nav_profile"
+        tools:layout="@layout/fragment_profile"/>
+</navigation>

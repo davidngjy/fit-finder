@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/navigation_search"
+        android:icon="@drawable/ic_nav_search_24dp"
+        android:title="@string/nav_search" />
+
+    <item
+        android:id="@+id/navigation_session"
+        android:icon="@drawable/ic_nav_booked_session_24dp"
+        android:title="@string/nav_session" />
+
+    <item
+        android:id="@+id/navigation_message"
+        android:icon="@drawable/ic_nav_message_24dp"
+        android:title="@string/nav_message" />
+
+    <item
+        android:id="@+id/navigation_profile"
+        android:icon="@drawable/ic_nav_profile_24dp"
+        android:title="@string/nav_profile" />
+
+</menu>

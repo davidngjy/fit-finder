@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">FitFinder</string>
+    <string name="nav_search">Search</string>
+    <string name="nav_session">Session</string>
+    <string name="nav_message">Message</string>
+    <string name="nav_profile">Profile</string>
+</resources>

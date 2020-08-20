@@ -29,10 +29,6 @@ class MessageFragment : Fragment() {
 
         messageViewModel = ViewModelProvider(this).get(MessageViewModel::class.java)
 
-        messageViewModel.text.observe(viewLifecycleOwner, {
-            binding.textMessage.text = it
-        })
-
         return binding.root
     }
 }

@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="user"
+            type="com.sample.fitfinder.domain.User" />
+
+        <variable
+            name="message"
+            type="com.sample.fitfinder.domain.Message" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/message_profile_image"
+            android:layout_width="65dp"
+            android:layout_height="65dp"
+            android:padding="10dp"
+            android:contentDescription="@string/profile_image_desc"
+            app:layout_constraintEnd_toStartOf="@id/message_profile_name"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:srcCompat="@drawable/default_profile_image_24" />
+
+        <TextView
+            android:id="@+id/message_profile_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="18sp"
+            android:text="@{user.displayName}"
+            app:layout_constraintBottom_toBottomOf="@+id/message_profile_image"
+            app:layout_constraintBottom_toTopOf="@id/message_peek"
+            app:layout_constraintStart_toEndOf="@id/message_profile_image"
+            app:layout_constraintTop_toTopOf="@+id/message_profile_image"
+            tools:text="David Ng" />
+
+        <TextView
+            android:id="@+id/message_peek"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@{message.content}"
+            app:layout_constraintTop_toBottomOf="@id/message_profile_name"
+            app:layout_constraintStart_toEndOf="@+id/message_profile_image"
+            app:layout_constraintBottom_toBottomOf="parent"
+            tools:text="Hello"/>
+
+        <TextView
+            android:id="@+id/message_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+            android:textSize="12sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="yesterday" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

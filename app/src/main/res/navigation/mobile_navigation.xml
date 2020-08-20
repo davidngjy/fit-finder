@@ -21,11 +21,23 @@
         android:id="@+id/navigation_message"
         android:name="com.sample.fitfinder.ui.message.MessageFragment"
         android:label="@string/nav_message"
-        tools:layout="@layout/fragment_message" />
+        tools:layout="@layout/fragment_message" >
+        <action
+            android:id="@+id/action_navigation_message_to_messageRoomFragment"
+            app:destination="@id/messageRoomFragment" />
+    </fragment>
 
     <fragment
         android:id="@+id/navigation_profile"
         android:name="com.sample.fitfinder.ui.profile.ProfileFragment"
         android:label="@string/nav_profile"
         tools:layout="@layout/fragment_profile"/>
+    <fragment
+        android:id="@+id/messageRoomFragment"
+        android:name="com.sample.fitfinder.ui.message.MessageRoomFragment"
+        android:label="MessageRoomFragment" >
+        <argument
+            android:name="userId"
+            app:argType="long" />
+    </fragment>
 </navigation>

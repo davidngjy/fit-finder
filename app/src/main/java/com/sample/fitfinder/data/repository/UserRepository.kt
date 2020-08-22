@@ -3,12 +3,13 @@ package com.sample.fitfinder.data.repository
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.sample.fitfinder.domain.User
+import com.sample.fitfinder.domain.UserRole
 
 class UserRepository {
     fun getUsers() : LiveData<List<User>> {
         val users = arrayListOf<User>(
-            User(1, "David", "David", "", null),
-            User(2, "Gareth", "Gareth", "", null)
+            User(1, "David", "David", "", UserRole.ADMIN, ""),
+            User(2, "Gareth", "Gareth", "", UserRole.ADMIN, "")
             )
         val data = MutableLiveData<List<User>>()
         data.value = users

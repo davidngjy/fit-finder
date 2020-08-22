@@ -11,22 +11,24 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:orientation="vertical"
-        android:layout_gravity="end"
         android:layout_marginLeft="15dp"
         android:layout_marginRight="15dp"
-        android:layout_marginTop="5dp"
-        android:layout_marginBottom="5dp"
+        android:layout_marginTop="3dp"
+        android:layout_marginBottom="3dp"
+        android:layout_gravity="end"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
         <TextView
             android:id="@+id/messageView"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@android:color/black"
-            android:textSize="15sp"
-            android:padding="15dp"
             android:background="@drawable/shape_my_bubble"
+            android:layout_height="wrap_content"
+            android:paddingVertical="10dp"
+            android:paddingStart="15dp"
+            android:paddingEnd="15dp"
+            android:textSize="16sp"
+            android:textColor="@android:color/black"
             android:text="@{message.content}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"

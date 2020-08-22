@@ -17,7 +17,7 @@ import kotlinx.coroutines.withContext
 private const val MY_MESSAGE = 0
 private const val OTHER_MESSAGE = 1
 
-class MessageAdapter : ListAdapter<DataItem, RecyclerView.ViewHolder>(MessageDiffCallBack()) {
+class MessageRoomAdapter : ListAdapter<DataItem, RecyclerView.ViewHolder>(MessageDiffCallBack()) {
 
     private val adapterScope = CoroutineScope(Dispatchers.Default)
 
@@ -32,7 +32,7 @@ class MessageAdapter : ListAdapter<DataItem, RecyclerView.ViewHolder>(MessageDif
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return when (viewType) {
             MY_MESSAGE -> MyMessageViewHolder.from(parent)
-            OTHER_MESSAGE -> MyMessageViewHolder.from(parent)
+            OTHER_MESSAGE -> OtherMessageViewHolder.from(parent)
             else -> throw IllegalArgumentException("Unknown View Type")
         }
     }
@@ -50,11 +50,47 @@ class MessageAdapter : ListAdapter<DataItem, RecyclerView.ViewHolder>(MessageDif
         }
     }
 
+    // Triggers from view model (to observe and submit new change)
     fun wrapAndSubmitList(list: List<Message>?) {
         adapterScope.launch {
             val items = list?.map { DataItem.MessageItem(it) }
             withContext(Dispatchers.Main) {
                 submitList(items)
+            }
+        }
+    }
+
+    // VIEW HOLDERS
+    class MyMessageViewHolder private constructor(private val binding: ItemMyMessageBinding)
+        : RecyclerView.ViewHolder(binding.root) {
+
+        fun bind(item: Message) {
+            binding.message = item
+        }
+
+        companion object {
+            fun from(parent: ViewGroup): RecyclerView.ViewHolder {
+                val layoutInflater = LayoutInflater.from(parent.context)
+                val binding = ItemMyMessageBinding
+                    .inflate(layoutInflater, parent, false)
+                return MyMessageViewHolder(binding)
+            }
+        }
+    }
+
+    class OtherMessageViewHolder private constructor(private val binding: ItemOtherMessageBinding)
+        : RecyclerView.ViewHolder(binding.root) {
+
+        fun bind(item: Message) {
+            binding.message = item
+        }
+
+        companion object {
+            fun from(parent: ViewGroup): RecyclerView.ViewHolder {
+                val layoutInflater = LayoutInflater.from(parent.context)
+                val binding = ItemOtherMessageBinding
+                    .inflate(layoutInflater, parent, false)
+                return OtherMessageViewHolder(binding)
             }
         }
     }
@@ -67,40 +103,6 @@ class MessageDiffCallBack: DiffUtil.ItemCallback<DataItem>() {
 
     override fun areContentsTheSame(oldItem: DataItem, newItem: DataItem): Boolean {
         return oldItem == newItem
-    }
-}
-
-class MyMessageViewHolder(private val binding: ItemMyMessageBinding)
-    : RecyclerView.ViewHolder(binding.root) {
-
-    fun bind(item: Message) {
-        binding.message = item
-    }
-
-    companion object {
-        fun from(parent: ViewGroup): RecyclerView.ViewHolder {
-            val layoutInflater = LayoutInflater.from(parent.context)
-            val binding = ItemMyMessageBinding
-                .inflate(layoutInflater, parent, false)
-            return MyMessageViewHolder(binding)
-        }
-    }
-}
-
-class OtherMessageViewHolder(private val binding: ItemOtherMessageBinding)
-    : RecyclerView.ViewHolder(binding.root) {
-
-    fun bind(item: Message) {
-        binding.message = item
-    }
-
-    companion object {
-        fun from(parent: ViewGroup): RecyclerView.ViewHolder {
-            val layoutInflater = LayoutInflater.from(parent.context)
-            val binding = ItemOtherMessageBinding
-                .inflate(layoutInflater, parent, false)
-            return OtherMessageViewHolder(binding)
-        }
     }
 }
 

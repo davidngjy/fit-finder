@@ -3,37 +3,38 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@+id/navigation_search">
+    app:startDestination="@+id/search_fragment">
 
     <fragment
-        android:id="@+id/navigation_search"
+        android:id="@+id/search_fragment"
         android:name="com.sample.fitfinder.ui.search.SearchFragment"
         android:label="@string/app_name"
         tools:layout="@layout/fragment_search" />
 
     <fragment
-        android:id="@+id/navigation_session"
+        android:id="@+id/session_fragment"
         android:name="com.sample.fitfinder.ui.session.SessionFragment"
         android:label="@string/nav_session"
         tools:layout="@layout/fragment_session" />
 
     <fragment
-        android:id="@+id/navigation_message"
+        android:id="@+id/message_fragment"
         android:name="com.sample.fitfinder.ui.message.MessageFragment"
         android:label="@string/nav_message"
         tools:layout="@layout/fragment_message" >
         <action
-            android:id="@+id/action_navigation_message_to_messageRoomFragment"
-            app:destination="@id/messageRoomFragment" />
+            android:id="@+id/action_message_fragment_to_messageRoomFragment"
+            app:destination="@id/message_room_fragment" />
     </fragment>
 
     <fragment
-        android:id="@+id/navigation_profile"
+        android:id="@+id/profile_fragment"
         android:name="com.sample.fitfinder.ui.profile.ProfileFragment"
         android:label="@string/nav_profile"
         tools:layout="@layout/fragment_profile"/>
+
     <fragment
-        android:id="@+id/messageRoomFragment"
+        android:id="@+id/message_room_fragment"
         android:name="com.sample.fitfinder.ui.message.MessageRoomFragment"
         android:label="MessageRoomFragment" >
         <argument

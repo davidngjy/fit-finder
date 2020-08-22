@@ -12,9 +12,9 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:orientation="vertical"
         android:layout_marginLeft="15dp"
-        android:layout_marginTop="15dp"
         android:layout_marginRight="15dp"
-        android:layout_marginBottom="15dp"
+        android:layout_marginTop="3dp"
+        android:layout_marginBottom="3dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
 
@@ -23,14 +23,14 @@
             android:background="@drawable/shape_other_bubble"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="16dp"
+            android:paddingVertical="10dp"
+            android:paddingStart="15dp"
+            android:paddingEnd="15dp"
             android:textSize="16sp"
             android:textColor="@android:color/white"
             android:text="@{message.content}"
-            app:layout_constrainedWidth="true"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginStart="12dp"
             tools:text="How are you?"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>

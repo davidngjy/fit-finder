@@ -4,10 +4,11 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import com.sample.fitfinder.R
+import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.sample.fitfinder.data.repository.MessageRepository
 import com.sample.fitfinder.databinding.FragmentMessageBinding
 
 class MessageFragment : Fragment() {
@@ -20,14 +21,39 @@ class MessageFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = DataBindingUtil.inflate(
-            inflater,
-            R.layout.fragment_message,
-            container,
-            false
-        )
+        binding = FragmentMessageBinding.inflate(inflater)
 
-        messageViewModel = ViewModelProvider(this).get(MessageViewModel::class.java)
+        val viewModelFactory = MessageViewModelFactory(MessageRepository())
+        messageViewModel = ViewModelProvider(this, viewModelFactory)
+            .get(MessageViewModel::class.java)
+
+        // Setup adapter and click listener when user select a conversation (room)
+        val adapter = MessageAdapter(MessageListItemListener { roomId ->
+            messageViewModel.onMessageRoomClick(roomId)
+        })
+        binding.roomList.adapter = adapter
+        //binding.lifecycleOwner = this
+
+        messageViewModel.rooms.observe(viewLifecycleOwner, {
+            it?.let {
+                adapter.submitList(it)
+            }
+        })
+
+        // Navigate to message room
+        messageViewModel.navigateToMessageRoom.observe(viewLifecycleOwner, { roomId ->
+            roomId?.let {
+                val action = MessageFragmentDirections
+                    .actionMessageFragmentToMessageRoomFragment(it)
+                this.findNavController()
+                    .navigate(action)
+
+                messageViewModel.onMessageRoomNavigated()
+            }
+        })
+
+        val manager = LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
+        binding.roomList.layoutManager = manager
 
         return binding.root
     }

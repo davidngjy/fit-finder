@@ -2,11 +2,11 @@ package com.sample.fitfinder.domain
 
 import java.time.Instant
 
-data class Message (
+data class MessageUserList (
     val id: Long,
-    val messageSender: MessageSender,
-    val content: String,
-    val messageType: MessageType,
     val senderUserId: Long,
+    val senderDisplayName: String,
+    val senderProfilePicture: String?,
+    val latestMessage: String,
     val sentDateTime: Instant
 )

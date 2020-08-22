@@ -6,27 +6,29 @@
 
     <data>
         <variable
-            name="user"
-            type="com.sample.fitfinder.domain.User" />
+            name="message"
+            type="com.sample.fitfinder.domain.MessageUserList" />
 
         <variable
-            name="message"
-            type="com.sample.fitfinder.domain.Message" />
+            name="clickListener"
+            type="com.sample.fitfinder.ui.message.MessageListItemListener" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:onClick="@{() -> clickListener.onClick(message)}">
 
         <ImageView
             android:id="@+id/message_profile_image"
             android:layout_width="65dp"
             android:layout_height="65dp"
-            android:padding="10dp"
             android:contentDescription="@string/profile_image_desc"
+            android:padding="10dp"
             app:layout_constraintEnd_toStartOf="@id/message_profile_name"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/default_profile_image_24"
             tools:srcCompat="@drawable/default_profile_image_24" />
 
         <TextView
@@ -34,7 +36,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="18sp"
-            android:text="@{user.displayName}"
+            android:text="@{message.senderDisplayName}"
             app:layout_constraintBottom_toBottomOf="@+id/message_profile_image"
             app:layout_constraintBottom_toTopOf="@id/message_peek"
             app:layout_constraintStart_toEndOf="@id/message_profile_image"
@@ -45,7 +47,7 @@
             android:id="@+id/message_peek"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@{message.content}"
+            android:text="@{message.latestMessage}"
             app:layout_constraintTop_toBottomOf="@id/message_profile_name"
             app:layout_constraintStart_toEndOf="@+id/message_profile_image"
             app:layout_constraintBottom_toBottomOf="parent"

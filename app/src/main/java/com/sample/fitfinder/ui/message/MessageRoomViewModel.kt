@@ -1,7 +1,10 @@
 package com.sample.fitfinder.ui.message
 
 import androidx.lifecycle.ViewModel
+import com.sample.fitfinder.data.repository.MessageRepository
 
-class MessageRoomViewModel : ViewModel() {
-    // TODO: Implement the ViewModel
+class MessageRoomViewModel(messageRepository: MessageRepository)
+    : ViewModel() {
+
+    val messages = messageRepository.getMessages()
 }

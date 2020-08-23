@@ -36,7 +36,8 @@
     <fragment
         android:id="@+id/message_room_fragment"
         android:name="com.sample.fitfinder.ui.message.MessageRoomFragment"
-        android:label="MessageRoomFragment" >
+        android:label="MessageRoomFragment"
+        tools:layout="@layout/item_my_message">
         <argument
             android:name="userId"
             app:argType="long" />

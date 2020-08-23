@@ -27,7 +27,7 @@ class MessageRoomFragment : Fragment() {
 
         val adapter = MessageRoomAdapter()
         binding.messageList.adapter = adapter
-        //binding.lifecycleOwner = this
+        binding.lifecycleOwner = this
 
         messageRoomViewModel.messages.observe(viewLifecycleOwner, {
             it?.let {

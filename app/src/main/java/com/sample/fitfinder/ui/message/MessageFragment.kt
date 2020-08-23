@@ -32,7 +32,7 @@ class MessageFragment : Fragment() {
             messageViewModel.onMessageRoomClick(roomId)
         })
         binding.roomList.adapter = adapter
-        //binding.lifecycleOwner = this
+        binding.lifecycleOwner = this
 
         messageViewModel.rooms.observe(viewLifecycleOwner, {
             it?.let {

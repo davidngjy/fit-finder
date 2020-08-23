@@ -27,7 +27,7 @@
             android:paddingStart="15dp"
             android:paddingEnd="15dp"
             android:textSize="16sp"
-            android:textColor="@android:color/white"
+            android:textColor="@android:color/black"
             android:text="@{message.content}"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

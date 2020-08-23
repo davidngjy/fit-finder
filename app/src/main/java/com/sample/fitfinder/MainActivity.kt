@@ -34,6 +34,10 @@ class MainActivity : AppCompatActivity() {
         binding.navView.setupWithNavController(navController)
     }
 
+    override fun onSupportNavigateUp(): Boolean {
+        return navController.navigateUp()
+    }
+
     private fun setupNavControllerVisibility(navController: NavController) {
         navController.addOnDestinationChangedListener { _, destination, _ ->
             when(destination.id) {

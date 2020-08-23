@@ -5,4 +5,5 @@
     <string name="nav_message">Message</string>
     <string name="nav_profile">Profile</string>
     <string name="profile_image_desc">Profile Image</string>
+    <string name="messageBoxHint">Type a message</string>
 </resources>

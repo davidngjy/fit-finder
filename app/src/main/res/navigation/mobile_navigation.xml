@@ -3,43 +3,43 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@+id/search_fragment">
+    app:startDestination="@+id/searchFragment">
 
     <fragment
-        android:id="@+id/search_fragment"
+        android:id="@+id/searchFragment"
         android:name="com.sample.fitfinder.ui.search.SearchFragment"
         android:label="@string/app_name"
         tools:layout="@layout/fragment_search" />
 
     <fragment
-        android:id="@+id/session_fragment"
+        android:id="@+id/sessionFragment"
         android:name="com.sample.fitfinder.ui.session.SessionFragment"
         android:label="@string/nav_session"
         tools:layout="@layout/fragment_session" />
 
     <fragment
-        android:id="@+id/message_fragment"
+        android:id="@+id/messageFragment"
         android:name="com.sample.fitfinder.ui.message.MessageFragment"
         android:label="@string/nav_message"
         tools:layout="@layout/fragment_message" >
         <action
-            android:id="@+id/action_message_fragment_to_messageRoomFragment"
-            app:destination="@id/message_room_fragment" />
+            android:id="@+id/action_messageFragment_to_messageRoomFragment"
+            app:destination="@id/messageRoomFragment" />
     </fragment>
 
     <fragment
-        android:id="@+id/profile_fragment"
+        android:id="@+id/profileFragment"
         android:name="com.sample.fitfinder.ui.profile.ProfileFragment"
         android:label="@string/nav_profile"
         tools:layout="@layout/fragment_profile"/>
 
     <fragment
-        android:id="@+id/message_room_fragment"
+        android:id="@+id/messageRoomFragment"
         android:name="com.sample.fitfinder.ui.message.MessageRoomFragment"
         android:label="MessageRoomFragment"
         tools:layout="@layout/item_my_message">
         <argument
-            android:name="userId"
-            app:argType="long" />
+            android:name="message"
+            app:argType="com.sample.fitfinder.domain.MessageUserList" />
     </fragment>
 </navigation>

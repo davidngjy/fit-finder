@@ -2,22 +2,22 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:id="@+id/search_fragment"
+        android:id="@+id/searchFragment"
         android:icon="@drawable/ic_nav_search_24dp"
         android:title="@string/nav_search" />
 
     <item
-        android:id="@+id/session_fragment"
+        android:id="@+id/sessionFragment"
         android:icon="@drawable/ic_nav_booked_session_24dp"
         android:title="@string/nav_session" />
 
     <item
-        android:id="@+id/message_fragment"
+        android:id="@+id/messageFragment"
         android:icon="@drawable/ic_nav_message_24dp"
         android:title="@string/nav_message" />
 
     <item
-        android:id="@+id/profile_fragment"
+        android:id="@+id/profileFragment"
         android:icon="@drawable/ic_nav_profile_24dp"
         android:title="@string/nav_profile" />
 

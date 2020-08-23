@@ -14,21 +14,22 @@ import com.sample.fitfinder.databinding.ActivityMainBinding
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
+    private lateinit var navController: NavController
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
 
-        val navController = findNavController(R.id.nav_host_fragment)
+        navController = findNavController(R.id.nav_host_fragment)
         setupNavControllerVisibility(navController)
 
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         val appBarConfiguration = AppBarConfiguration(setOf(
-            R.id.search_fragment,
-            R.id.session_fragment,
-            R.id.message_fragment,
-            R.id.profile_fragment))
+            R.id.searchFragment,
+            R.id.sessionFragment,
+            R.id.messageFragment,
+            R.id.profileFragment))
         setupActionBarWithNavController(navController, appBarConfiguration)
         binding.navView.setupWithNavController(navController)
     }
@@ -36,10 +37,10 @@ class MainActivity : AppCompatActivity() {
     private fun setupNavControllerVisibility(navController: NavController) {
         navController.addOnDestinationChangedListener { _, destination, _ ->
             when(destination.id) {
-                R.id.search_fragment -> binding.navView.visibility = View.VISIBLE
-                R.id.session_fragment -> binding.navView.visibility = View.VISIBLE
-                R.id.message_fragment -> binding.navView.visibility = View.VISIBLE
-                R.id.profile_fragment -> binding.navView.visibility = View.VISIBLE
+                R.id.searchFragment -> binding.navView.visibility = View.VISIBLE
+                R.id.sessionFragment -> binding.navView.visibility = View.VISIBLE
+                R.id.messageFragment -> binding.navView.visibility = View.VISIBLE
+                R.id.profileFragment -> binding.navView.visibility = View.VISIBLE
                 else -> binding.navView.visibility = View.GONE
             }
         }

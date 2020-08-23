@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -20,6 +21,9 @@ class MessageRoomFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentMessageRoomBinding.inflate(inflater)
+
+        val args = MessageRoomFragmentArgs.fromBundle(requireArguments())
+        setActionBarTitle(args.message.senderDisplayName)
 
         val viewModelFactory = MessageRoomViewModelFactory(MessageRepository())
         messageRoomViewModel = ViewModelProvider(this, viewModelFactory)
@@ -39,5 +43,9 @@ class MessageRoomFragment : Fragment() {
         binding.messageList.layoutManager = manager
 
         return binding.root
+    }
+
+    private fun setActionBarTitle(name: String) {
+        (activity as AppCompatActivity).supportActionBar?.title = name
     }
 }

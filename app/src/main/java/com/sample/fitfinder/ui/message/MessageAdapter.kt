@@ -49,6 +49,6 @@ class MessageListDiffCallBack: DiffUtil.ItemCallback<MessageUserList>() {
     }
 }
 
-class MessageListItemListener(val clickListener: (RoomId: Long) -> Unit) {
-    fun onClick(message: MessageUserList) = clickListener(message.id)
+class MessageListItemListener(val clickListener: (message: MessageUserList) -> Unit) {
+    fun onClick(message: MessageUserList) = clickListener(message)
 }

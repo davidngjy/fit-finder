@@ -21,10 +21,9 @@ class MainActivity : AppCompatActivity() {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
 
         navController = findNavController(R.id.nav_host_fragment)
-        setupNavControllerVisibility(navController)
+        setupNavControllerDestinationChange(navController)
+        setSupportActionBar(binding.toolbar)
 
-        // Passing each menu ID as a set of Ids because each
-        // menu should be considered as top level destinations.
         val appBarConfiguration = AppBarConfiguration(setOf(
             R.id.searchFragment,
             R.id.sessionFragment,
@@ -38,7 +37,7 @@ class MainActivity : AppCompatActivity() {
         return navController.navigateUp()
     }
 
-    private fun setupNavControllerVisibility(navController: NavController) {
+    private fun setupNavControllerDestinationChange(navController: NavController) {
         navController.addOnDestinationChangedListener { _, destination, _ ->
             when(destination.id) {
                 R.id.searchFragment -> binding.navView.visibility = View.VISIBLE

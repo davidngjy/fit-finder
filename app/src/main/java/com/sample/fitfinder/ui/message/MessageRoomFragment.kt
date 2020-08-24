@@ -45,7 +45,7 @@ class MessageRoomFragment : Fragment() {
         return binding.root
     }
 
-    private fun setActionBarTitle(name: String) {
-        (activity as AppCompatActivity).supportActionBar?.title = name
+    private fun setActionBarTitle(displayName: String) {
+        (activity as AppCompatActivity).supportActionBar?.title = displayName
     }
 }

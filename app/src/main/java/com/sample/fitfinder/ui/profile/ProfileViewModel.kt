@@ -1,12 +1,12 @@
 package com.sample.fitfinder.ui.profile
 
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.sample.fitfinder.data.repository.UserRepository
+import com.sample.fitfinder.domain.User
 
-class ProfileViewModel : ViewModel() {
-    private val _text = MutableLiveData<String>().apply {
-        value = "This is profile Fragment"
-    }
-    val text: LiveData<String> = _text
+class ProfileViewModel(userRepository: UserRepository) : ViewModel() {
+    private val _currentUser = userRepository.getCurrentUser()
+    val currentUser: LiveData<User>
+        get() = _currentUser
 }

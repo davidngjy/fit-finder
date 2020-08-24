@@ -5,5 +5,9 @@
     <string name="nav_message">Message</string>
     <string name="nav_profile">Profile</string>
     <string name="profile_image_desc">Profile Image</string>
-    <string name="messageBoxHint">Type a message</string>
+    <string name="message_box_hint">Type a message</string>
+    <string name="terms_of_service">Terms of Service</string>
+    <string name="payment_details">Payment Details</string>
+    <string name="contact">Contact</string>
+    <string name="sign_out">Sign out</string>
 </resources>

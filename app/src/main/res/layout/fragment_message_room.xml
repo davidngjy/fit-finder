@@ -26,7 +26,7 @@
             android:layout_margin="10dp"
             android:ems="10"
             android:gravity="bottom|start"
-            android:hint="@string/messageBoxHint"
+            android:hint="@string/message_box_hint"
             android:inputType="textMultiLine"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/sendMessageButton"

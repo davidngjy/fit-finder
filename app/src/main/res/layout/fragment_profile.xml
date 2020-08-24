@@ -3,23 +3,106 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:context=".ui.profile.ProfileFragment">
+    <data>
+        <variable
+            name="profileViewModel"
+            type="com.sample.fitfinder.ui.profile.ProfileViewModel" />
+    </data>
 
-        <TextView
-            android:id="@+id/text_profile"
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="8dp"
-            android:textAlignment="center"
-            android:textSize="20sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            tools:context=".ui.profile.ProfileFragment">
+
+            <ImageView
+                android:id="@+id/imageView"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_margin="15dp"
+                android:contentDescription="@string/profile_image_desc"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/ic_default_profile_24" />
+
+            <TextView
+                android:id="@+id/displayName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                android:text="@{profileViewModel.currentUser.displayName}"
+                android:textSize="24sp"
+                app:layout_constraintBottom_toTopOf="@id/emailAddress"
+                app:layout_constraintStart_toEndOf="@+id/imageView"
+                app:layout_constraintTop_toTopOf="@+id/imageView"
+                tools:text="David Ng" />
+
+            <TextView
+                android:id="@+id/emailAddress"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{profileViewModel.currentUser.email}"
+                app:layout_constraintBottom_toBottomOf="@+id/imageView"
+                app:layout_constraintStart_toEndOf="@+id/imageView"
+                app:layout_constraintTop_toBottomOf="@+id/displayName"
+                tools:text="david.ng@gmail.com" />
+
+            <View
+                android:id="@+id/profilePictureDivider"
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_marginVertical="10dp"
+                android:background="?android:attr/listDivider"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/imageView" />
+
+            <Button
+                android:id="@+id/tocButton"
+                android:text="@string/terms_of_service"
+                app:icon="@drawable/ic_button_document_24"
+                app:iconPadding="20dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/profilePictureDivider"
+                style="@style/ProfileOptionButtonListStyle" />
+
+            <Button
+                android:id="@+id/paymentDetailsButton"
+                android:text="@string/payment_details"
+                app:icon="@drawable/ic_button_creditcard_24"
+                app:iconPadding="20dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tocButton"
+                style="@style/ProfileOptionButtonListStyle" />
+
+            <Button
+                android:id="@+id/contactDetailsButton"
+                android:text="@string/contact"
+                app:icon="@drawable/ic_button_contact_24"
+                app:iconPadding="20dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/paymentDetailsButton"
+                style="@style/ProfileOptionButtonListStyle" />
+
+            <Button
+                android:id="@+id/signOutButton"
+                android:text="@string/sign_out"
+                app:icon="@drawable/ic_button_signout_24"
+                app:iconPadding="20dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/contactDetailsButton"
+                style="@style/ProfileOptionButtonListStyle" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </ScrollView>
+
+
 </layout>

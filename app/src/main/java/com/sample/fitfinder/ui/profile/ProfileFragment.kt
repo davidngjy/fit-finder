@@ -4,10 +4,9 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import com.sample.fitfinder.R
+import com.sample.fitfinder.data.repository.UserRepository
 import com.sample.fitfinder.databinding.FragmentProfileBinding
 
 class ProfileFragment : Fragment() {
@@ -20,19 +19,13 @@ class ProfileFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate view and obtain an instance of the binding class
-        binding = DataBindingUtil.inflate(
-            inflater,
-            R.layout.fragment_profile,
-            container,
-            false
-        )
+        binding = FragmentProfileBinding.inflate(inflater)
 
-        profileViewModel = ViewModelProvider(this).get(ProfileViewModel::class.java)
+        val profileViewModelFactory = ProfileViewModelFactory(UserRepository())
+        profileViewModel = ViewModelProvider(this, profileViewModelFactory)
+            .get(ProfileViewModel::class.java)
 
-        profileViewModel.text.observe(viewLifecycleOwner, {
-            binding.textProfile.text = it
-        })
+        binding.profileViewModel = profileViewModel
 
         return binding.root
     }

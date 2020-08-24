@@ -15,4 +15,10 @@ class UserRepository {
         data.value = users
         return data
     }
+
+    fun getCurrentUser() : LiveData<User> {
+        val data = MutableLiveData<User>()
+        data.value = User(1, "David", "David", "david.ng@gmail.com", UserRole.ADMIN, "")
+        return data
+    }
 }

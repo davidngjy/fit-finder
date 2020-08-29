@@ -12,4 +12,6 @@ data class MessageUserList (
     val senderProfilePicture: String?,
     val latestMessage: String,
     val sentDateTime: Instant
-) : Parcelable
+) : Parcelable {
+    val messageTime = "yesterday"
+}

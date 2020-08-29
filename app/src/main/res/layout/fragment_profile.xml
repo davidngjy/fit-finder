@@ -34,7 +34,7 @@
                 android:layout_height="wrap_content"
                 android:clickable="true"
                 android:text="@{profileViewModel.currentUser.displayName}"
-                android:textSize="24sp"
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Headline5"
                 app:layout_constraintBottom_toTopOf="@id/emailAddress"
                 app:layout_constraintStart_toEndOf="@+id/imageView"
                 app:layout_constraintTop_toTopOf="@+id/imageView"
@@ -45,6 +45,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@{profileViewModel.currentUser.email}"
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle1"
                 app:layout_constraintBottom_toBottomOf="@+id/imageView"
                 app:layout_constraintStart_toEndOf="@+id/imageView"
                 app:layout_constraintTop_toBottomOf="@+id/displayName"
@@ -62,7 +63,7 @@
 
             <Button
                 android:id="@+id/tocButton"
-                style="@style/ProfileOptionButtonListStyle"
+                style="@style/Widget.FitFinder.ListButtonStyle"
                 android:text="@string/terms_of_service"
                 app:icon="@drawable/ic_button_document_24"
                 app:iconPadding="20dp"
@@ -78,7 +79,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tocButton"
-                style="@style/ProfileOptionButtonListStyle" />
+                style="@style/Widget.FitFinder.ListButtonStyle" />
 
             <Button
                 android:id="@+id/contactDetailsButton"
@@ -88,7 +89,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/paymentDetailsButton"
-                style="@style/ProfileOptionButtonListStyle" />
+                style="@style/Widget.FitFinder.ListButtonStyle" />
 
             <Button
                 android:id="@+id/signOutButton"
@@ -98,7 +99,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/contactDetailsButton"
-                style="@style/ProfileOptionButtonListStyle" />
+                style="@style/Widget.FitFinder.ListButtonStyle" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

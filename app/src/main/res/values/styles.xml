@@ -11,13 +11,14 @@
         <item name="colorOnSecondary">@color/secondaryTextColor</item>
     </style>
 
-    <style name="ProfileOptionButtonListStyle" parent="Widget.MaterialComponents.Button.TextButton.Icon">
+    <style name="Widget.FitFinder.ListButtonStyle" parent="Widget.MaterialComponents.Button.TextButton.Icon">
         <item name="android:layout_width">0dp</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:paddingHorizontal">30dp</item>
         <item name="android:paddingVertical">16dp</item>
         <item name="android:textAlignment">textStart</item>
         <item name="android:textAllCaps">false</item>
+        <item name="android:textColor">?android:attr/textColorPrimary</item>
+        <item name="iconTint">?android:attr/textColorPrimary</item>
     </style>
-
 </resources>

@@ -1,4 +1,4 @@
-package com.sample.fitfinder.ui.message
+package com.sample.fitfinder.ui.message.viewmodel
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModel
 import com.sample.fitfinder.data.repository.MessageRepository
 import com.sample.fitfinder.domain.MessageUserList
 
-class MessageViewModel(private val messageRepository: MessageRepository)
+class MessageViewModel(messageRepository: MessageRepository)
     : ViewModel() {
 
     val rooms = messageRepository.getMessageRooms()

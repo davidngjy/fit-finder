@@ -8,6 +8,8 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.sample.fitfinder.data.repository.UserRepository
 import com.sample.fitfinder.databinding.FragmentProfileBinding
+import com.sample.fitfinder.ui.profile.viewmodel.ProfileViewModel
+import com.sample.fitfinder.ui.profile.viewmodel.ProfileViewModelFactory
 
 class ProfileFragment : Fragment() {
 

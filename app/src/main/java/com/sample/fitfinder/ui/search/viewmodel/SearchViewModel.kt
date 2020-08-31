@@ -1,4 +1,4 @@
-package com.sample.fitfinder.ui.search
+package com.sample.fitfinder.ui.search.viewmodel
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

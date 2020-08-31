@@ -1,4 +1,4 @@
-package com.sample.fitfinder.ui.session
+package com.sample.fitfinder.ui.session.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider

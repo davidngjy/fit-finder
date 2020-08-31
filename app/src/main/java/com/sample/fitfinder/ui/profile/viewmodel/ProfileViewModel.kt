@@ -1,4 +1,4 @@
-package com.sample.fitfinder.ui.profile
+package com.sample.fitfinder.ui.profile.viewmodel
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel

@@ -10,6 +10,8 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.sample.fitfinder.data.repository.MessageRepository
 import com.sample.fitfinder.databinding.FragmentMessageBinding
+import com.sample.fitfinder.ui.message.viewmodel.MessageViewModel
+import com.sample.fitfinder.ui.message.viewmodel.MessageViewModelFactory
 
 class MessageFragment : Fragment() {
 

@@ -10,6 +10,8 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.sample.fitfinder.data.repository.MessageRepository
 import com.sample.fitfinder.databinding.FragmentMessageRoomBinding
+import com.sample.fitfinder.ui.message.viewmodel.MessageRoomViewModel
+import com.sample.fitfinder.ui.message.viewmodel.MessageRoomViewModelFactory
 
 class MessageRoomFragment : Fragment() {
 

@@ -1,4 +1,4 @@
-package com.sample.fitfinder.ui.message
+package com.sample.fitfinder.ui.message.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider

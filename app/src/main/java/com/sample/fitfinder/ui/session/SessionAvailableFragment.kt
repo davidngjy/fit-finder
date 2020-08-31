@@ -9,6 +9,8 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.sample.fitfinder.data.repository.SessionRepository
 import com.sample.fitfinder.databinding.FragmentSessionAvailableBinding
+import com.sample.fitfinder.ui.session.viewmodel.SessionAvailableViewModel
+import com.sample.fitfinder.ui.session.viewmodel.SessionAvailableViewModelFactory
 import kotlin.time.ExperimentalTime
 
 class SessionAvailableFragment : Fragment() {

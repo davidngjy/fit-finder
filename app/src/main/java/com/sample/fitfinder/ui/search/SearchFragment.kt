@@ -15,6 +15,7 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.sample.fitfinder.R
 import com.sample.fitfinder.databinding.FragmentSearchBinding
+import com.sample.fitfinder.ui.search.viewmodel.SearchViewModel
 
 class SearchFragment : Fragment(), OnMapReadyCallback {
 

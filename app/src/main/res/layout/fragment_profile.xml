@@ -19,7 +19,7 @@
             tools:context=".ui.profile.ProfileFragment">
 
             <ImageView
-                android:id="@+id/imageView"
+                android:id="@+id/image_view"
                 android:layout_width="100dp"
                 android:layout_height="100dp"
                 android:layout_margin="15dp"
@@ -29,76 +29,76 @@
                 app:srcCompat="@drawable/ic_default_profile_24" />
 
             <TextView
-                android:id="@+id/displayName"
+                android:id="@+id/display_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:clickable="true"
                 android:text="@{profileViewModel.currentUser.displayName}"
                 android:textAppearance="@style/TextAppearance.MaterialComponents.Headline5"
-                app:layout_constraintBottom_toTopOf="@id/emailAddress"
-                app:layout_constraintStart_toEndOf="@+id/imageView"
-                app:layout_constraintTop_toTopOf="@+id/imageView"
+                app:layout_constraintBottom_toTopOf="@id/email_address"
+                app:layout_constraintStart_toEndOf="@+id/image_view"
+                app:layout_constraintTop_toTopOf="@+id/image_view"
                 tools:text="David Ng" />
 
             <TextView
-                android:id="@+id/emailAddress"
+                android:id="@+id/email_address"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@{profileViewModel.currentUser.email}"
                 android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle1"
-                app:layout_constraintBottom_toBottomOf="@+id/imageView"
-                app:layout_constraintStart_toEndOf="@+id/imageView"
-                app:layout_constraintTop_toBottomOf="@+id/displayName"
+                app:layout_constraintBottom_toBottomOf="@+id/image_view"
+                app:layout_constraintStart_toEndOf="@+id/image_view"
+                app:layout_constraintTop_toBottomOf="@+id/display_name"
                 tools:text="david.ng@gmail.com" />
 
             <View
-                android:id="@+id/profilePictureDivider"
+                android:id="@+id/profile_picture_divider"
                 android:layout_width="0dp"
                 android:layout_height="1dp"
                 android:layout_marginVertical="10dp"
                 android:background="?android:attr/listDivider"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/imageView" />
+                app:layout_constraintTop_toBottomOf="@+id/image_view" />
 
             <Button
-                android:id="@+id/tocButton"
+                android:id="@+id/toc_button"
                 style="@style/Widget.FitFinder.ListButtonStyle"
                 android:text="@string/terms_of_service"
                 app:icon="@drawable/ic_button_document_24"
                 app:iconPadding="20dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/profilePictureDivider" />
+                app:layout_constraintTop_toBottomOf="@+id/profile_picture_divider" />
 
             <Button
-                android:id="@+id/paymentDetailsButton"
+                android:id="@+id/payment_details_button"
                 android:text="@string/payment_details"
                 app:icon="@drawable/ic_button_creditcard_24"
                 app:iconPadding="20dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tocButton"
+                app:layout_constraintTop_toBottomOf="@+id/toc_button"
                 style="@style/Widget.FitFinder.ListButtonStyle" />
 
             <Button
-                android:id="@+id/contactDetailsButton"
+                android:id="@+id/contact_details_button"
                 android:text="@string/contact"
                 app:icon="@drawable/ic_button_contact_24"
                 app:iconPadding="20dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/paymentDetailsButton"
+                app:layout_constraintTop_toBottomOf="@+id/payment_details_button"
                 style="@style/Widget.FitFinder.ListButtonStyle" />
 
             <Button
-                android:id="@+id/signOutButton"
+                android:id="@+id/sign_out_button"
                 android:text="@string/sign_out"
                 app:icon="@drawable/ic_button_signout_24"
                 app:iconPadding="20dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/contactDetailsButton"
+                app:layout_constraintTop_toBottomOf="@+id/contact_details_button"
                 style="@style/Widget.FitFinder.ListButtonStyle" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>

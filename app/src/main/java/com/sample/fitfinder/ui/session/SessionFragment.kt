@@ -39,8 +39,8 @@ class SessionFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val sessionCollectionAdapter = SessionCollectionAdapter(this, UserRepository())
-        binding.pager.adapter = sessionCollectionAdapter
-        TabLayoutMediator(binding.tabLayout, binding.pager) { tab, position ->
+        binding.viewPager.adapter = sessionCollectionAdapter
+        TabLayoutMediator(binding.tabLayout, binding.viewPager) { tab, position ->
             if (currentUser.role == UserRole.ADMIN || currentUser.role == UserRole.TRAINER) {
                 when (position) {
                     0 -> tab.setupTab(R.string.session_available, R.drawable.ic_session_available_24)

@@ -13,14 +13,14 @@
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_marginVertical="10dp"
-            app:layout_constraintBottom_toTopOf="@+id/messageBox"
+            app:layout_constraintBottom_toTopOf="@+id/message_box"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:listitem="@layout/item_my_message" />
 
         <EditText
-            android:id="@+id/messageBox"
+            android:id="@+id/message_box"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
@@ -29,21 +29,20 @@
             android:hint="@string/message_box_hint"
             android:inputType="textMultiLine"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/sendMessageButton"
+            app:layout_constraintEnd_toStartOf="@+id/send_message_button"
             app:layout_constraintStart_toStartOf="parent"
             android:importantForAutofill="no" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/sendMessageButton"
+            android:id="@+id/send_message_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
             android:clickable="true"
-            app:fabCustomSize="50dp"
-            app:fabSize="auto"
-            app:layout_constraintBottom_toBottomOf="@+id/messageBox"
+            app:fabSize="mini"
+            app:layout_constraintBottom_toBottomOf="@+id/message_box"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/messageBox"
+            app:layout_constraintTop_toTopOf="@+id/message_box"
             app:srcCompat="@drawable/ic_button_send_24" />
 
 

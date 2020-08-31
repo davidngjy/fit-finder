@@ -10,4 +10,12 @@
     <string name="payment_details">Payment Details</string>
     <string name="contact">Contact</string>
     <string name="sign_out">Sign out</string>
+    <string name="session_available">Available</string>
+    <string name="session_upcoming">Upcoming</string>
+    <string name="session_past">Past</string>
+
+    <string name="session_heading">%s - %s</string>
+
+    <string name="location_icon_desc">Location icon</string>
+    <string name="cost_icon_desc">Cost icon</string>
 </resources>

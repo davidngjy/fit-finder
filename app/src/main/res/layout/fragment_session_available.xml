@@ -3,9 +3,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".ui.session.SessionAvailableFragment">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/session_available_list"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent">
 
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/session_available_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

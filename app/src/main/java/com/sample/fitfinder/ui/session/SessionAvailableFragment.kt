@@ -13,12 +13,12 @@ import com.sample.fitfinder.ui.session.viewmodel.SessionAvailableViewModel
 import com.sample.fitfinder.ui.session.viewmodel.SessionAvailableViewModelFactory
 import kotlin.time.ExperimentalTime
 
+@ExperimentalTime
 class SessionAvailableFragment : Fragment() {
 
     private lateinit var sessionAvailableViewModel: SessionAvailableViewModel
     private lateinit var binding: FragmentSessionAvailableBinding
 
-    @ExperimentalTime
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -26,7 +26,7 @@ class SessionAvailableFragment : Fragment() {
     ): View? {
         binding = FragmentSessionAvailableBinding.inflate(inflater)
 
-        val viewModelFactory = SessionAvailableViewModelFactory(SessionRepository())
+        val viewModelFactory = SessionAvailableViewModelFactory(SessionRepository)
         sessionAvailableViewModel = ViewModelProvider(this, viewModelFactory)
             .get(SessionAvailableViewModel::class.java)
 

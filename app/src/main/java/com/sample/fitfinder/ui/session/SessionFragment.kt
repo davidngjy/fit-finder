@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.sample.fitfinder.R
@@ -13,6 +14,7 @@ import com.sample.fitfinder.data.repository.UserRepository
 import com.sample.fitfinder.databinding.FragmentSessionBinding
 import com.sample.fitfinder.domain.User
 import com.sample.fitfinder.domain.UserRole
+
 
 class SessionFragment : Fragment() {
 
@@ -54,11 +56,31 @@ class SessionFragment : Fragment() {
                 }
             }
         }.attach()
+
+        binding.tabLayout.addOnTabSelectedListener(object: TabLayout.OnTabSelectedListener {
+            override fun onTabSelected(tab: TabLayout.Tab?) {
+                if (tab?.tag == R.string.session_available) {
+                    binding.sessionAddFab.show()
+                } else {
+                    binding.sessionAddFab.hide()
+                }
+            }
+
+            override fun onTabUnselected(tab: TabLayout.Tab?) { }
+
+            override fun onTabReselected(tab: TabLayout.Tab?) { }
+        })
+
+        binding.sessionAddFab.setOnClickListener {
+            this.findNavController()
+                .navigate(SessionFragmentDirections.actionSessionFragmentToSessionAddFragment())
+        }
     }
 
     // Extension to Tab for setup
     private fun TabLayout.Tab.setupTab(textResId: Int, drawableIconRestId: Int) {
         setText(textResId)
         setIcon(drawableIconRestId)
+        tag = textResId
     }
 }

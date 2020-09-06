@@ -4,8 +4,8 @@ import androidx.lifecycle.ViewModel
 import com.sample.fitfinder.data.repository.SessionRepository
 import kotlin.time.ExperimentalTime
 
+@ExperimentalTime
 class SessionAvailableViewModel(sessionRepository: SessionRepository) : ViewModel() {
 
-    @ExperimentalTime
     val sessions = sessionRepository.getSessions()
 }

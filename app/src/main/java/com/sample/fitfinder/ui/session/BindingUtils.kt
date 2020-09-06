@@ -4,12 +4,9 @@ import android.widget.TextView
 import androidx.databinding.BindingAdapter
 import com.sample.fitfinder.R
 import com.sample.fitfinder.domain.Session
-import java.math.RoundingMode
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.util.*
-import kotlin.time.DurationUnit
-import kotlin.time.ExperimentalTime
 
 @BindingAdapter("sessionHeadingFormatted")
 fun TextView.setSessionHeading(item: Session?) {
@@ -19,36 +16,35 @@ fun TextView.setSessionHeading(item: Session?) {
             .withLocale(Locale.UK)
             .withZone(ZoneId.systemDefault())
 
-        val datetime = item.sessionDateTime
+        val dateTime = item.sessionDateTime
         val isOnline = item.isOnline
         val isInPerson = item.isInPerson
 
-        val dateTimeString = formatter.format(datetime)
+        val dateTimeString = formatter.format(dateTime)
 
         val res = context.resources
 
-        if (isOnline && isInPerson) {
-            text = res.getString(R.string.session_heading, dateTimeString, "Online | In-Person")
+        text = if (isOnline && isInPerson) {
+            res.getString(R.string.session_heading, dateTimeString, "Online | In-Person")
         } else if (isOnline) {
-            text = res.getString(R.string.session_heading, dateTimeString, "Online")
+            res.getString(R.string.session_heading, dateTimeString, "Online")
         } else {
-            text = res.getString(R.string.session_heading, dateTimeString, "In-Person")
+            res.getString(R.string.session_heading, dateTimeString, "In-Person")
         }
     }
 }
 
-@ExperimentalTime
 @BindingAdapter("sessionDurationFormatted")
 fun TextView.setSessionDuration(item: Session?) {
     item?.let {
-        text = item.durationInMin.toString(DurationUnit.MINUTES)
+        val res = context.resources
+        text = res.getString(R.string.session_duration, item.durationInMin)
     }
 }
 
-@BindingAdapter("sessionPriceFormatted")
-fun TextView.setSessionPrice(item: Session?) {
+@BindingAdapter("sessionCostFormatted")
+fun TextView.setSessionCost(item: Session?) {
     item?.let {
-        val roundedPrice = item.price.setScale(2, RoundingMode.HALF_DOWN).toString()
-        text = roundedPrice
+        text = item.cost.toString()
     }
 }

@@ -21,4 +21,12 @@
         <item name="android:textColor">?android:attr/textColorPrimary</item>
         <item name="iconTint">?android:attr/textColorPrimary</item>
     </style>
+
+    <style name="Widget.FitFinder.TextInput.OutlinedBox" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        <item name="android:paddingVertical">10dp</item>
+    </style>
+
+    <style name="Widget.FitFinder.TextInput.Icon" parent="">
+        <item name="android:paddingEnd">20dp</item>
+    </style>
 </resources>

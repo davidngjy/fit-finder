@@ -15,7 +15,11 @@
         android:id="@+id/sessionFragment"
         android:name="com.sample.fitfinder.ui.session.SessionFragment"
         android:label="@string/nav_session"
-        tools:layout="@layout/fragment_session" />
+        tools:layout="@layout/fragment_session" >
+        <action
+            android:id="@+id/action_sessionFragment_to_sessionAddFragment"
+            app:destination="@id/sessionAddFragment" />
+    </fragment>
 
     <fragment
         android:id="@+id/messageFragment"
@@ -45,5 +49,16 @@
         <argument
             android:name="message"
             app:argType="com.sample.fitfinder.domain.MessageUserList" />
+    </fragment>
+    <fragment
+        android:id="@+id/sessionAddFragment"
+        android:name="com.sample.fitfinder.ui.session.SessionAddFragment"
+        android:label="fragment_session_add"
+        tools:layout="@layout/fragment_session_add" >
+        <action
+            android:id="@+id/action_sessionAddFragment_to_sessionFragment"
+            app:destination="@id/sessionFragment"
+            app:popUpTo="@id/sessionFragment"
+            app:popUpToInclusive="true" />
     </fragment>
 </navigation>

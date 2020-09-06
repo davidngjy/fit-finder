@@ -13,9 +13,26 @@
     <string name="session_available">Available</string>
     <string name="session_upcoming">Upcoming</string>
     <string name="session_past">Past</string>
+    <string name="confirm_button">Confirm</string>
+    <string name="duration">Duration</string>
 
+    // Format string
     <string name="session_heading">%s - %s</string>
+    <string name="session_duration">%d min</string>
+    <string name="session_suburb">%s, %s</string>
 
+    // Content Description
     <string name="location_icon_desc">Location icon</string>
     <string name="cost_icon_desc">Cost icon</string>
+    <string name="add_session">Add Session</string>
+
+    // Form hint
+    <string name="title_form">Title</string>
+    <string name="description_form">Description</string>
+    <string name="date_form">Date</string>
+    <string name="time_form">Time</string>
+    <string name="suburb_form">Suburb</string>
+    <string name="cost_form">Cost</string>
+    <string name="online_toggle">This session can be done online</string>
+    <string name="in_person_toggle">This session can be done in person</string>
 </resources>

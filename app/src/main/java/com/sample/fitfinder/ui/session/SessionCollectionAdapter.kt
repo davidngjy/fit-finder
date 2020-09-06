@@ -4,6 +4,7 @@ import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.sample.fitfinder.data.repository.UserRepository
 import com.sample.fitfinder.domain.UserRole
+import kotlin.time.ExperimentalTime
 
 class SessionCollectionAdapter(fragment: Fragment,
                                userRepository: UserRepository)
@@ -13,6 +14,7 @@ class SessionCollectionAdapter(fragment: Fragment,
 
     override fun getItemCount(): Int = if (user.value!!.role == UserRole.ADMIN || user.value!!.role == UserRole.TRAINER) 3 else 2
 
+    @ExperimentalTime
     override fun createFragment(position: Int): Fragment {
         return if (user.value!!.role == UserRole.ADMIN || user.value!!.role == UserRole.TRAINER) {
             when (position) {

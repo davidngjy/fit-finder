@@ -54,12 +54,15 @@ class MainActivity : AppCompatActivity() {
 
     private fun setupNavControllerDestinationChange(navController: NavController) {
         navController.addOnDestinationChangedListener { _, destination, _ ->
-            when(destination.id) {
-                R.id.searchFragment -> binding.navView.visibility = View.VISIBLE
-                R.id.sessionFragment -> binding.navView.visibility = View.VISIBLE
-                R.id.messageFragment -> binding.navView.visibility = View.VISIBLE
-                R.id.profileFragment -> binding.navView.visibility = View.VISIBLE
-                else -> binding.navView.visibility = View.GONE
+            if (destination.id in arrayListOf(
+                    R.id.searchFragment,
+                    R.id.sessionFragment,
+                    R.id.messageFragment,
+                    R.id.profileFragment
+                )){
+                binding.navView.visibility = View.VISIBLE
+            } else {
+                binding.navView.visibility = View.GONE
             }
         }
     }

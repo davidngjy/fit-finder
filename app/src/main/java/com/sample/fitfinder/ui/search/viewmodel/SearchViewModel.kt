@@ -1,13 +1,11 @@
 package com.sample.fitfinder.ui.search.viewmodel
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.sample.fitfinder.data.repository.SessionRepository
+import kotlin.time.ExperimentalTime
 
-class SearchViewModel : ViewModel() {
+@ExperimentalTime
+class SearchViewModel(sessionRepository: SessionRepository) : ViewModel() {
 
-    private val _text = MutableLiveData<String>().apply {
-        value = "This is search Fragment"
-    }
-    val text: LiveData<String> = _text
+    var sessions = sessionRepository.getSessions()
 }

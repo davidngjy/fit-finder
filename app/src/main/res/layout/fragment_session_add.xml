@@ -160,6 +160,22 @@
                     android:text="@{viewModel.locationString}"/>
 
             </com.google.android.material.textfield.TextInputLayout>
+            
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/map_card_view"
+                android:layout_width="0dp"
+                android:layout_height="200dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@id/location_text_field"
+                app:layout_constraintTop_toBottomOf="@id/location_text_field"
+                app:cardCornerRadius="4dp">
+
+                <fragment
+                    android:id="@+id/small_map"
+                    android:name="com.google.android.gms.maps.SupportMapFragment"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"/>
+            </com.google.android.material.card.MaterialCardView>
 
             <ImageView
                 android:id="@+id/cost_icon"
@@ -178,7 +194,7 @@
                 android:layout_height="wrap_content"
                 style="@style/Widget.FitFinder.TextInput.OutlinedBox"
                 android:hint="@string/cost_form"
-                app:layout_constraintTop_toBottomOf="@id/location_text_field"
+                app:layout_constraintTop_toBottomOf="@id/map_card_view"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/cost_icon">
 

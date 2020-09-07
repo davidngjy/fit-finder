@@ -10,10 +10,16 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import com.google.android.gms.maps.CameraUpdateFactory
+import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.SupportMapFragment
+import com.google.android.gms.maps.model.CircleOptions
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.libraries.places.api.model.Place
 import com.google.android.libraries.places.api.model.TypeFilter
 import com.google.android.libraries.places.widget.Autocomplete
@@ -37,10 +43,11 @@ import kotlin.time.ExperimentalTime
 @ExperimentalTime
 class SessionAddFragment : Fragment() {
 
-    private lateinit var viewModel: SessionAddViewModel
+    private val viewModel: SessionAddViewModel by viewModels()
     private lateinit var binding: FragmentSessionAddBinding
     private lateinit var datePicker: MaterialDatePicker<Long>
     private lateinit var geocoder: Geocoder
+    private lateinit var map: GoogleMap
 
     private val sessionRepository = SessionRepository
 
@@ -50,7 +57,22 @@ class SessionAddFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = FragmentSessionAddBinding.inflate(inflater)
+        binding = FragmentSessionAddBinding.inflate(inflater, container, false)
+
+        val mapFragment = childFragmentManager
+            .findFragmentById(R.id.small_map) as SupportMapFragment
+
+        mapFragment.getMapAsync {
+            map = it
+            map.apply {
+                uiSettings.isMapToolbarEnabled = false
+                uiSettings.isScrollGesturesEnabled = false
+                uiSettings.isZoomGesturesEnabled = false
+                uiSettings.isRotateGesturesEnabled = false
+            }
+        }
+
+        binding.mapCardView.visibility = View.GONE
 
         geocoder = Geocoder(requireContext())
 
@@ -63,9 +85,6 @@ class SessionAddFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-
-        viewModel = ViewModelProvider(this).get(SessionAddViewModel::class.java)
-
         binding.viewModel = viewModel
         binding.lifecycleOwner = this
 
@@ -130,19 +149,21 @@ class SessionAddFragment : Fragment() {
                 Activity.RESULT_OK -> {
                     data?.let {
                         val place = Autocomplete.getPlaceFromIntent(data)
-
                         val address = geocoder.getFromLocation(place.latLng!!.latitude, place.latLng!!.longitude, 1).first()
                         val suburb = address.locality
                         val postcode = address.postalCode
                         val state = address.adminArea
+                        val coordinate = LatLng(address.latitude, address.longitude)
 
-                        viewModel.locationCoordinate = LatLng(address.latitude, address.longitude)
+                        viewModel.locationCoordinate = coordinate
 
                         viewModel.locationString.value = getString(
                             R.string.session_suburb,
                             suburb,
                             postcode,
                             state)
+
+                        setupMapFragment(coordinate)
                     }
                 }
                 AutocompleteActivity.RESULT_ERROR -> {
@@ -155,6 +176,25 @@ class SessionAddFragment : Fragment() {
             return
         }
         super.onActivityResult(requestCode, resultCode, data)
+    }
+
+    private fun setupMapFragment(coordinate: LatLng) {
+        map.clear()
+        map.animateCamera(CameraUpdateFactory.newLatLngZoom(coordinate, 13F))
+        map.addMarker(
+            MarkerOptions()
+                .position(coordinate)
+        )
+        map.addCircle(
+            CircleOptions()
+                .center(coordinate)
+                .radius(1000.0)
+                .fillColor(ActivityCompat.getColor(requireContext(), R.color.markerFillColor))
+                .strokeColor(ActivityCompat.getColor(requireContext(), R.color.markerStrokeColor))
+                .strokeWidth(1F)
+        )
+
+        binding.mapCardView.visibility = View.VISIBLE
     }
 
     private fun setActionBarTitle() {

@@ -16,9 +16,9 @@ import kotlin.time.minutes
 object SessionRepository {
 
     private val sessions = arrayListOf(
-        Session(1, 1, "Session 1", "My first session", Instant.now(), LatLng(12.0,12.0), "Melbourne, 3000", true, true, 11, 10),
-        Session(2, 1, "Session 2", "My second session", Instant.now(), LatLng(12.0,12.0), "Mont Albert, 3128", false, true, 22, 25),
-        Session(3, 1, "Session 3", "My third session", Instant.now(), LatLng(12.0,12.0), "South Bank, 3001", true, false, 33, 30),
+        Session(1, 1, "Session 1", "My first session", Instant.now(), LatLng(-37.809566, 145.078613), "Balwyn, 3103, Victoria", true, true, 11, 10),
+        Session(2, 1, "Session 2", "My second session", Instant.now(), LatLng(-37.842360, 145.016557), "Toorak, 3142, Victoria", false, true, 22, 25),
+        Session(3, 1, "Session 3", "My third session", Instant.now(), LatLng(-37.786491, 144.836742), "Sunshine, 3020, Victoria", true, false, 33, 30),
     )
 
     private val bookingSession = arrayListOf(

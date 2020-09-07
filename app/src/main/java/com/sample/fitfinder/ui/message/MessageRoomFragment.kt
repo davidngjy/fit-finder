@@ -6,7 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.sample.fitfinder.data.repository.MessageRepository
 import com.sample.fitfinder.databinding.FragmentMessageRoomBinding
@@ -15,21 +15,17 @@ import com.sample.fitfinder.ui.message.viewmodel.MessageRoomViewModelFactory
 
 class MessageRoomFragment : Fragment() {
 
-    private lateinit var messageRoomViewModel: MessageRoomViewModel
+    private val messageRoomViewModel: MessageRoomViewModel by viewModels { MessageRoomViewModelFactory(MessageRepository()) }
     private lateinit var binding: FragmentMessageRoomBinding
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = FragmentMessageRoomBinding.inflate(inflater)
+        binding = FragmentMessageRoomBinding.inflate(inflater, container, false)
 
         val args = MessageRoomFragmentArgs.fromBundle(requireArguments())
         setActionBarTitle(args.message.senderDisplayName)
-
-        val viewModelFactory = MessageRoomViewModelFactory(MessageRepository())
-        messageRoomViewModel = ViewModelProvider(this, viewModelFactory)
-            .get(MessageRoomViewModel::class.java)
 
         val adapter = MessageRoomAdapter()
         binding.messageList.adapter = adapter

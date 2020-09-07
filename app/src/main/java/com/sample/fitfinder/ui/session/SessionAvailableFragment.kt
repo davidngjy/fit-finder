@@ -5,7 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.sample.fitfinder.data.repository.SessionRepository
 import com.sample.fitfinder.databinding.FragmentSessionAvailableBinding
@@ -16,7 +16,7 @@ import kotlin.time.ExperimentalTime
 @ExperimentalTime
 class SessionAvailableFragment : Fragment() {
 
-    private lateinit var sessionAvailableViewModel: SessionAvailableViewModel
+    private val sessionAvailableViewModel: SessionAvailableViewModel by viewModels { SessionAvailableViewModelFactory(SessionRepository) }
     private lateinit var binding: FragmentSessionAvailableBinding
 
     override fun onCreateView(
@@ -24,11 +24,7 @@ class SessionAvailableFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = FragmentSessionAvailableBinding.inflate(inflater)
-
-        val viewModelFactory = SessionAvailableViewModelFactory(SessionRepository)
-        sessionAvailableViewModel = ViewModelProvider(this, viewModelFactory)
-            .get(SessionAvailableViewModel::class.java)
+        binding = FragmentSessionAvailableBinding.inflate(inflater, container, false)
 
         val adapter = SessionAvailableAdapter()
         binding.sessionAvailableList.adapter = adapter

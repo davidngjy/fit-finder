@@ -5,7 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.sample.fitfinder.data.repository.MessageRepository
@@ -15,7 +15,7 @@ import com.sample.fitfinder.ui.message.viewmodel.MessageViewModelFactory
 
 class MessageFragment : Fragment() {
 
-    private lateinit var messageViewModel: MessageViewModel
+    private val messageViewModel: MessageViewModel by viewModels { MessageViewModelFactory(MessageRepository()) }
     private lateinit var binding: FragmentMessageBinding
 
     override fun onCreateView(
@@ -23,11 +23,7 @@ class MessageFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = FragmentMessageBinding.inflate(inflater)
-
-        val viewModelFactory = MessageViewModelFactory(MessageRepository())
-        messageViewModel = ViewModelProvider(this, viewModelFactory)
-            .get(MessageViewModel::class.java)
+        binding = FragmentMessageBinding.inflate(inflater, container, false)
 
         // Setup adapter and click listener when user select a conversation (room)
         val adapter = MessageAdapter(MessageListItemListener { roomId ->

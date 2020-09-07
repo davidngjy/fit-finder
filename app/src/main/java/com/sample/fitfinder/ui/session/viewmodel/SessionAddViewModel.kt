@@ -25,10 +25,7 @@ class SessionAddViewModel : ViewModel() {
     val time = MutableLiveData(Calendar.getInstance())
 
     // Location
-    var locationId: String = ""
     var locationCoordinate: LatLng = LatLng(0.0, 0.0)
-    var locationSuburb: String = ""
-    var locationPostalCode: String = ""
 
     fun validateInput(layout: TextInputLayout): Boolean {
         if (layout.editText!!.text.isNullOrBlank()) {

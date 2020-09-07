@@ -2,6 +2,7 @@ package com.sample.fitfinder.ui.session
 
 import android.app.Activity
 import android.content.Intent
+import android.location.Geocoder
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.MenuItem
@@ -12,6 +13,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import com.google.android.gms.maps.model.LatLng
 import com.google.android.libraries.places.api.model.Place
 import com.google.android.libraries.places.api.model.TypeFilter
 import com.google.android.libraries.places.widget.Autocomplete
@@ -38,18 +40,19 @@ class SessionAddFragment : Fragment() {
     private lateinit var viewModel: SessionAddViewModel
     private lateinit var binding: FragmentSessionAddBinding
     private lateinit var datePicker: MaterialDatePicker<Long>
+    private lateinit var geocoder: Geocoder
 
     private val sessionRepository = SessionRepository
 
     private val formatter: SimpleDateFormat = SimpleDateFormat("hh:mm a", Locale.getDefault())
-
-    private val autocompleteRequestCode = 1
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentSessionAddBinding.inflate(inflater)
+
+        geocoder = Geocoder(requireContext())
 
         setActionBarTitle()
         setupDatePicker()
@@ -122,27 +125,24 @@ class SessionAddFragment : Fragment() {
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        if (requestCode == this.autocompleteRequestCode) {
+        if (requestCode == AUTOCOMPLETE_REQUEST_CODE) {
             when (resultCode) {
                 Activity.RESULT_OK -> {
                     data?.let {
                         val place = Autocomplete.getPlaceFromIntent(data)
-                        place.addressComponents?.asList()?.forEach { component ->
-                            if ("locality" in component.types) {
-                                viewModel.locationSuburb = component.name
-                            }
-                            if ("postal_code" in component.types) {
-                                viewModel.locationPostalCode = component.name
-                            }
-                        }
 
-                        viewModel.locationId = place.id!!
-                        viewModel.locationCoordinate = place.latLng!!
+                        val address = geocoder.getFromLocation(place.latLng!!.latitude, place.latLng!!.longitude, 1).first()
+                        val suburb = address.locality
+                        val postcode = address.postalCode
+                        val state = address.adminArea
+
+                        viewModel.locationCoordinate = LatLng(address.latitude, address.longitude)
 
                         viewModel.locationString.value = getString(
                             R.string.session_suburb,
-                            viewModel.locationSuburb,
-                            viewModel.locationPostalCode)
+                            suburb,
+                            postcode,
+                            state)
                     }
                 }
                 AutocompleteActivity.RESULT_ERROR -> {
@@ -195,7 +195,7 @@ class SessionAddFragment : Fragment() {
     private fun launchAutoCompleteIntent() {
         // Set the fields to specify which types of place data to
         // return after the user has made a selection.
-        val fields = listOf(Place.Field.ID, Place.Field.ADDRESS_COMPONENTS, Place.Field.LAT_LNG)
+        val fields = listOf(Place.Field.LAT_LNG)
 
         // Start the autocomplete intent.
         val intent = Autocomplete.IntentBuilder(AutocompleteActivityMode.OVERLAY, fields)
@@ -203,7 +203,7 @@ class SessionAddFragment : Fragment() {
             .setCountries(listOf("AU"))
             .build(requireContext())
 
-        startActivityForResult(intent, autocompleteRequestCode)
+        startActivityForResult(intent, AUTOCOMPLETE_REQUEST_CODE)
     }
 
     private fun onConfirmButton() {
@@ -216,7 +216,6 @@ class SessionAddFragment : Fragment() {
             viewModel.title.value!!,
             viewModel.description.value!!,
             viewModel.getConvertedDateTime(),
-            viewModel.locationId,
             viewModel.locationCoordinate,
             viewModel.locationString.value!!,
             viewModel.isOnline.value!!,
@@ -280,5 +279,9 @@ class SessionAddFragment : Fragment() {
                 dialog.cancel()
             }
             .show()
+    }
+
+    companion object {
+        private const val AUTOCOMPLETE_REQUEST_CODE = 23487
     }
 }

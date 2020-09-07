@@ -8,7 +8,7 @@ import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.navigation.NavController
-import androidx.navigation.findNavController
+import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
@@ -26,7 +26,9 @@ class MainActivity : AppCompatActivity() {
 
         Places.initialize(applicationContext, getString(R.string.google_maps_key))
 
-        navController = findNavController(R.id.nav_host_fragment)
+        val navHostFragment = supportFragmentManager
+            .findFragmentById(R.id.nav_host_fragment) as NavHostFragment
+        navController = navHostFragment.navController
         setupNavControllerDestinationChange(navController)
         setSupportActionBar(binding.toolbar)
 

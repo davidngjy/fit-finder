@@ -26,6 +26,7 @@ import com.sample.fitfinder.R
 import com.sample.fitfinder.data.repository.SessionRepository
 import com.sample.fitfinder.databinding.FragmentSearchBinding
 import com.sample.fitfinder.domain.Session
+import com.sample.fitfinder.ui.configureDayNightStyle
 import com.sample.fitfinder.ui.search.viewmodel.SearchViewModel
 import com.sample.fitfinder.ui.search.viewmodel.SearchViewModelFactory
 import kotlin.time.ExperimentalTime
@@ -63,6 +64,8 @@ class SearchFragment : Fragment(),
 
     override fun onMapReady(googleMap: GoogleMap) {
         map = googleMap
+        map.configureDayNightStyle(requireContext())
+
         googleMap.setOnMyLocationButtonClickListener {
             Toast.makeText(requireContext(), "MyLocation button clicked", Toast.LENGTH_SHORT).show()
             // Return false so that we don't consume the event and the default behavior still occurs

@@ -22,6 +22,7 @@ import com.google.android.gms.maps.model.CircleOptions
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.gson.Gson
 import com.sample.fitfinder.R
 import com.sample.fitfinder.data.repository.SessionRepository
 import com.sample.fitfinder.databinding.FragmentSearchBinding
@@ -39,6 +40,7 @@ class SearchFragment : Fragment(),
     private lateinit var binding: FragmentSearchBinding
     private lateinit var map: GoogleMap
     private lateinit var fusedLocationClient: FusedLocationProviderClient
+    private lateinit var converter: Gson
 
     private var permissionDenied = false
 
@@ -58,6 +60,8 @@ class SearchFragment : Fragment(),
 
         searchViewModel = ViewModelProvider(this, SearchViewModelFactory(SessionRepository))
             .get(SearchViewModel::class.java)
+        
+        converter = Gson()
 
         return binding.root
     }
@@ -65,6 +69,7 @@ class SearchFragment : Fragment(),
     override fun onMapReady(googleMap: GoogleMap) {
         map = googleMap
         map.configureDayNightStyle(requireContext())
+        map.setInfoWindowAdapter(CustomInfoWindowAdapter(layoutInflater, converter))
 
         googleMap.setOnMyLocationButtonClickListener {
             Toast.makeText(requireContext(), "MyLocation button clicked", Toast.LENGTH_SHORT).show()
@@ -153,12 +158,14 @@ class SearchFragment : Fragment(),
     }
 
     private fun markSessionOnMap(session: Session) {
+        val data = MapInfoData(session.id, session.title, session.description, session.sessionDateTime)
+        
         map.addMarker(
             MarkerOptions()
                 .position(session.locationCoordinate)
-                .title(session.title)
-                .snippet(session.description)
+                .title(converter.toJson(data))
         )
+
         map.addCircle(
             CircleOptions()
                 .center(session.locationCoordinate)

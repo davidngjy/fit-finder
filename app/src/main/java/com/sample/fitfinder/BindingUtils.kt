@@ -1,9 +1,9 @@
-package com.sample.fitfinder.ui.session
+package com.sample.fitfinder
 
 import android.widget.TextView
 import androidx.databinding.BindingAdapter
-import com.sample.fitfinder.R
 import com.sample.fitfinder.domain.Session
+import java.time.Instant
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.util.*
@@ -11,16 +11,11 @@ import java.util.*
 @BindingAdapter("sessionHeadingFormatted")
 fun TextView.setSessionHeading(item: Session?) {
     item?.let {
-        val formatter: DateTimeFormatter = DateTimeFormatter
-            .ofPattern("dd/MMM hh:mm a")
-            .withLocale(Locale.UK)
-            .withZone(ZoneId.systemDefault())
-
         val dateTime = item.sessionDateTime
         val isOnline = item.isOnline
         val isInPerson = item.isInPerson
 
-        val dateTimeString = formatter.format(dateTime)
+        val dateTimeString = dateTimeConverter(dateTime)
 
         val res = context.resources
 
@@ -47,4 +42,19 @@ fun TextView.setSessionCost(item: Session?) {
     item?.let {
         text = item.cost.toString()
     }
+}
+
+@BindingAdapter("dateTimeFormatted")
+fun TextView.setDateTime(item: Instant?) {
+    item?.let {
+        text = dateTimeConverter(item)
+    }
+}
+
+private fun dateTimeConverter(dateTime: Instant) : String {
+    val formatter: DateTimeFormatter = DateTimeFormatter
+        .ofPattern("dd/MMM hh:mm a")
+        .withLocale(Locale.UK)
+        .withZone(ZoneId.systemDefault())
+    return formatter.format(dateTime)
 }

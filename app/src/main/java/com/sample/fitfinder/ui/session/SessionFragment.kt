@@ -33,7 +33,11 @@ class SessionFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        val sessionCollectionAdapter = SessionCollectionAdapter(this, UserRepository())
+        val sessionCollectionAdapter = SessionCollectionAdapter(this, UserRepository()) {
+            findNavController().navigate(SessionFragmentDirections
+                .actionSessionFragmentToSessionDetailFragment(it))
+        }
+
         binding.viewPager.adapter = sessionCollectionAdapter
         TabLayoutMediator(binding.tabLayout, binding.viewPager) { tab, position ->
             if (currentUser.role == UserRole.ADMIN || currentUser.role == UserRole.TRAINER) {
@@ -65,7 +69,7 @@ class SessionFragment : Fragment() {
         })
 
         binding.sessionAddFab.setOnClickListener {
-            this.findNavController()
+            findNavController()
                 .navigate(SessionFragmentDirections.actionSessionFragmentToSessionAddFragment())
         }
     }

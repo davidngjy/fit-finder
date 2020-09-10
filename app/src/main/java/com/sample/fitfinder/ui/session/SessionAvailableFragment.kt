@@ -14,7 +14,7 @@ import com.sample.fitfinder.ui.session.viewmodel.SessionAvailableViewModelFactor
 import kotlin.time.ExperimentalTime
 
 @ExperimentalTime
-class SessionAvailableFragment : Fragment() {
+class SessionAvailableFragment(private val sessionClickListener: (sessionId: Long) -> Unit) : Fragment() {
 
     private val sessionAvailableViewModel: SessionAvailableViewModel by viewModels { SessionAvailableViewModelFactory(SessionRepository) }
     private lateinit var binding: FragmentSessionAvailableBinding
@@ -26,13 +26,23 @@ class SessionAvailableFragment : Fragment() {
     ): View? {
         binding = FragmentSessionAvailableBinding.inflate(inflater, container, false)
 
-        val adapter = SessionAvailableAdapter()
+        val adapter = SessionAvailableAdapter(SessionListItemListener { sessionId ->
+            sessionAvailableViewModel.onSessionClick(sessionId)
+        })
+
         binding.sessionAvailableList.adapter = adapter
         binding.lifecycleOwner = this
 
         sessionAvailableViewModel.sessions.observe(viewLifecycleOwner, {
             it?.let {
                 adapter.submitList(it)
+            }
+        })
+
+        sessionAvailableViewModel.navigateToSessionDetail.observe(viewLifecycleOwner, {
+            it?.let {
+                sessionClickListener(it)
+                sessionAvailableViewModel.onSessionDetailNavigated()
             }
         })
 

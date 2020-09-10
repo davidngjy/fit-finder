@@ -41,10 +41,8 @@ class MessageFragment : Fragment() {
         // Navigate to message room
         messageViewModel.navigateToMessageRoom.observe(viewLifecycleOwner, { message ->
             message?.let {
-                val action = MessageFragmentDirections
-                    .actionMessageFragmentToMessageRoomFragment(message)
-                this.findNavController()
-                    .navigate(action)
+                findNavController().navigate(MessageFragmentDirections
+                        .actionMessageFragmentToMessageRoomFragment(message))
 
                 messageViewModel.onMessageRoomNavigated()
             }

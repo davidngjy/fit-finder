@@ -6,8 +6,8 @@ import com.sample.fitfinder.data.repository.UserRepository
 import com.sample.fitfinder.domain.UserRole
 import kotlin.time.ExperimentalTime
 
-class SessionCollectionAdapter(fragment: Fragment,
-                               userRepository: UserRepository)
+class SessionCollectionAdapter(fragment: Fragment, userRepository: UserRepository,
+                               private val sessionClickListener: (sessionId: Long) -> Unit)
     : FragmentStateAdapter(fragment) {
 
     private val user = userRepository.getCurrentUser()
@@ -18,7 +18,7 @@ class SessionCollectionAdapter(fragment: Fragment,
     override fun createFragment(position: Int): Fragment {
         return if (user.value!!.role == UserRole.ADMIN || user.value!!.role == UserRole.TRAINER) {
             when (position) {
-                0 -> SessionAvailableFragment()
+                0 -> SessionAvailableFragment(sessionClickListener)
                 1 -> SessionUpcomingFragment()
                 2 -> SessionPastFragment()
                 else -> throw IllegalArgumentException("Unknown fragment")

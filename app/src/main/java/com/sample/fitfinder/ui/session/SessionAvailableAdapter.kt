@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.sample.fitfinder.databinding.ItemSessionListBinding
 import com.sample.fitfinder.domain.Session
 
-class SessionAvailableAdapter
+class SessionAvailableAdapter(private val clickListener: SessionListItemListener)
     : ListAdapter<Session, SessionAvailableAdapter.ViewHolder>(SessionDiffCallBack()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -17,14 +17,15 @@ class SessionAvailableAdapter
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = getItem(position)
-        holder.bind(item)
+        holder.bind(item, clickListener)
     }
 
     class ViewHolder private constructor(private val binding: ItemSessionListBinding)
         : RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(item: Session) {
+        fun bind(item: Session, clickListener: SessionListItemListener) {
             binding.session = item
+            binding.clickListener = clickListener
             binding.executePendingBindings()
         }
 
@@ -48,4 +49,8 @@ class SessionDiffCallBack: DiffUtil.ItemCallback<Session>() {
     override fun areContentsTheSame(oldItem: Session, newItem: Session): Boolean {
         return oldItem == newItem
     }
+}
+
+class SessionListItemListener(val clickListener: (sessionId: Long) -> Unit) {
+    fun onClick(sessionId: Long) = clickListener(sessionId)
 }

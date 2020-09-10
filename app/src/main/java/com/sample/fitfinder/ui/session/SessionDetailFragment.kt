@@ -34,6 +34,8 @@ class SessionDetailFragment : Fragment() {
         binding = FragmentSessionDetailBinding.inflate(inflater, container, false)
         setActionBarTitle()
 
+        binding.mapCardView.visibility = View.GONE
+
         val mapFragment = childFragmentManager
             .findFragmentById(R.id.small_map) as SupportMapFragment
 

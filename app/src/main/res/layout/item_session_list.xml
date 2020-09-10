@@ -8,6 +8,10 @@
         <variable
             name="session"
             type="com.sample.fitfinder.domain.Session" />
+        
+        <variable
+            name="clickListener"
+            type="com.sample.fitfinder.ui.session.SessionListItemListener" />
     </data>
 
     <FrameLayout
@@ -23,7 +27,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:clickable="true"
-            android:focusable="true">
+            android:onClick="@{() -> clickListener.onClick(session.id)}">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
@@ -83,7 +87,8 @@
                     android:contentDescription="@string/location_icon_desc"
                     app:layout_constraintBottom_toBottomOf="@id/session_location"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="@id/session_location"/>
+                    app:layout_constraintTop_toTopOf="@id/session_location"
+                    tools:ignore="RtlSymmetry" />
 
                 <TextView
                     android:id="@+id/session_location"

@@ -267,7 +267,7 @@ class SessionAddFragment : Fragment() {
             )
         sessionRepository.addSession(newSession)
 
-        this.findNavController().navigate(
+        findNavController().navigate(
             SessionAddFragmentDirections.actionSessionAddFragmentToSessionFragment()
         )
     }
@@ -301,7 +301,8 @@ class SessionAddFragment : Fragment() {
         return when (item.itemId) {
             android.R.id.home -> {
                 showConfirmation {
-                    this.findNavController().navigate(SessionAddFragmentDirections.actionSessionAddFragmentToSessionFragment())
+                    findNavController().navigate(SessionAddFragmentDirections
+                        .actionSessionAddFragmentToSessionFragment())
                 }
                 true
             }

@@ -23,6 +23,9 @@
         <action
             android:id="@+id/action_sessionFragment_to_sessionAddFragment"
             app:destination="@id/sessionAddFragment" />
+        <action
+            android:id="@+id/action_sessionFragment_to_sessionDetailFragment"
+            app:destination="@id/sessionDetailFragment" />
     </fragment>
 
     <fragment
@@ -77,9 +80,5 @@
         android:id="@+id/sessionAvailableFragment"
         android:name="com.sample.fitfinder.ui.session.SessionAvailableFragment"
         android:label="fragment_session_available"
-        tools:layout="@layout/fragment_session_available" >
-        <action
-            android:id="@+id/action_sessionAvailableFragment_to_sessionDetailFragment"
-            app:destination="@id/sessionDetailFragment" />
-    </fragment>
+        tools:layout="@layout/fragment_session_available" />
 </navigation>

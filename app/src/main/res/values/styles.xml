@@ -26,7 +26,13 @@
         <item name="android:paddingVertical">10dp</item>
     </style>
 
-    <style name="Widget.FitFinder.TextInput.Icon" parent="">
+    <style name="Widget.FitFinder.Form.Icon" parent="">
         <item name="android:paddingEnd">20dp</item>
+    </style>
+
+    <style name="Widget.FitFinder.Form.TextView" parent="">
+        <item name="android:paddingVertical">20dp</item>
+        <item name="android:paddingHorizontal">10dp</item>
+        <item name="android:textAppearance">?attr/textAppearanceBody1</item>
     </style>
 </resources>

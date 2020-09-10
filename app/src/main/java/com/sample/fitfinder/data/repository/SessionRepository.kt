@@ -31,6 +31,12 @@ object SessionRepository {
         }
     }
 
+    fun getSession(id: Long) : LiveData<Session> {
+        return MutableLiveData<Session>().apply {
+            value = sessions.first { it.id == id }
+        }
+    }
+
     fun getBookingSessions(): LiveData<List<BookingSession>> {
         return MutableLiveData<List<BookingSession>>().apply {
             value = bookingSession

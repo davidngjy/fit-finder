@@ -1,5 +1,6 @@
 package com.sample.fitfinder
 
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.databinding.BindingAdapter
 import com.sample.fitfinder.domain.Session
@@ -57,4 +58,12 @@ private fun dateTimeConverter(dateTime: Instant) : String {
         .withLocale(Locale.UK)
         .withZone(ZoneId.systemDefault())
     return formatter.format(dateTime)
+}
+
+@BindingAdapter("sessionTypeAvailableIcon")
+fun ImageView.setSessionTypeAvailableIcon(isAvailable: Boolean?) {
+    isAvailable?.let {
+        if (isAvailable) setImageResource(R.drawable.ic_session_checked_24)
+        else setImageResource(R.drawable.ic_session_cross_24)
+    }
 }

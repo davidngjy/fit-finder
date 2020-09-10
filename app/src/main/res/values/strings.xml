@@ -33,6 +33,8 @@
     <string name="time_form">Time</string>
     <string name="suburb_form">Suburb</string>
     <string name="cost_form">Cost</string>
-    <string name="online_toggle">This session can be done online</string>
-    <string name="in_person_toggle">This session can be done in person</string>
+    <string name="online_session">This session can be done online</string>
+    <string name="in_person_session">This session can be done in person</string>
+    <string name="session_edit_button">Edit</string>
+    <string name="availability_icon">Availability Icon</string>
 </resources>

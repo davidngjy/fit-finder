@@ -13,6 +13,7 @@ import androidx.core.app.ActivityCompat.getColor
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import com.google.android.gms.location.*
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
@@ -70,6 +71,12 @@ class SearchFragment : Fragment(),
         map = googleMap
         map.configureDayNightStyle(requireContext())
         map.setInfoWindowAdapter(CustomInfoWindowAdapter(layoutInflater, converter))
+
+        map.setOnInfoWindowClickListener {
+            val sessionId = it.tag as Long
+            findNavController().navigate(SearchFragmentDirections
+                .actionSearchFragmentToSessionDetailFragment(sessionId))
+        }
 
         googleMap.setOnMyLocationButtonClickListener {
             Toast.makeText(requireContext(), "MyLocation button clicked", Toast.LENGTH_SHORT).show()

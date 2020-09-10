@@ -8,6 +8,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.SupportMapFragment
@@ -23,6 +25,7 @@ import kotlin.time.ExperimentalTime
 @ExperimentalTime
 class SessionDetailFragment : Fragment() {
     private val viewModel: SessionDetailViewModel by viewModels()
+    private val args: SessionDetailFragmentArgs by navArgs()
 
     private lateinit var binding: FragmentSessionDetailBinding
     private lateinit var map: GoogleMap
@@ -52,9 +55,14 @@ class SessionDetailFragment : Fragment() {
             viewModel.location.observe(viewLifecycleOwner, { setupMapFragment(it) })
         }
 
-        val sessionId = SessionDetailFragmentArgs.fromBundle(requireArguments()).sessionId
+        val sessionId = args.sessionId
 
         viewModel.setSessionId(sessionId)
+
+        binding.editButton.setOnClickListener {
+            findNavController().navigate(SessionDetailFragmentDirections
+                .actionSessionDetailFragmentToSessionAddFragment(sessionId))
+        }
 
         binding.viewModel = viewModel
         binding.lifecycleOwner = this

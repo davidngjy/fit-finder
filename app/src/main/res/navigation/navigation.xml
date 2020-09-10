@@ -67,6 +67,10 @@
             app:destination="@id/sessionFragment"
             app:popUpTo="@id/sessionFragment"
             app:popUpToInclusive="true" />
+        <argument
+            android:name="sessionId"
+            app:argType="long"
+            android:defaultValue="0L" />
     </fragment>
     <fragment
         android:id="@+id/sessionDetailFragment"
@@ -75,6 +79,9 @@
         <argument
             android:name="sessionId"
             app:argType="long" />
+        <action
+            android:id="@+id/action_sessionDetailFragment_to_sessionAddFragment"
+            app:destination="@id/sessionAddFragment" />
     </fragment>
     <fragment
         android:id="@+id/sessionAvailableFragment"

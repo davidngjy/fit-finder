@@ -14,6 +14,7 @@ import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.SupportMapFragment
@@ -32,9 +33,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.timepicker.MaterialTimePicker
 import com.google.android.material.timepicker.TimeFormat
 import com.sample.fitfinder.R
-import com.sample.fitfinder.data.repository.SessionRepository
 import com.sample.fitfinder.databinding.FragmentSessionAddBinding
-import com.sample.fitfinder.domain.Session
 import com.sample.fitfinder.ui.configureDayNightStyle
 import com.sample.fitfinder.ui.session.viewmodel.SessionAddViewModel
 import java.text.SimpleDateFormat
@@ -45,12 +44,12 @@ import kotlin.time.ExperimentalTime
 class SessionAddFragment : Fragment() {
 
     private val viewModel: SessionAddViewModel by viewModels()
+    private val args: SessionDetailFragmentArgs by navArgs()
+
     private lateinit var binding: FragmentSessionAddBinding
     private lateinit var datePicker: MaterialDatePicker<Long>
-    private lateinit var geocoder: Geocoder
+    private lateinit var geoCoder: Geocoder
     private lateinit var map: GoogleMap
-
-    private val sessionRepository = SessionRepository
 
     private val formatter: SimpleDateFormat = SimpleDateFormat("hh:mm a", Locale.getDefault())
 
@@ -72,15 +71,20 @@ class SessionAddFragment : Fragment() {
                 uiSettings.isRotateGesturesEnabled = false
                 configureDayNightStyle(requireContext())
             }
+
+            viewModel.locationCoordinate.observe(viewLifecycleOwner, { coordinate ->
+                setCoordinateToMap(coordinate)
+            })
         }
 
         binding.mapCardView.visibility = View.GONE
 
-        geocoder = Geocoder(requireContext())
+        geoCoder = Geocoder(requireContext())
 
         setActionBarTitle()
         setupDatePicker()
         setupBackNavigation()
+        checkForEdit()
 
         return binding.root
     }
@@ -143,6 +147,14 @@ class SessionAddFragment : Fragment() {
         }
 
         binding.confirmButton.setOnClickListener { onConfirmButton() }
+
+        viewModel.navigateOnConfirm.observe(viewLifecycleOwner, {
+            it?.let {
+                findNavController().navigate(
+                    SessionAddFragmentDirections.actionSessionAddFragmentToSessionFragment()
+                )
+            }
+        })
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -151,21 +163,19 @@ class SessionAddFragment : Fragment() {
                 Activity.RESULT_OK -> {
                     data?.let {
                         val place = Autocomplete.getPlaceFromIntent(data)
-                        val address = geocoder.getFromLocation(place.latLng!!.latitude, place.latLng!!.longitude, 1).first()
+                        val address = geoCoder.getFromLocation(place.latLng!!.latitude, place.latLng!!.longitude, 1).first()
                         val suburb = address.locality
                         val postcode = address.postalCode
                         val state = address.adminArea
                         val coordinate = LatLng(address.latitude, address.longitude)
 
-                        viewModel.locationCoordinate = coordinate
+                        viewModel.setCoordinate(coordinate)
 
                         viewModel.locationString.value = getString(
                             R.string.session_suburb,
                             suburb,
                             postcode,
                             state)
-
-                        setupMapFragment(coordinate)
                     }
                 }
                 AutocompleteActivity.RESULT_ERROR -> {
@@ -180,7 +190,7 @@ class SessionAddFragment : Fragment() {
         super.onActivityResult(requestCode, resultCode, data)
     }
 
-    private fun setupMapFragment(coordinate: LatLng) {
+    private fun setCoordinateToMap(coordinate: LatLng) {
         map.clear()
         map.animateCamera(CameraUpdateFactory.newLatLngZoom(coordinate, 13F))
         map.addMarker(
@@ -252,24 +262,7 @@ class SessionAddFragment : Fragment() {
         if (!validateAllInput()) { return }
         if (!viewModel.validateDateTime(binding.timeTextField)) { return }
 
-        val newSession = Session(
-            1,
-            1,
-            viewModel.title.value!!,
-            viewModel.description.value!!,
-            viewModel.getConvertedDateTime(),
-            viewModel.locationCoordinate,
-            viewModel.locationString.value!!,
-            viewModel.isOnline.value!!,
-            viewModel.isInPerson.value!!,
-            viewModel.cost.value!!,
-            viewModel.duration.value!!
-            )
-        sessionRepository.addSession(newSession)
-
-        findNavController().navigate(
-            SessionAddFragmentDirections.actionSessionAddFragmentToSessionFragment()
-        )
+        viewModel.saveSession()
     }
 
     private fun validateAllInput(): Boolean {
@@ -322,6 +315,10 @@ class SessionAddFragment : Fragment() {
                 dialog.cancel()
             }
             .show()
+    }
+
+    private fun checkForEdit() {
+        if (args.sessionId > 0) viewModel.loadSessionDetail(args.sessionId)
     }
 
     companion object {

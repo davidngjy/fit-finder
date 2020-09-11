@@ -165,7 +165,7 @@ class SearchFragment : Fragment(),
     }
 
     private fun markSessionOnMap(session: Session) {
-        val data = MapInfoData(session.id, session.title, session.description, session.sessionDateTime)
+        val data = MapInfoData(session.id, session.title, session.description, session.sessionDateTime.toEpochMilli())
         
         map.addMarker(
             MarkerOptions()

@@ -6,7 +6,6 @@ import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.model.Marker
 import com.google.gson.Gson
 import com.sample.fitfinder.databinding.ItemInfoWindowBinding
-import java.time.Instant
 
 class CustomInfoWindowAdapter(private val inflater: LayoutInflater, private val converter: Gson)
     : GoogleMap.InfoWindowAdapter {
@@ -29,5 +28,5 @@ data class MapInfoData (
     val id: Long,
     val title: String,
     val description: String,
-    val dateTime: Instant
+    val dateTimeEpochMilli: Long
 )

@@ -60,6 +60,13 @@ private fun dateTimeConverter(dateTime: Instant) : String {
     return formatter.format(dateTime)
 }
 
+@BindingAdapter("dateTimeEpochMilliFormatted")
+fun TextView.setDateTimeFromEpochMilli(item: Long?) {
+    item?.let {
+        text = dateTimeConverter(Date(item).toInstant())
+    }
+}
+
 @BindingAdapter("sessionTypeAvailableIcon")
 fun ImageView.setSessionTypeAvailableIcon(isAvailable: Boolean?) {
     isAvailable?.let {

@@ -11,6 +11,7 @@ import android.view.ViewGroup
 import androidx.activity.addCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
+import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -144,6 +145,10 @@ class SessionAddFragment : Fragment() {
             if (!hasFocus) {
                 viewModel.validateInput(binding.costTextField)
             }
+        }
+
+        binding.timeTextField.editText!!.addTextChangedListener {
+            viewModel.validateDateTime(binding.timeTextField)
         }
 
         binding.confirmButton.setOnClickListener { onConfirmButton() }

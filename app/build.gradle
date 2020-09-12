@@ -64,4 +64,7 @@ dependencies {
 
     // Json converter
     implementation 'com.google.code.gson:gson:2.8.6'
+
+    // Auth
+    implementation 'com.google.android.gms:play-services-auth:18.1.0'
 }

@@ -213,7 +213,8 @@ class SessionAddFragment : Fragment() {
     }
 
     private fun setActionBarTitle() {
-        (activity as AppCompatActivity).supportActionBar?.title = "Add New Session"
+        if (args.sessionId == 0L) (activity as AppCompatActivity).supportActionBar?.title = "Add New Session"
+        else (activity as AppCompatActivity).supportActionBar?.title = "Edit Session"
     }
 
     private fun showMaterialTimePicker() {

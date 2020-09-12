@@ -115,7 +115,7 @@ class SessionAddViewModel : ViewModel() {
     @ExperimentalTime
     fun saveSession() {
         val newSession = Session(
-            1,
+            sessionId,
             1,
             title.value!!,
             description.value!!,
@@ -127,7 +127,9 @@ class SessionAddViewModel : ViewModel() {
             cost.value!!,
             duration.value!!
         )
-        sessionRepository.addSession(newSession)
+
+        if (sessionId != 0L) sessionRepository.updateSession(sessionId, newSession)
+        else sessionRepository.addSession(newSession)
 
         _navigateOnConfirm.value = true
     }

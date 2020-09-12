@@ -62,11 +62,6 @@
         android:name="com.sample.fitfinder.ui.session.SessionAddFragment"
         android:label="fragment_session_add"
         tools:layout="@layout/fragment_session_add" >
-        <action
-            android:id="@+id/action_sessionAddFragment_to_sessionFragment"
-            app:destination="@id/sessionFragment"
-            app:popUpTo="@id/sessionFragment"
-            app:popUpToInclusive="true" />
         <argument
             android:name="sessionId"
             app:argType="long"

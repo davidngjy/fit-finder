@@ -8,7 +8,7 @@ import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import androidx.activity.OnBackPressedCallback
+import androidx.activity.addCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
@@ -150,9 +150,7 @@ class SessionAddFragment : Fragment() {
 
         viewModel.navigateOnConfirm.observe(viewLifecycleOwner, {
             it?.let {
-                findNavController().navigate(
-                    SessionAddFragmentDirections.actionSessionAddFragmentToSessionFragment()
-                )
+                findNavController().popBackStack()
             }
         })
     }
@@ -280,22 +278,18 @@ class SessionAddFragment : Fragment() {
         // This is required to set to true for overriding onOptionsItemSelected
         // Else it'll direct to main activity instead
         setHasOptionsMenu(true)
-        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, object: OnBackPressedCallback(true) {
-            override fun handleOnBackPressed() {
-                showConfirmation {
-                    isEnabled = false
-                    requireActivity().onBackPressed()
-                }
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
+            showConfirmation {
+                findNavController().popBackStack()
             }
-        })
+        }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             android.R.id.home -> {
                 showConfirmation {
-                    findNavController().navigate(SessionAddFragmentDirections
-                        .actionSessionAddFragmentToSessionFragment())
+                    findNavController().popBackStack()
                 }
                 true
             }

@@ -44,6 +44,11 @@ object SessionRepository {
     }
 
     fun addSession(newSession: Session) {
-        sessions.add(newSession)
+        val assignedId = newSession.copy(id = sessions.count().toLong())
+        sessions.add(assignedId)
+    }
+
+    fun updateSession(sessionId: Long, updatedSession: Session) {
+        sessions[sessionId.toInt() - 1] = updatedSession
     }
 }

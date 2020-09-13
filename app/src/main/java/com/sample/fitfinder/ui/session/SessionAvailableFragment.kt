@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.sample.fitfinder.data.repository.SessionRepository
 import com.sample.fitfinder.databinding.FragmentSessionAvailableBinding
@@ -14,7 +15,7 @@ import com.sample.fitfinder.ui.session.viewmodel.SessionAvailableViewModelFactor
 import kotlin.time.ExperimentalTime
 
 @ExperimentalTime
-class SessionAvailableFragment(private val sessionClickListener: (sessionId: Long) -> Unit) : Fragment() {
+class SessionAvailableFragment : Fragment() {
 
     private val sessionAvailableViewModel: SessionAvailableViewModel by viewModels { SessionAvailableViewModelFactory(SessionRepository) }
     private lateinit var binding: FragmentSessionAvailableBinding
@@ -41,7 +42,8 @@ class SessionAvailableFragment(private val sessionClickListener: (sessionId: Lon
 
         sessionAvailableViewModel.navigateToSessionDetail.observe(viewLifecycleOwner, {
             it?.let {
-                sessionClickListener(it)
+                findNavController()
+                    .navigate(SessionFragmentDirections.actionSessionFragmentToSessionDetailFragment(it))
                 sessionAvailableViewModel.onSessionDetailNavigated()
             }
         })

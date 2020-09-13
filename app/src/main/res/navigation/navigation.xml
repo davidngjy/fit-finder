@@ -70,7 +70,8 @@
     <fragment
         android:id="@+id/sessionDetailFragment"
         android:name="com.sample.fitfinder.ui.session.SessionDetailFragment"
-        android:label="SessionDetailFragment" >
+        android:label="SessionDetailFragment"
+        tools:layout="@layout/fragment_session_detail" >
         <argument
             android:name="sessionId"
             app:argType="long" />

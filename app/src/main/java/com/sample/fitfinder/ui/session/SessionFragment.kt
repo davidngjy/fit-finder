@@ -33,10 +33,7 @@ class SessionFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        val sessionCollectionAdapter = SessionCollectionAdapter(this, UserRepository()) {
-            findNavController().navigate(SessionFragmentDirections
-                .actionSessionFragmentToSessionDetailFragment(it))
-        }
+        val sessionCollectionAdapter = SessionCollectionAdapter(this, UserRepository())
 
         binding.viewPager.adapter = sessionCollectionAdapter
         TabLayoutMediator(binding.tabLayout, binding.viewPager) { tab, position ->

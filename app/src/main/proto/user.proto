@@ -1,0 +1,29 @@
+syntax = "proto3";
+
+package fitfinder.proto;
+
+import "user_profile.proto";
+
+option java_package = "com.sample.fitfinder.proto";
+option java_multiple_files = true;
+
+service UserProtocol {
+    rpc ConnectUser(ConnectUserRequest) returns (stream ConnectUserResponse);
+}
+
+message ConnectUserRequest {
+    string googleTokenId = 1;
+}
+
+message ConnectUserResponse {
+    enum Status {
+        Verifying = 0;
+        Creating = 1;
+        Retrieving = 2;
+        Connected = 3;
+        Failed = 4;
+    }
+    Status status = 1;
+    UserProfile userProfile = 2;
+}
+

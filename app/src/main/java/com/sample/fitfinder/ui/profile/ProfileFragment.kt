@@ -7,19 +7,14 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.sample.fitfinder.LoginActivity
 import com.sample.fitfinder.databinding.FragmentProfileBinding
 import com.sample.fitfinder.ui.profile.viewmodel.ProfileViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class ProfileFragment : Fragment() {
-
-    @Inject lateinit var googleSignInClient: GoogleSignInClient
-
-    private val profileViewModel: ProfileViewModel by viewModels()
+    private val viewModel: ProfileViewModel by viewModels()
 
     private lateinit var binding: FragmentProfileBinding
 
@@ -30,16 +25,25 @@ class ProfileFragment : Fragment() {
     ): View? {
         binding = FragmentProfileBinding.inflate(inflater, container, false)
 
-        binding.signOutButton.setOnClickListener { onSignOut() }
+        binding.signOutButton.setOnClickListener {
+            viewModel.logOut()
+        }
 
-        binding.profileViewModel = profileViewModel
+        binding.viewModel = viewModel
+        binding.lifecycleOwner = this
+
+        viewModel.logOutSuccessful.observe(viewLifecycleOwner, {
+            it?.let {
+                if (it) {
+                    navigateToLogin()
+                }
+            }
+        })
 
         return binding.root
     }
 
-    private fun onSignOut() {
-        googleSignInClient.signOut()
-
+    private fun navigateToLogin() {
         val intent = Intent(requireContext(), LoginActivity::class.java)
         startActivity(intent)
         requireActivity().finish()

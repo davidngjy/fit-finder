@@ -1,10 +1,10 @@
 package com.sample.fitfinder.domain
 
 data class User (
-    val userId: Long,
+    val Id: Long,
+    val googleId: String,
     val displayName: String,
-    val userName: String,
     val email: String,
     val role: UserRole,
-    val profilePicture: String?
+    val profilePictureUri: String?
 )

@@ -37,4 +37,7 @@
     <string name="in_person_session">This session can be done in person</string>
     <string name="session_edit_button">Edit</string>
     <string name="availability_icon">Availability Icon</string>
+
+    // Error Message
+    <string name="connection_error">Network problem, please try again.</string>
 </resources>

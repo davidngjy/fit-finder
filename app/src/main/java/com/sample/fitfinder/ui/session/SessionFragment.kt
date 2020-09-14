@@ -13,9 +13,13 @@ import com.sample.fitfinder.data.repository.UserRepository
 import com.sample.fitfinder.databinding.FragmentSessionBinding
 import com.sample.fitfinder.domain.User
 import com.sample.fitfinder.domain.UserRole
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
-
+@AndroidEntryPoint
 class SessionFragment : Fragment() {
+
+    @Inject lateinit var userRepository: UserRepository
 
     private lateinit var binding: FragmentSessionBinding
     private lateinit var currentUser: User
@@ -27,13 +31,13 @@ class SessionFragment : Fragment() {
     ): View? {
         binding = FragmentSessionBinding.inflate(inflater, container, false)
 
-        currentUser = UserRepository().getCurrentUser().value!!
+        currentUser = userRepository.getCurrentUser().value!!
 
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        val sessionCollectionAdapter = SessionCollectionAdapter(this, UserRepository())
+        val sessionCollectionAdapter = SessionCollectionAdapter(this, userRepository)
 
         binding.viewPager.adapter = sessionCollectionAdapter
         TabLayoutMediator(binding.tabLayout, binding.viewPager) { tab, position ->

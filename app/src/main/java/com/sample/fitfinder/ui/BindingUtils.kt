@@ -3,6 +3,7 @@ package com.sample.fitfinder.ui
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.databinding.BindingAdapter
+import com.bumptech.glide.Glide
 import com.sample.fitfinder.R
 import com.sample.fitfinder.domain.Session
 import java.time.Instant
@@ -73,5 +74,15 @@ fun ImageView.setSessionTypeAvailableIcon(isAvailable: Boolean?) {
     isAvailable?.let {
         if (isAvailable) setImageResource(R.drawable.ic_session_checked_24)
         else setImageResource(R.drawable.ic_session_cross_24)
+    }
+}
+
+@BindingAdapter("loadImageFromUrl")
+fun ImageView.loadImageFromUrl(url: String?) {
+    url?.let {
+        Glide.with(this)
+            .load(url)
+            .placeholder(R.drawable.ic_default_profile_24)
+            .into(this)
     }
 }

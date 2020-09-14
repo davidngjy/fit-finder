@@ -5,7 +5,7 @@
 
     <data>
         <variable
-            name="profileViewModel"
+            name="viewModel"
             type="com.sample.fitfinder.ui.profile.viewmodel.ProfileViewModel" />
     </data>
 
@@ -26,14 +26,15 @@
                 android:contentDescription="@string/profile_image_desc"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/ic_default_profile_24" />
+                app:loadImageFromUrl="@{viewModel.currentUser.profilePictureUri}"
+                tools:srcCompat="@drawable/ic_default_profile_24" />
 
             <TextView
                 android:id="@+id/display_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:clickable="true"
-                android:text="@{profileViewModel.currentUser.displayName}"
+                android:text="@{viewModel.currentUser.displayName}"
                 android:textAppearance="@style/TextAppearance.MaterialComponents.Headline5"
                 app:layout_constraintBottom_toTopOf="@id/email_address"
                 app:layout_constraintStart_toEndOf="@+id/image_view"
@@ -44,7 +45,7 @@
                 android:id="@+id/email_address"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@{profileViewModel.currentUser.email}"
+                android:text="@{viewModel.currentUser.email}"
                 android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle1"
                 app:layout_constraintBottom_toBottomOf="@+id/image_view"
                 app:layout_constraintStart_toEndOf="@+id/image_view"

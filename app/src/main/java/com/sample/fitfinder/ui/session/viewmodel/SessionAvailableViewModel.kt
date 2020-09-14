@@ -1,13 +1,17 @@
 package com.sample.fitfinder.ui.session.viewmodel
 
+import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.sample.fitfinder.data.repository.SessionRepository
+import dagger.hilt.android.scopes.FragmentScoped
 import kotlin.time.ExperimentalTime
 
+@FragmentScoped
 @ExperimentalTime
-class SessionAvailableViewModel(sessionRepository: SessionRepository) : ViewModel() {
+class SessionAvailableViewModel @ViewModelInject constructor(sessionRepository: SessionRepository)
+    : ViewModel() {
 
     val sessions = sessionRepository.getSessions()
 

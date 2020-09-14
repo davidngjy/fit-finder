@@ -12,7 +12,7 @@ import androidx.core.app.ActivityCompat.OnRequestPermissionsResultCallback
 import androidx.core.app.ActivityCompat.getColor
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.google.android.gms.location.*
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -25,19 +25,20 @@ import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.gson.Gson
 import com.sample.fitfinder.R
-import com.sample.fitfinder.data.repository.SessionRepository
 import com.sample.fitfinder.databinding.FragmentSearchBinding
 import com.sample.fitfinder.domain.Session
 import com.sample.fitfinder.ui.configureDayNightStyle
 import com.sample.fitfinder.ui.search.viewmodel.SearchViewModel
-import com.sample.fitfinder.ui.search.viewmodel.SearchViewModelFactory
+import dagger.hilt.android.AndroidEntryPoint
 import kotlin.time.ExperimentalTime
 
+@AndroidEntryPoint
 @ExperimentalTime
 class SearchFragment : Fragment(),
     OnRequestPermissionsResultCallback, OnMapReadyCallback {
 
-    private lateinit var searchViewModel: SearchViewModel
+    private val searchViewModel: SearchViewModel by viewModels()
+
     private lateinit var binding: FragmentSearchBinding
     private lateinit var map: GoogleMap
     private lateinit var fusedLocationClient: FusedLocationProviderClient
@@ -58,9 +59,6 @@ class SearchFragment : Fragment(),
         mapFragment.getMapAsync(this)
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity())
-
-        searchViewModel = ViewModelProvider(this, SearchViewModelFactory(SessionRepository))
-            .get(SearchViewModel::class.java)
         
         converter = Gson()
 

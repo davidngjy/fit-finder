@@ -1,16 +1,19 @@
 package com.sample.fitfinder.ui.session.viewmodel
 
+import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.android.gms.maps.model.LatLng
 import com.sample.fitfinder.data.repository.SessionRepository
 import com.sample.fitfinder.domain.Session
+import dagger.hilt.android.scopes.FragmentScoped
 import kotlin.time.ExperimentalTime
 
+@FragmentScoped
 @ExperimentalTime
-class SessionDetailViewModel() : ViewModel() {
-    private val sessionRepository = SessionRepository
+class SessionDetailViewModel @ViewModelInject constructor(private val sessionRepository: SessionRepository)
+    : ViewModel() {
 
     var session: LiveData<Session>? = null
 

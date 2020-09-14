@@ -7,17 +7,19 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import com.google.android.gms.auth.api.signin.GoogleSignIn
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.sample.fitfinder.LoginActivity
-import com.sample.fitfinder.data.repository.UserRepository
 import com.sample.fitfinder.databinding.FragmentProfileBinding
 import com.sample.fitfinder.ui.profile.viewmodel.ProfileViewModel
-import com.sample.fitfinder.ui.profile.viewmodel.ProfileViewModelFactory
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class ProfileFragment : Fragment() {
 
-    private val profileViewModel: ProfileViewModel by viewModels { ProfileViewModelFactory(UserRepository()) }
+    @Inject lateinit var googleSignInClient: GoogleSignInClient
+
+    private val profileViewModel: ProfileViewModel by viewModels()
 
     private lateinit var binding: FragmentProfileBinding
 
@@ -36,9 +38,7 @@ class ProfileFragment : Fragment() {
     }
 
     private fun onSignOut() {
-        GoogleSignIn
-            .getClient(requireContext(), GoogleSignInOptions.DEFAULT_SIGN_IN)
-            .signOut()
+        googleSignInClient.signOut()
 
         val intent = Intent(requireContext(), LoginActivity::class.java)
         startActivity(intent)

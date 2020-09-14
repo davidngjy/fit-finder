@@ -8,18 +8,20 @@ import androidx.databinding.DataBindingUtil
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.SignInButton
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.tasks.Task
 import com.google.android.material.card.MaterialCardView
 import com.sample.fitfinder.databinding.ActivityLoginBinding
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
-
+@AndroidEntryPoint
 class LoginActivity : AppCompatActivity() {
 
+    @Inject lateinit var googleSignInClient: GoogleSignInClient
+
     private lateinit var binding: ActivityLoginBinding
-    private lateinit var googleSignInClient: GoogleSignInClient
     private lateinit var progressBarCard: MaterialCardView
     private lateinit var signInButton: SignInButton
 
@@ -29,15 +31,6 @@ class LoginActivity : AppCompatActivity() {
         progressBarCard = binding.progressBarCard
         signInButton = binding.signInButton
         setupSignInButton()
-
-        // Configure sign-in to request the user's ID, email address, and basic
-        // profile. ID and basic profile are included in DEFAULT_SIGN_IN.
-        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-            .requestIdToken(getString(R.string.server_client_id))
-            .build()
-
-        // Build a GoogleSignInClient with the options specified by gso.
-        googleSignInClient = GoogleSignIn.getClient(this, gso)
 
         googleSignInClient.silentSignIn().addOnCompleteListener {
             handleSignInResult(it)
@@ -50,8 +43,7 @@ class LoginActivity : AppCompatActivity() {
             setOnClickListener {
                 signInButton.visibility = View.INVISIBLE
                 progressBarCard.visibility = View.VISIBLE
-                val signInIntent = googleSignInClient.signInIntent
-                startActivityForResult(signInIntent, RC_SIGN_IN)
+                startActivityForResult(googleSignInClient.signInIntent, RC_SIGN_IN)
             }
         }
     }

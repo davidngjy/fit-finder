@@ -8,14 +8,14 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.sample.fitfinder.data.repository.MessageRepository
 import com.sample.fitfinder.databinding.FragmentMessageBinding
 import com.sample.fitfinder.ui.message.viewmodel.MessageViewModel
-import com.sample.fitfinder.ui.message.viewmodel.MessageViewModelFactory
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MessageFragment : Fragment() {
 
-    private val messageViewModel: MessageViewModel by viewModels { MessageViewModelFactory(MessageRepository()) }
+    private val messageViewModel: MessageViewModel by viewModels()
     private lateinit var binding: FragmentMessageBinding
 
     override fun onCreateView(

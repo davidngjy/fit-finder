@@ -4,8 +4,11 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.sample.fitfinder.domain.User
 import com.sample.fitfinder.domain.UserRole
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class UserRepository {
+@Singleton
+class UserRepository @Inject constructor() {
     fun getUsers() : LiveData<List<User>> {
         val users = arrayListOf<User>(
             User(1, "David", "David", "", UserRole.ADMIN, ""),

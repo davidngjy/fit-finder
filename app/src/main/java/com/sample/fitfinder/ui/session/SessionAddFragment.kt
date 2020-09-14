@@ -37,10 +37,12 @@ import com.sample.fitfinder.R
 import com.sample.fitfinder.databinding.FragmentSessionAddBinding
 import com.sample.fitfinder.ui.configureDayNightStyle
 import com.sample.fitfinder.ui.session.viewmodel.SessionAddViewModel
+import dagger.hilt.android.AndroidEntryPoint
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.time.ExperimentalTime
 
+@AndroidEntryPoint
 @ExperimentalTime
 class SessionAddFragment : Fragment() {
 

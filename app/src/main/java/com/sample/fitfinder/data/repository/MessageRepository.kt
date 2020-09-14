@@ -7,9 +7,11 @@ import com.sample.fitfinder.domain.MessageSender
 import com.sample.fitfinder.domain.MessageType
 import com.sample.fitfinder.domain.MessageUserList
 import java.time.Instant
+import javax.inject.Inject
+import javax.inject.Singleton
 
-
-class MessageRepository {
+@Singleton
+class MessageRepository @Inject constructor() {
     fun getMessages() : LiveData<List<Message>> {
         val messages = arrayListOf<Message>(
             Message(1, MessageSender.ME, "Hello", MessageType.STRING, 1, Instant.now()),

@@ -1,4 +1,4 @@
-package com.sample.fitfinder
+package com.sample.fitfinder.ui
 
 import android.text.TextUtils
 import androidx.databinding.InverseMethod

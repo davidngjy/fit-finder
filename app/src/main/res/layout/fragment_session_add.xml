@@ -5,7 +5,7 @@
     tools:context=".ui.session.SessionAddFragment">
 
     <data>
-        <import type="com.sample.fitfinder.DataBindingConverter" />
+        <import type="com.sample.fitfinder.ui.DataBindingConverter" />
 
         <variable
             name="viewModel"

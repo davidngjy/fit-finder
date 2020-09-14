@@ -8,16 +8,16 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.sample.fitfinder.data.repository.SessionRepository
 import com.sample.fitfinder.databinding.FragmentSessionAvailableBinding
 import com.sample.fitfinder.ui.session.viewmodel.SessionAvailableViewModel
-import com.sample.fitfinder.ui.session.viewmodel.SessionAvailableViewModelFactory
+import dagger.hilt.android.AndroidEntryPoint
 import kotlin.time.ExperimentalTime
 
+@AndroidEntryPoint
 @ExperimentalTime
 class SessionAvailableFragment : Fragment() {
 
-    private val sessionAvailableViewModel: SessionAvailableViewModel by viewModels { SessionAvailableViewModelFactory(SessionRepository) }
+    private val sessionAvailableViewModel: SessionAvailableViewModel by viewModels()
     private lateinit var binding: FragmentSessionAvailableBinding
 
     override fun onCreateView(

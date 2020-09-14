@@ -8,12 +8,14 @@ import com.sample.fitfinder.domain.BookingStatus
 import com.sample.fitfinder.domain.Session
 import java.math.BigDecimal
 import java.time.Instant
+import javax.inject.Inject
+import javax.inject.Singleton
 import kotlin.time.ExperimentalTime
 import kotlin.time.minutes
 
-// TODO: Remove singleton class
+@Singleton
 @ExperimentalTime
-object SessionRepository {
+class SessionRepository @Inject constructor() {
 
     private val sessions = arrayListOf(
         Session(1, 1, "Session 1", "My first session", Instant.now(), LatLng(-37.809566, 145.078613), "Balwyn, 3103, Victoria", true, true, 11, 10),

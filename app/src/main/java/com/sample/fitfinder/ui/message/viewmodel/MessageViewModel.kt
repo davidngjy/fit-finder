@@ -1,12 +1,15 @@
 package com.sample.fitfinder.ui.message.viewmodel
 
+import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.sample.fitfinder.data.repository.MessageRepository
 import com.sample.fitfinder.domain.MessageUserList
+import dagger.hilt.android.scopes.FragmentScoped
 
-class MessageViewModel(messageRepository: MessageRepository)
+@FragmentScoped
+class MessageViewModel @ViewModelInject constructor(messageRepository: MessageRepository)
     : ViewModel() {
 
     val rooms = messageRepository.getMessageRooms()

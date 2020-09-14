@@ -1,5 +1,6 @@
 package com.sample.fitfinder.ui.session.viewmodel
 
+import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -7,15 +8,18 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.material.textfield.TextInputLayout
 import com.sample.fitfinder.data.repository.SessionRepository
 import com.sample.fitfinder.domain.Session
+import dagger.hilt.android.scopes.FragmentScoped
 import java.text.SimpleDateFormat
 import java.time.Instant
 import java.time.ZonedDateTime
 import java.util.*
 import kotlin.time.ExperimentalTime
 
-class SessionAddViewModel : ViewModel() {
-    @ExperimentalTime
-    private val sessionRepository = SessionRepository
+@FragmentScoped
+@ExperimentalTime
+class SessionAddViewModel @ViewModelInject constructor(private val sessionRepository: SessionRepository)
+    : ViewModel() {
+
     var sessionId: Long = 0
 
     private val timeFormatter = SimpleDateFormat("hh:mm a", Locale.getDefault())

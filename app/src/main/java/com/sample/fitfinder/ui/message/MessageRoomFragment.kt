@@ -9,14 +9,14 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.sample.fitfinder.data.repository.MessageRepository
 import com.sample.fitfinder.databinding.FragmentMessageRoomBinding
 import com.sample.fitfinder.ui.message.viewmodel.MessageRoomViewModel
-import com.sample.fitfinder.ui.message.viewmodel.MessageRoomViewModelFactory
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MessageRoomFragment : Fragment() {
 
-    private val messageRoomViewModel: MessageRoomViewModel by viewModels { MessageRoomViewModelFactory(MessageRepository()) }
+    private val messageRoomViewModel: MessageRoomViewModel by viewModels()
     private val args: MessageRoomFragmentArgs by navArgs()
 
     private lateinit var binding: FragmentMessageRoomBinding

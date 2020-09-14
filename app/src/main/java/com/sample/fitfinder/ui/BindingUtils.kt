@@ -1,8 +1,9 @@
-package com.sample.fitfinder
+package com.sample.fitfinder.ui
 
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.databinding.BindingAdapter
+import com.sample.fitfinder.R
 import com.sample.fitfinder.domain.Session
 import java.time.Instant
 import java.time.ZoneId

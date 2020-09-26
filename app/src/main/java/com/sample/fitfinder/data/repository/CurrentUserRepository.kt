@@ -8,12 +8,10 @@ import com.sample.fitfinder.data.gateway.UserGateway
 import com.sample.fitfinder.proto.ConnectUserResponse.Status
 import com.sample.fitfinder.proto.UserProfileOuterClass.UserProfile
 import dagger.hilt.android.qualifiers.ApplicationContext
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onEach
 import timber.log.Timber
 import java.io.IOException
 import javax.inject.Inject
@@ -40,19 +38,14 @@ class CurrentUserRepository @Inject constructor(@ApplicationContext context: Con
         }
 
     suspend fun connectUser(token: String): Flow<Status> {
-        return withContext(Dispatchers.IO) {
-            val responseFlow = userGateway.connectUser(token)
-            return@withContext flow {
-                responseFlow.collect {response ->
-                    emit(response.status)
-
-                    if (response.status == Status.Connected) {
-                        insertCurrentUser(response.userProfile)
-                        googleTokenRepository.updateGoogleToken(token)
-                    }
+        return userGateway.connectUser(token)
+            .onEach {
+                if (it.status == Status.Connected) {
+                    insertCurrentUser(it.userProfile)
+                    googleTokenRepository.updateGoogleToken(token)
                 }
             }
-        }
+            .map { it.status }
     }
 
     private suspend fun insertCurrentUser(user: UserProfile) {

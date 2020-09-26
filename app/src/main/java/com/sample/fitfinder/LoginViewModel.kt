@@ -4,35 +4,38 @@ import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.asLiveData
 import com.sample.fitfinder.data.repository.CurrentUserRepository
-import com.sample.fitfinder.proto.ConnectUserResponse.Status
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.channels.BroadcastChannel
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.asFlow
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.flowOn
 
+@FlowPreview
+@ExperimentalCoroutinesApi
 class LoginViewModel @ViewModelInject constructor(
     private val currentUserRepository: CurrentUserRepository)
     : ViewModel() {
 
-    private val _status = MutableLiveData<Status>()
-    val status: LiveData<Status>
-        get() = _status
+    private val tokenChannel = BroadcastChannel<String>(Channel.CONFLATED)
+    val status = tokenChannel
+        .asFlow()
+        .flatMapLatest {
+            currentUserRepository.connectUser(it)
+        }
+        .flowOn(Dispatchers.IO)
+        .asLiveData()
 
     private val _errorMessage = MutableLiveData<String>()
     val errorMessage: LiveData<String>
         get() = _errorMessage
 
     fun connectUser(token: String) {
-        viewModelScope.launch {
-            currentUserRepository.connectUser(token)
-                .collect {
-                    withContext(Dispatchers.Main) {
-                        _status.value = it
-                    }
-                }
-        }
+        tokenChannel.offer(token)
     }
 
     fun setErrorMessage(msg: String) {

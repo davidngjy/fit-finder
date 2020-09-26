@@ -23,6 +23,8 @@ import timber.log.Timber
 import javax.inject.Inject
 
 @AndroidEntryPoint
+@FlowPreview
+@ExperimentalCoroutinesApi
 class LoginActivity : AppCompatActivity() {
     private val viewModel: LoginViewModel by viewModels()
 
@@ -31,8 +33,6 @@ class LoginActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityLoginBinding
 
-    @FlowPreview
-    @ExperimentalCoroutinesApi
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_login)

@@ -41,10 +41,7 @@ class LoginActivity : AppCompatActivity() {
         binding.lifecycleOwner = this
 
         setupSignInButton()
-
-        googleSignInClient.silentSignIn().addOnCompleteListener {
-            handleSignInResult(it)
-        }
+        trySignIn()
 
         viewModel.status.observe(this, {
             it?.let {
@@ -59,10 +56,16 @@ class LoginActivity : AppCompatActivity() {
             setSize(SignInButton.SIZE_WIDE)
             setOnClickListener {
                 viewModel.clearErrorMessage()
-                binding.signInButton.visibility = View.INVISIBLE
-                binding.progressBarCard.visibility = View.VISIBLE
+                hideLoginButton()
                 startActivityForResult(googleSignInClient.signInIntent, RC_SIGN_IN)
             }
+        }
+    }
+
+    private fun trySignIn() {
+        hideLoginButton()
+        googleSignInClient.silentSignIn().addOnCompleteListener {
+            handleSignInResult(it)
         }
     }
 
@@ -84,7 +87,10 @@ class LoginActivity : AppCompatActivity() {
         } catch (e: ApiException) {
             when (e.statusCode) {
                 GoogleSignInStatusCodes.NETWORK_ERROR -> displayConnectionError()
-                else -> Timber.d("Error logging in statusCode: ${e.statusCode}")
+                else -> {
+                    Timber.d("Error logging in statusCode: ${e.statusCode}")
+                    showLoginButton()
+                }
             }
         }
     }
@@ -103,6 +109,11 @@ class LoginActivity : AppCompatActivity() {
     private fun showLoginButton() {
         binding.signInButton.visibility = View.VISIBLE
         binding.progressBarCard.visibility = View.INVISIBLE
+    }
+
+    private fun hideLoginButton() {
+        binding.signInButton.visibility = View.INVISIBLE
+        binding.progressBarCard.visibility = View.VISIBLE
     }
 
     companion object {

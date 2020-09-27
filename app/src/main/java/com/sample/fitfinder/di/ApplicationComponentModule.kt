@@ -5,6 +5,7 @@ import androidx.room.Room
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.sample.fitfinder.BuildConfig
 import com.sample.fitfinder.R
 import com.sample.fitfinder.data.database.ApplicationDatabase
 import com.sample.fitfinder.data.database.UserDao
@@ -48,9 +49,16 @@ object ApplicationComponentModule {
 
     @Provides
     @Singleton
-    fun provideManagedChannel(): ManagedChannel {
-        return ManagedChannelBuilder.forAddress("localhost", 5001)
-            .usePlaintext()
-            .build()
+    fun provideManagedChannel(@ApplicationContext appContext: Context): ManagedChannel {
+        val serviceUrl = appContext.getString(R.string.service_url)
+        return if (BuildConfig.LOCAL_BACKEND) {
+            ManagedChannelBuilder.forAddress(serviceUrl, 5001)
+                .usePlaintext()
+                .build()
+        } else {
+            ManagedChannelBuilder.forTarget(serviceUrl)
+                .useTransportSecurity()
+                .build()
+        }
     }
 }

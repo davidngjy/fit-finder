@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="google_maps_key" templateMergeStrategy="preserve" translatable="false">AIzaSyAlMWsW1rCPtSL10pr_eJjZ_Ph0WMlPX5s</string>
+    <string name="server_client_id" templateMergeStrategy="preserve" translatable="false">23020845888-iapkrik3ta9upg07frpg5ub8gr8uvrrv.apps.googleusercontent.com</string>
+    <string name="service_url" templateMergeStrategy="preserve" translatable="false">fitfinderserviceprod-l3nd6mxcgq-ts.a.run.app</string>
+</resources>

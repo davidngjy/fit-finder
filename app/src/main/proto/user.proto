@@ -2,13 +2,15 @@ syntax = "proto3";
 
 package fitfinder.proto;
 
-import "user_profile.proto";
-
 option java_package = "com.sample.fitfinder.proto";
 option java_multiple_files = true;
 
+import "google/protobuf/empty.proto";
+
 service UserProtocol {
     rpc ConnectUser(ConnectUserRequest) returns (stream ConnectUserResponse);
+    rpc SubscribeToUserProfile(SubscribeUserProfileRequest) returns (stream UserProfile);
+    rpc UpdateUserProfile(UpdateUserProfileRequest) returns (google.protobuf.Empty);
 }
 
 message ConnectUserRequest {
@@ -27,3 +29,27 @@ message ConnectUserResponse {
     UserProfile userProfile = 2;
 }
 
+message UpdateUserProfileRequest {
+    int64 userId = 1;
+    string displayName = 2;
+    string email = 3;
+    string profilePictureUri = 4;
+}
+message UserProfile {
+    int64 id = 1;
+    string googleId = 2;
+    string displayName = 3;
+    string email = 4;
+    string profilePictureUri = 5;
+    UserRole userRole = 6;
+
+    enum UserRole {
+        Admin = 0;
+        Trainer = 1;
+        User = 2;
+    }
+}
+
+message SubscribeUserProfileRequest {
+    int64 id = 1;
+}

@@ -11,7 +11,11 @@ import com.sample.fitfinder.LoginActivity
 import com.sample.fitfinder.databinding.FragmentProfileBinding
 import com.sample.fitfinder.ui.profile.viewmodel.ProfileViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.FlowPreview
 
+@ExperimentalCoroutinesApi
+@FlowPreview
 @AndroidEntryPoint
 class ProfileFragment : Fragment() {
     private val viewModel: ProfileViewModel by viewModels()
@@ -41,6 +45,11 @@ class ProfileFragment : Fragment() {
         })
 
         return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        viewModel.listenToProfileChange()
     }
 
     private fun navigateToLogin() {

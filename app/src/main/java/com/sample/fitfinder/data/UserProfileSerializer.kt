@@ -3,7 +3,7 @@ package com.sample.fitfinder.data
 import androidx.datastore.CorruptionException
 import androidx.datastore.Serializer
 import com.google.protobuf.InvalidProtocolBufferException
-import com.sample.fitfinder.proto.UserProfileOuterClass.UserProfile
+import com.sample.fitfinder.proto.UserProfile
 import java.io.InputStream
 import java.io.OutputStream
 

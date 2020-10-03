@@ -6,12 +6,9 @@ import androidx.datastore.createDataStore
 import com.sample.fitfinder.data.UserProfileSerializer
 import com.sample.fitfinder.data.gateway.UserGateway
 import com.sample.fitfinder.proto.ConnectUserResponse.Status
-import com.sample.fitfinder.proto.UserProfileOuterClass.UserProfile
+import com.sample.fitfinder.proto.UserProfile
 import dagger.hilt.android.qualifiers.ApplicationContext
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.*
 import timber.log.Timber
 import java.io.IOException
 import javax.inject.Inject
@@ -46,6 +43,32 @@ class CurrentUserRepository @Inject constructor(@ApplicationContext context: Con
                 }
             }
             .map { it.status }
+    }
+
+    suspend fun updateDisplayName(newDisplayName: String) {
+        val currentUser = currentUser.first()
+        userGateway.updateUserProfile(
+            currentUser.id,
+            newDisplayName,
+            currentUser.email,
+            currentUser.profilePictureUri
+        )
+    }
+
+    suspend fun updateEmail(newEmail: String) {
+        val currentUser = currentUser.first()
+        userGateway.updateUserProfile(
+            currentUser.id,
+            currentUser.displayName,
+            newEmail,
+            currentUser.profilePictureUri
+        )
+    }
+
+    suspend fun subscribeToUserProfile() {
+        val currentUserId = currentUser.first().id
+        userGateway.subscribeToUserProfile(currentUserId)
+            .collect { insertCurrentUser(it) }
     }
 
     private suspend fun insertCurrentUser(user: UserProfile) {

@@ -14,6 +14,7 @@
     <string name="session_upcoming">Upcoming</string>
     <string name="session_past">Past</string>
     <string name="confirm_button">Confirm</string>
+    <string name="cancel_button">Cancel</string>
     <string name="duration">Duration</string>
 
     // Format string
@@ -35,8 +36,9 @@
     <string name="cost_form">Cost</string>
     <string name="online_session">This session can be done online</string>
     <string name="in_person_session">This session can be done in person</string>
-    <string name="session_edit_button">Edit</string>
+    <string name="edit_button">Edit</string>
     <string name="availability_icon">Availability Icon</string>
+    <string name="new_value">New Value</string>
 
     // Error Message
     <string name="connection_error">Network problem, please try again.</string>

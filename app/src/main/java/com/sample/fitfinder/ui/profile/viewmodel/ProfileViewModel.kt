@@ -21,12 +21,6 @@ class ProfileViewModel @ViewModelInject constructor(
     val logOutSuccessful: LiveData<Boolean>
         get() = _logOutSuccessful
 
-    fun updateDisplayName(newName: String) {
-        viewModelScope.launch {
-            currentUserRepository.updateDisplayName(newName)
-        }
-    }
-
     fun listenToProfileChange() {
         viewModelScope.launch {
             currentUserRepository.subscribeToUserProfile()

@@ -83,6 +83,7 @@ fun ImageView.loadImageFromUrl(url: String?) {
         Glide.with(this)
             .load(url)
             .placeholder(R.drawable.ic_default_profile_24)
+            .circleCrop()
             .into(this)
     }
 }

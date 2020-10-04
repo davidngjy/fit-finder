@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import com.sample.fitfinder.LoginActivity
 import com.sample.fitfinder.databinding.FragmentProfileBinding
 import com.sample.fitfinder.ui.profile.viewmodel.ProfileViewModel
@@ -28,11 +29,6 @@ class ProfileFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentProfileBinding.inflate(inflater, container, false)
-
-        binding.signOutButton.setOnClickListener {
-            viewModel.logOut()
-        }
-
         binding.viewModel = viewModel
         binding.lifecycleOwner = this
 
@@ -43,6 +39,20 @@ class ProfileFragment : Fragment() {
                 }
             }
         })
+
+        binding.signOutButton.setOnClickListener {
+            viewModel.logOut()
+        }
+
+        binding.editEmailButton.setOnClickListener {
+            findNavController()
+                .navigate(ProfileFragmentDirections.actionProfileFragmentToProfileEditDialogFragment(EditAction.Email))
+        }
+
+        binding.editNameButton.setOnClickListener {
+            findNavController()
+                .navigate(ProfileFragmentDirections.actionProfileFragmentToProfileEditDialogFragment(EditAction.DisplayName))
+        }
 
         return binding.root
     }

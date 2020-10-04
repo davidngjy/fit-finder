@@ -46,7 +46,11 @@
         android:id="@+id/profileFragment"
         android:name="com.sample.fitfinder.ui.profile.ProfileFragment"
         android:label="@string/nav_profile"
-        tools:layout="@layout/fragment_profile"/>
+        tools:layout="@layout/fragment_profile">
+        <action
+            android:id="@+id/action_profileFragment_to_profileEditDialogFragment"
+            app:destination="@id/profileEditDialogFragment" />
+    </fragment>
 
     <fragment
         android:id="@+id/messageRoomFragment"
@@ -84,4 +88,12 @@
         android:name="com.sample.fitfinder.ui.session.SessionAvailableFragment"
         android:label="fragment_session_available"
         tools:layout="@layout/fragment_session_available" />
+    <dialog
+        android:id="@+id/profileEditDialogFragment"
+        android:name="com.sample.fitfinder.ui.profile.ProfileEditDialogFragment"
+        android:label="ProfileEditDialogFragment" >
+        <argument
+            android:name="editAction"
+            app:argType="com.sample.fitfinder.ui.profile.EditAction" />
+    </dialog>
 </navigation>

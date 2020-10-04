@@ -241,7 +241,7 @@
                 android:id="@+id/edit_button"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="@string/session_edit_button"
+                android:text="@string/edit_button"
                 android:layout_margin="10dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"

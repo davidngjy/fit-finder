@@ -222,12 +222,14 @@ class SessionAddFragment : Fragment() {
     }
 
     private fun showMaterialTimePicker() {
-        val timePicker = MaterialTimePicker.newInstance().apply {
-            setTimeFormat(TimeFormat.CLOCK_12H)
-        }
+        val timePicker = MaterialTimePicker
+            .Builder()
+            .setTimeFormat(TimeFormat.CLOCK_12H)
+            .build()
+
         timePicker.show(parentFragmentManager, timePicker.toString())
 
-        timePicker.setListener {
+        timePicker.addOnPositiveButtonClickListener {
             viewModel.time.value!!.set(Calendar.HOUR_OF_DAY, timePicker.hour)
             viewModel.time.value!!.set(Calendar.MINUTE, timePicker.minute)
 

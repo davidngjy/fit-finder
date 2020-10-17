@@ -22,16 +22,15 @@ class SessionDetailViewModel @ViewModelInject constructor(private val sessionRep
     : ViewModel() {
 
     private val sessionIdChannel = BroadcastChannel<Long>(Channel.CONFLATED)
-
-    private val currentSession = sessionIdChannel
+    private val sessionFlow = sessionIdChannel
         .asFlow()
         .flatMapLatest {
             sessionRepository.getSession(it)
         }
 
-    val session = currentSession.asLiveData()
+    val session = sessionFlow.asLiveData()
 
-    val location = currentSession
+    val location = sessionFlow
         .map { it.location }
         .asLiveData()
 

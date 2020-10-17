@@ -34,6 +34,10 @@ class CurrentUserRepository @Inject constructor(@ApplicationContext context: Con
             }
         }
 
+    val userId = userProfileDataStore.data.map {
+        it.id
+    }
+
     suspend fun connectUser(token: String): Flow<Status> {
         return userGateway.connectUser(token)
             .onEach {
@@ -48,7 +52,6 @@ class CurrentUserRepository @Inject constructor(@ApplicationContext context: Con
     suspend fun updateDisplayName(newDisplayName: String) {
         val currentUser = currentUser.first()
         userGateway.updateUserProfile(
-            currentUser.id,
             newDisplayName,
             currentUser.email,
             currentUser.profilePictureUri
@@ -58,7 +61,6 @@ class CurrentUserRepository @Inject constructor(@ApplicationContext context: Con
     suspend fun updateEmail(newEmail: String) {
         val currentUser = currentUser.first()
         userGateway.updateUserProfile(
-            currentUser.id,
             currentUser.displayName,
             newEmail,
             currentUser.profilePictureUri
@@ -66,8 +68,7 @@ class CurrentUserRepository @Inject constructor(@ApplicationContext context: Con
     }
 
     suspend fun subscribeToUserProfile() {
-        val currentUserId = currentUser.first().id
-        userGateway.subscribeToUserProfile(currentUserId)
+        userGateway.subscribeToUserProfile()
             .collect { insertCurrentUser(it) }
     }
 

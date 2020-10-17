@@ -21,10 +21,14 @@ import com.sample.fitfinder.databinding.FragmentSessionDetailBinding
 import com.sample.fitfinder.ui.configureDayNightStyle
 import com.sample.fitfinder.ui.session.viewmodel.SessionDetailViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.FlowPreview
 import kotlin.time.ExperimentalTime
 
 @AndroidEntryPoint
 @ExperimentalTime
+@FlowPreview
+@ExperimentalCoroutinesApi
 class SessionDetailFragment : Fragment() {
     private val viewModel: SessionDetailViewModel by viewModels()
     private val args: SessionDetailFragmentArgs by navArgs()

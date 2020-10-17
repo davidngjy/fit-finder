@@ -1,6 +1,6 @@
 package com.sample.fitfinder.data.gateway
 
-import android.annotation.SuppressLint
+import com.google.protobuf.Empty
 import com.sample.fitfinder.data.repository.GoogleTokenRepository
 import com.sample.fitfinder.proto.*
 import io.grpc.ManagedChannel
@@ -33,30 +33,24 @@ class UserGateway @Inject constructor() {
             }
     }
 
-    @SuppressLint("CheckResult")
-    suspend fun updateUserProfile(userId: Long, displayName: String, email: String, profilePictureUrl: String) {
+    suspend fun updateUserProfile(displayName: String, email: String, profilePictureUrl: String)
+        : Response{
         val stub = createCoroutineStub()
 
         val request = UpdateUserProfileRequest
             .newBuilder()
-            .setUserId(userId)
             .setDisplayName(displayName)
             .setEmail(email)
             .setProfilePictureUri(profilePictureUrl)
             .build()
 
-        stub.updateUserProfile(request)
+        return stub.updateUserProfile(request)
     }
 
-    suspend fun subscribeToUserProfile(userId: Long): Flow<UserProfile> {
+    suspend fun subscribeToUserProfile(): Flow<UserProfile> {
         val stub = createCoroutineStub()
 
-        val request = SubscribeUserProfileRequest
-            .newBuilder()
-            .setId(userId)
-            .build()
-
-        return stub.subscribeToUserProfile(request)
+        return stub.subscribeToUserProfile(Empty.getDefaultInstance())
             .catch { ex ->
                 Timber.e(ex, "Exception thrown on subscribe to user profile.")
             }

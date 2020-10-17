@@ -11,15 +11,22 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.sample.fitfinder.databinding.FragmentSessionAvailableBinding
 import com.sample.fitfinder.ui.session.viewmodel.SessionAvailableViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlin.time.ExperimentalTime
 
 @AndroidEntryPoint
 @ExperimentalTime
 class SessionAvailableFragment : Fragment() {
 
-    private val sessionAvailableViewModel: SessionAvailableViewModel by viewModels()
+    private val viewModel: SessionAvailableViewModel by viewModels()
     private lateinit var binding: FragmentSessionAvailableBinding
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        viewModel.subscribeToUserSession()
+    }
+
+    @ExperimentalCoroutinesApi
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -28,23 +35,23 @@ class SessionAvailableFragment : Fragment() {
         binding = FragmentSessionAvailableBinding.inflate(inflater, container, false)
 
         val adapter = SessionAvailableAdapter(SessionListItemListener { sessionId ->
-            sessionAvailableViewModel.onSessionClick(sessionId)
+            viewModel.onSessionClick(sessionId)
         })
 
         binding.sessionAvailableList.adapter = adapter
         binding.lifecycleOwner = this
 
-        sessionAvailableViewModel.sessions.observe(viewLifecycleOwner, {
+        viewModel.sessions.observe(viewLifecycleOwner, {
             it?.let {
                 adapter.submitList(it)
             }
         })
 
-        sessionAvailableViewModel.navigateToSessionDetail.observe(viewLifecycleOwner, {
+        viewModel.navigateToSessionDetail.observe(viewLifecycleOwner, {
             it?.let {
                 findNavController()
                     .navigate(SessionFragmentDirections.actionSessionFragmentToSessionDetailFragment(it))
-                sessionAvailableViewModel.onSessionDetailNavigated()
+                viewModel.onSessionDetailNavigated()
             }
         })
 

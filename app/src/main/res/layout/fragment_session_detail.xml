@@ -101,7 +101,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 style="@style/Widget.FitFinder.Form.TextView"
-                android:text="@{viewModel.session.locationSuburbString}"
+                android:text="@{viewModel.session.locationString}"
                 app:layout_constraintTop_toBottomOf="@id/date_time"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/location_icon"

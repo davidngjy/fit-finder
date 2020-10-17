@@ -1,19 +1,23 @@
 package com.sample.fitfinder.ui.session.viewmodel
 
 import androidx.hilt.lifecycle.ViewModelInject
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.*
 import com.sample.fitfinder.data.repository.SessionRepository
 import dagger.hilt.android.scopes.FragmentScoped
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.launch
 import kotlin.time.ExperimentalTime
 
 @FragmentScoped
 @ExperimentalTime
-class SessionAvailableViewModel @ViewModelInject constructor(sessionRepository: SessionRepository)
+class SessionAvailableViewModel @ViewModelInject constructor(
+    val sessionRepository: SessionRepository)
     : ViewModel() {
 
-    val sessions = sessionRepository.getSessions()
+    @ExperimentalCoroutinesApi
+    val sessions = sessionRepository
+        .getNonBookSessions()
+        .asLiveData()
 
     private val _navigateToSessionDetail = MutableLiveData<Long>()
     val navigateToSessionDetail: LiveData<Long>
@@ -25,5 +29,11 @@ class SessionAvailableViewModel @ViewModelInject constructor(sessionRepository: 
 
     fun onSessionDetailNavigated() {
         _navigateToSessionDetail.value = null
+    }
+
+    fun subscribeToUserSession() {
+        viewModelScope.launch {
+            sessionRepository.subscribeToUserSession()
+        }
     }
 }

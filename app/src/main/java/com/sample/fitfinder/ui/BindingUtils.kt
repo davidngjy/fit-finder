@@ -36,14 +36,14 @@ fun TextView.setSessionHeading(item: Session?) {
 fun TextView.setSessionDuration(item: Session?) {
     item?.let {
         val res = context.resources
-        text = res.getString(R.string.session_duration, item.durationInMin)
+        text = res.getString(R.string.session_duration, item.duration)
     }
 }
 
 @BindingAdapter("sessionCostFormatted")
 fun TextView.setSessionCost(item: Session?) {
     item?.let {
-        text = item.cost.toString()
+        text = item.price.toString()
     }
 }
 

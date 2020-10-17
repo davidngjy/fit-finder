@@ -43,7 +43,7 @@ class SessionAvailableAdapter(private val clickListener: SessionListItemListener
 
 class SessionDiffCallBack: DiffUtil.ItemCallback<Session>() {
     override fun areItemsTheSame(oldItem: Session, newItem: Session): Boolean {
-        return oldItem.id == newItem.id
+        return oldItem.sessionId == newItem.sessionId
     }
 
     override fun areContentsTheSame(oldItem: Session, newItem: Session): Boolean {

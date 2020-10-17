@@ -8,6 +8,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.sample.fitfinder.BuildConfig
 import com.sample.fitfinder.R
 import com.sample.fitfinder.data.database.ApplicationDatabase
+import com.sample.fitfinder.data.database.SessionDao
 import com.sample.fitfinder.data.database.UserDao
 import dagger.Module
 import dagger.Provides
@@ -45,6 +46,11 @@ object ApplicationComponentModule {
     @Provides
     fun provideUserDao(database: ApplicationDatabase): UserDao {
         return database.userDao()
+    }
+
+    @Provides
+    fun provideSessionDao(database: ApplicationDatabase): SessionDao {
+        return database.sessionDao()
     }
 
     @Provides

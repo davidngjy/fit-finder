@@ -4,11 +4,16 @@ import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.material.textfield.TextInputLayout
+import com.sample.fitfinder.data.repository.CurrentUserRepository
 import com.sample.fitfinder.data.repository.SessionRepository
 import com.sample.fitfinder.domain.Session
+import com.sample.fitfinder.proto.Response
 import dagger.hilt.android.scopes.FragmentScoped
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.time.Instant
 import java.time.ZonedDateTime
@@ -17,7 +22,9 @@ import kotlin.time.ExperimentalTime
 
 @FragmentScoped
 @ExperimentalTime
-class SessionAddViewModel @ViewModelInject constructor(private val sessionRepository: SessionRepository)
+class SessionAddViewModel @ViewModelInject constructor(
+    val sessionRepository: SessionRepository,
+    val currentUserRepository: CurrentUserRepository)
     : ViewModel() {
 
     var sessionId: Long = 0
@@ -31,7 +38,7 @@ class SessionAddViewModel @ViewModelInject constructor(private val sessionReposi
     val dateString = MutableLiveData<String>()
     val timeString = MutableLiveData<String>()
     val locationString = MutableLiveData<String>()
-    val cost = MutableLiveData<Int>()
+    val price = MutableLiveData<Int>()
     val duration = MutableLiveData(30)
     val isOnline = MutableLiveData(true)
     val isInPerson = MutableLiveData(false)
@@ -93,17 +100,21 @@ class SessionAddViewModel @ViewModelInject constructor(private val sessionReposi
     fun loadSessionDetail(sessionId: Long) {
         if (sessionId == this.sessionId) return
 
-        val sessionDetail = sessionRepository.getSession(sessionId).value!!
-        this.sessionId = sessionDetail.id
-        title.value = sessionDetail.title
-        description.value = sessionDetail.description
-        locationString.value = sessionDetail.locationSuburbString
-        cost.value = sessionDetail.cost
-        duration.value = sessionDetail.durationInMin
-        isOnline.value = sessionDetail.isOnline
-        isInPerson.value = sessionDetail.isInPerson
-        _locationCoordinate.value = sessionDetail.locationCoordinate
-        setDateTimeFromSession(sessionDetail.sessionDateTime)
+        viewModelScope.launch {
+            sessionRepository.getSession(sessionId)
+                .collect {sessionDetail ->
+                    this@SessionAddViewModel.sessionId = sessionDetail.sessionId
+                    title.value = sessionDetail.title
+                    description.value = sessionDetail.description
+                    locationString.value = sessionDetail.locationString
+                    price.value = sessionDetail.price.toInt()
+                    duration.value = sessionDetail.duration
+                    isOnline.value = sessionDetail.isOnline
+                    isInPerson.value = sessionDetail.isInPerson
+                    _locationCoordinate.value = sessionDetail.location
+                    setDateTimeFromSession(sessionDetail.sessionDateTime)
+                }
+        }
     }
 
     private fun setDateTimeFromSession(dateTimeInstant: Instant) {
@@ -128,13 +139,15 @@ class SessionAddViewModel @ViewModelInject constructor(private val sessionReposi
             locationString.value!!,
             isOnline.value!!,
             isInPerson.value!!,
-            cost.value!!,
+            price.value!!.toDouble(),
             duration.value!!
         )
 
-        if (sessionId != 0L) sessionRepository.updateSession(sessionId, newSession)
-        else sessionRepository.addSession(newSession)
-
-        _navigateOnConfirm.value = true
+        viewModelScope.launch {
+//            if (sessionId != 0L) sessionRepository.updateSession(sessionId, newSession)
+//            else sessionRepository.addSession(newSession)
+            val response = sessionRepository.addSession(newSession)
+            _navigateOnConfirm.value = response.resultStatus == Response.Status.Success
+        }
     }
 }

@@ -1,28 +1,41 @@
 package com.sample.fitfinder.ui.session.viewmodel
 
 import androidx.hilt.lifecycle.ViewModelInject
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.google.android.gms.maps.model.LatLng
+import androidx.lifecycle.asLiveData
 import com.sample.fitfinder.data.repository.SessionRepository
-import com.sample.fitfinder.domain.Session
 import dagger.hilt.android.scopes.FragmentScoped
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.channels.BroadcastChannel
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.asFlow
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.map
 import kotlin.time.ExperimentalTime
 
 @FragmentScoped
 @ExperimentalTime
+@FlowPreview
+@ExperimentalCoroutinesApi
 class SessionDetailViewModel @ViewModelInject constructor(private val sessionRepository: SessionRepository)
     : ViewModel() {
 
-    var session: LiveData<Session>? = null
+    private val sessionIdChannel = BroadcastChannel<Long>(Channel.CONFLATED)
 
-    private val _location = MutableLiveData<LatLng>()
-    val location: LiveData<LatLng>
-        get() = _location
+    private val currentSession = sessionIdChannel
+        .asFlow()
+        .flatMapLatest {
+            sessionRepository.getSession(it)
+        }
+
+    val session = currentSession.asLiveData()
+
+    val location = currentSession
+        .map { it.location }
+        .asLiveData()
 
     fun setSessionId(id: Long) {
-        session = sessionRepository.getSession(id)
-        _location.value = session?.value?.locationCoordinate
+        sessionIdChannel.offer(id)
     }
 }

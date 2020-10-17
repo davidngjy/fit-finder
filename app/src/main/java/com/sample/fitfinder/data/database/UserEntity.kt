@@ -8,7 +8,7 @@ import com.sample.fitfinder.domain.UserRole
 @Entity(tableName = "User")
 data class UserEntity (
     @PrimaryKey
-    val Id: Long,
+    val id: Long,
     val googleId: String,
     val displayName: String,
     val email: String,
@@ -16,7 +16,7 @@ data class UserEntity (
     val profilePictureUri: String?
 ) {
     fun toDomainModel(): User = User(
-        Id,
+        id,
         googleId,
         displayName,
         email,
@@ -26,7 +26,7 @@ data class UserEntity (
 
     companion object {
         fun toEntityModel(user: User) = UserEntity(
-            user.Id,
+            user.id,
             user.googleId,
             user.displayName,
             user.email,

@@ -23,13 +23,14 @@ import com.google.android.gms.maps.model.CircleOptions
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.google.gson.Gson
 import com.sample.fitfinder.R
 import com.sample.fitfinder.databinding.FragmentSearchBinding
 import com.sample.fitfinder.domain.Session
 import com.sample.fitfinder.ui.configureDayNightStyle
 import com.sample.fitfinder.ui.search.viewmodel.SearchViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
 import kotlin.time.ExperimentalTime
 
 @AndroidEntryPoint
@@ -42,7 +43,6 @@ class SearchFragment : Fragment(),
     private lateinit var binding: FragmentSearchBinding
     private lateinit var map: GoogleMap
     private lateinit var fusedLocationClient: FusedLocationProviderClient
-    private lateinit var converter: Gson
 
     private var permissionDenied = false
 
@@ -59,8 +59,6 @@ class SearchFragment : Fragment(),
         mapFragment.getMapAsync(this)
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity())
-        
-        converter = Gson()
 
         return binding.root
     }
@@ -68,7 +66,7 @@ class SearchFragment : Fragment(),
     override fun onMapReady(googleMap: GoogleMap) {
         map = googleMap
         map.configureDayNightStyle(requireContext())
-        map.setInfoWindowAdapter(CustomInfoWindowAdapter(layoutInflater, converter))
+        map.setInfoWindowAdapter(CustomInfoWindowAdapter(layoutInflater))
 
         map.setOnInfoWindowClickListener {
             val sessionId = it.tag as Long
@@ -89,7 +87,7 @@ class SearchFragment : Fragment(),
 
         enableMyLocation()
 
-        searchViewModel.sessions.observe(viewLifecycleOwner) { sessions ->
+        searchViewModel.nonBookSessions.observe(viewLifecycleOwner) { sessions ->
             map.clear()
             sessions.forEach { session ->
                 markSessionOnMap(session)
@@ -163,17 +161,20 @@ class SearchFragment : Fragment(),
     }
 
     private fun markSessionOnMap(session: Session) {
-        val data = MapInfoData(session.id, session.title, session.description, session.sessionDateTime.toEpochMilli())
+        val data = MapInfoData(session.sessionId,
+            session.title,
+            session.description,
+            session.sessionDateTime.toEpochMilli())
         
         map.addMarker(
             MarkerOptions()
-                .position(session.locationCoordinate)
-                .title(converter.toJson(data))
+                .position(session.location)
+                .title(Json.encodeToString(data))
         )
 
         map.addCircle(
             CircleOptions()
-                .center(session.locationCoordinate)
+                .center(session.location)
                 .radius(1000.0)
                 .fillColor(getColor(requireContext(), R.color.markerFillColor))
                 .strokeColor(getColor(requireContext(), R.color.markerStrokeColor))

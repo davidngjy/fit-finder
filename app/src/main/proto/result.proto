@@ -1,0 +1,14 @@
+syntax = "proto3";
+
+package fitfinder.proto;
+
+option java_package = "com.sample.fitfinder.proto";
+option java_multiple_files = true;
+
+message Response {
+    Status resultStatus = 1;
+    enum Status {
+        Success = 0;
+        Failed = 1;
+    }
+}

@@ -88,6 +88,7 @@ class SessionAddFragment : Fragment() {
         setupDatePicker()
         setupBackNavigation()
         checkForEdit()
+        showConfirmButton()
 
         return binding.root
     }
@@ -157,7 +158,8 @@ class SessionAddFragment : Fragment() {
 
         viewModel.navigateOnConfirm.observe(viewLifecycleOwner, {
             it?.let {
-                findNavController().popBackStack()
+                if (it) findNavController().popBackStack()
+                else showConfirmButton()
             }
         })
     }
@@ -243,7 +245,7 @@ class SessionAddFragment : Fragment() {
     }
 
     private fun showMaterialDatePicker() {
-        datePicker.show(parentFragmentManager, datePicker.toString())
+        datePicker.show(childFragmentManager, datePicker.toString())
         datePicker.addOnPositiveButtonClickListener {
             viewModel.date.value!!.time = Date(it)
             viewModel.dateString.value = datePicker.headerText
@@ -268,6 +270,7 @@ class SessionAddFragment : Fragment() {
         if (!validateAllInput()) { return }
         if (!viewModel.validateDateTime(binding.timeTextField)) { return }
 
+        showProgress()
         viewModel.saveSession()
     }
 
@@ -321,6 +324,16 @@ class SessionAddFragment : Fragment() {
 
     private fun checkForEdit() {
         if (args.sessionId > 0) viewModel.loadSessionDetail(args.sessionId)
+    }
+
+    private fun showProgress() {
+        binding.progressBarCard.visibility = View.VISIBLE
+        binding.confirmButton.visibility = View.INVISIBLE
+    }
+
+    private fun showConfirmButton() {
+        binding.progressBarCard.visibility = View.INVISIBLE
+        binding.confirmButton.visibility = View.VISIBLE
     }
 
     companion object {

@@ -5,6 +5,7 @@ apply plugin: "androidx.navigation.safeargs.kotlin"
 apply plugin: 'kotlin-kapt'
 apply plugin: 'dagger.hilt.android.plugin'
 apply plugin: 'com.google.protobuf'
+apply plugin: 'kotlinx-serialization'
 
 android {
     compileSdkVersion 30
@@ -103,12 +104,12 @@ dependencies {
 
     // Maps
     implementation 'com.google.android.gms:play-services-maps:17.0.0'
-    implementation ('com.google.android.libraries.places:places:2.3.0') {
+    implementation ('com.google.android.libraries.places:places:2.4.0') {
         exclude group:'com.google.protobuf', module:'protobuf-lite'
     }
 
     // Json converter
-    implementation 'com.google.code.gson:gson:2.8.6'
+    implementation "org.jetbrains.kotlinx:kotlinx-serialization-json:1.0.0"
 
     // Auth
     implementation 'com.google.android.gms:play-services-auth:18.1.0'

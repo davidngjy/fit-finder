@@ -27,7 +27,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:clickable="true"
-            android:onClick="@{() -> clickListener.onClick(session.id)}">
+            android:onClick="@{() -> clickListener.onClick(session.sessionId)}">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
@@ -94,7 +94,7 @@
                     android:id="@+id/session_location"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@{session.locationSuburbString}"
+                    android:text="@{session.locationString}"
                     android:textAppearance="@style/TextAppearance.MaterialComponents.Caption"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/session_description"

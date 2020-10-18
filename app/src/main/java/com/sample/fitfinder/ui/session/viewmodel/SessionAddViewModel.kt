@@ -13,6 +13,7 @@ import com.sample.fitfinder.domain.Session
 import com.sample.fitfinder.proto.Response
 import dagger.hilt.android.scopes.FragmentScoped
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.time.Instant
@@ -129,24 +130,22 @@ class SessionAddViewModel @ViewModelInject constructor(
 
     @ExperimentalTime
     fun saveSession() {
-        val newSession = Session(
-            sessionId,
-            1,
-            title.value!!,
-            description.value!!,
-            getConvertedDateTime(),
-            locationCoordinate.value!!,
-            locationString.value!!,
-            isOnline.value!!,
-            isInPerson.value!!,
-            price.value!!.toDouble(),
-            duration.value!!
-        )
-
         viewModelScope.launch {
-//            if (sessionId != 0L) sessionRepository.updateSession(sessionId, newSession)
-//            else sessionRepository.addSession(newSession)
-            val response = sessionRepository.addSession(newSession)
+            val session = Session(
+                sessionId,
+                currentUserRepository.userId.first(),
+                title.value!!,
+                description.value!!,
+                getConvertedDateTime(),
+                locationCoordinate.value!!,
+                locationString.value!!,
+                isOnline.value!!,
+                isInPerson.value!!,
+                price.value!!.toDouble(),
+                duration.value!!
+            )
+
+            val response = sessionRepository.upsertSession(session)
             _navigateOnConfirm.value = response.resultStatus == Response.Status.Success
         }
     }

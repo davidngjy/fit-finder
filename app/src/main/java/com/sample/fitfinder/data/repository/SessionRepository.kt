@@ -25,12 +25,17 @@ class SessionRepository @Inject constructor() {
     @Inject lateinit var sessionDao: SessionDao
     @Inject lateinit var currentUserRepository: CurrentUserRepository
 
-    suspend fun addSession(newSession: Session): Response {
-        return sessionGateway.addSession(newSession)
+    fun getAvailableSessions(): Flow<List<Session>> {
+        return sessionDao.getAvailableSessions()
     }
 
     fun getSession(sessionId: Long): Flow<Session> {
         return sessionDao.getSession(sessionId)
+    }
+
+    suspend fun upsertSession(session: Session): Response {
+        return if (session.sessionId == 0L) sessionGateway.addSession(session)
+        else sessionGateway.editSession(session)
     }
 
     @ExperimentalCoroutinesApi

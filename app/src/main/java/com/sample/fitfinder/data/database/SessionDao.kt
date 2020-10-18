@@ -13,11 +13,18 @@ abstract class SessionDao: BaseDao<SessionEntity>() {
         FROM Session
         WHERE BookingStatus = :type 
             AND TrainerUserId = :trainerUserId""")
-    abstract fun getSessions(type: BookingStatus, trainerUserId: Long) : Flow<List<Session>>
+    abstract fun getSessions(type: BookingStatus, trainerUserId: Long): Flow<List<Session>>
+
+    @Query("""
+        SELECT *
+        FROM Session
+        WHERE BookingId = 0
+    """)
+    abstract fun getAvailableSessions(): Flow<List<Session>>
 
     @Query("""
         SELECT * 
         FROM Session
         WHERE SessionId = :sessionId """)
-    abstract fun getSession(sessionId: Long) : Flow<Session>
+    abstract fun getSession(sessionId: Long): Flow<Session>
 }

@@ -87,7 +87,7 @@ class SearchFragment : Fragment(),
 
         enableMyLocation()
 
-        searchViewModel.nonBookSessions.observe(viewLifecycleOwner) { sessions ->
+        searchViewModel.availableSessions.observe(viewLifecycleOwner) { sessions ->
             map.clear()
             sessions.forEach { session ->
                 markSessionOnMap(session)

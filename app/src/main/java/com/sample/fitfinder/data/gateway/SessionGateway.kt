@@ -19,7 +19,7 @@ class SessionGateway @Inject constructor() {
 
     private val key = Metadata.Key.of("Authorization", Metadata.ASCII_STRING_MARSHALLER)
 
-    suspend fun addSession(newSession: Session) : Response {
+    suspend fun addSession(newSession: Session): Response {
         val stub = createCoroutineStub()
         val request = AddSessionRequest.newBuilder()
             .setTitle(newSession.title)
@@ -36,6 +36,32 @@ class SessionGateway @Inject constructor() {
             .setDuration(Duration.newBuilder().setSeconds((newSession.duration * 60).toLong()))
             .build()
         return stub.addSession(request)
+    }
+
+    suspend fun editSession(editedSession: Session): Response {
+        val stub = createCoroutineStub()
+        val request = EditSessionRequest.newBuilder()
+            .setTrainerUserId(editedSession.trainerUserId)
+            .setSessionId(editedSession.sessionId)
+            .setTitle(editedSession.title)
+            .setDescription(editedSession.description)
+            .setSessionDateTime(Timestamp.newBuilder()
+                .setSeconds(editedSession.sessionDateTime.epochSecond))
+            .setLocation(LatLng.newBuilder()
+                .setLatitude(editedSession.location.latitude)
+                .setLongitude(editedSession.location.longitude))
+            .setLocationString(editedSession.locationString)
+            .setIsOnline(editedSession.isOnline)
+            .setIsInPerson(editedSession.isInPerson)
+            .setPrice(editedSession.price)
+            .setDuration(Duration.newBuilder().setSeconds((editedSession.duration * 60).toLong()))
+            .build()
+        return stub.editSession(request)
+    }
+
+    suspend fun getAvailableSessions(): Flow<UserSession> {
+        val stub = createCoroutineStub()
+        return stub.getAvailableSessions(Empty.getDefaultInstance())
     }
 
     suspend fun getUserSessions(): Flow<UserSession> {

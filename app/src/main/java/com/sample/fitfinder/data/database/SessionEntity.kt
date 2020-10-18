@@ -23,25 +23,4 @@ data class SessionEntity (
     val bookingId: Long?,
     val clientUserId: Long?,
     val bookingStatus: BookingStatus
-) {
-//    companion object {
-//        fun SessionEntity.toDomain() : Session{
-//            return Session(
-//                SessionId,
-//                TrainerUserId,
-//                Title,
-//                Description,
-//                SessionDateTime,
-//                Location,
-//                LocationString,
-//                IsOnline,
-//                IsInPerson,
-//                Price,
-//                Duration,
-//                BookingId,
-//                ClientUserId,
-//                BookingStatus
-//            )
-//        }
-//    }
-}
+)

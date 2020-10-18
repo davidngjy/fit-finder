@@ -59,19 +59,14 @@ class SessionGateway @Inject constructor() {
         return stub.editSession(request)
     }
 
-    suspend fun getAvailableSessions(): Flow<UserSession> {
-        val stub = createCoroutineStub()
-        return stub.getAvailableSessions(Empty.getDefaultInstance())
-    }
-
-    suspend fun getUserSessions(): Flow<UserSession> {
-        val stub = createCoroutineStub()
-        return stub.getUserSessions(Empty.getDefaultInstance())
-    }
-
     suspend fun subscribeToUserSession(): Flow<UserSession> {
         val stub = createCoroutineStub()
         return stub.subscribeToUserSession(Empty.getDefaultInstance())
+    }
+
+    suspend fun subscribeToAvailableSession(): Flow<UserSession> {
+        val stub = createCoroutineStub()
+        return stub.subscribeToAvailableSessions(Empty.getDefaultInstance())
     }
 
     private suspend fun createCoroutineStub(): SessionProtocolGrpcKt.SessionProtocolCoroutineStub {

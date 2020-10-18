@@ -42,7 +42,7 @@ class CurrentUserRepository @Inject constructor(@ApplicationContext context: Con
         return userGateway.connectUser(token)
             .onEach {
                 if (it.status == Status.Connected) {
-                    insertCurrentUser(it.userProfile)
+                    upsertCurrentUser(it.userProfile)
                     googleTokenRepository.updateGoogleToken(token)
                 }
             }
@@ -67,12 +67,7 @@ class CurrentUserRepository @Inject constructor(@ApplicationContext context: Con
         )
     }
 
-    suspend fun subscribeToUserProfile() {
-        userGateway.subscribeToUserProfile()
-            .collect { insertCurrentUser(it) }
-    }
-
-    private suspend fun insertCurrentUser(user: UserProfile) {
+    suspend fun upsertCurrentUser(user: UserProfile) {
         userProfileDataStore.updateData { data ->
             data.toBuilder()
                 .setId(user.id)

@@ -4,7 +4,6 @@ import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.*
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.sample.fitfinder.data.repository.CurrentUserRepository
-import com.sample.fitfinder.proto.UserProfile
 import dagger.hilt.android.scopes.FragmentScoped
 import kotlinx.coroutines.launch
 
@@ -13,19 +12,11 @@ class ProfileViewModel @ViewModelInject constructor(
     private val googleSignInClient: GoogleSignInClient,
     private val currentUserRepository: CurrentUserRepository) : ViewModel() {
 
-    private val _currentUser = currentUserRepository.currentUser.asLiveData()
-    val currentUser: LiveData<UserProfile>
-        get() = _currentUser
+    val currentUser = currentUserRepository.currentUser.asLiveData()
 
     private val _logOutSuccessful = MutableLiveData<Boolean>()
     val logOutSuccessful: LiveData<Boolean>
         get() = _logOutSuccessful
-
-    fun listenToProfileChange() {
-        viewModelScope.launch {
-            currentUserRepository.subscribeToUserProfile()
-        }
-    }
 
     fun logOut() {
         viewModelScope.launch {

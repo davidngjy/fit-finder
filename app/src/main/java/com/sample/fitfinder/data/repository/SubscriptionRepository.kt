@@ -4,50 +4,39 @@ import com.google.android.gms.maps.model.LatLng
 import com.sample.fitfinder.data.database.SessionDao
 import com.sample.fitfinder.data.database.SessionEntity
 import com.sample.fitfinder.data.gateway.SessionGateway
+import com.sample.fitfinder.data.gateway.UserGateway
 import com.sample.fitfinder.domain.BookingStatus
-import com.sample.fitfinder.domain.Session
-import com.sample.fitfinder.proto.Response
 import com.sample.fitfinder.proto.UserSession
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.collect
 import java.time.Instant
 import javax.inject.Inject
-import javax.inject.Singleton
-import kotlin.time.ExperimentalTime
 
-@Singleton
-@ExperimentalTime
-class SessionRepository @Inject constructor() {
+class SubscriptionRepository @Inject constructor() {
 
+    @Inject lateinit var userGateway: UserGateway
     @Inject lateinit var sessionGateway: SessionGateway
-    @Inject lateinit var sessionDao: SessionDao
     @Inject lateinit var currentUserRepository: CurrentUserRepository
+    @Inject lateinit var sessionDao: SessionDao
 
-    fun getAvailableSessions(): Flow<List<Session>> {
-        return sessionDao.getAvailableSessions()
-    }
-
-    fun getSession(sessionId: Long): Flow<Session> {
-        return sessionDao.getSession(sessionId)
-    }
-
-    suspend fun upsertSession(session: Session): Response {
-        return if (session.sessionId == 0L) sessionGateway.addSession(session)
-        else sessionGateway.editSession(session)
-    }
-
-    @ExperimentalCoroutinesApi
-    fun getNonBookSessions(): Flow<List<Session>> {
-        return currentUserRepository
-            .userId
-            .flatMapLatest {
-                sessionDao.getSessions(BookingStatus.Unknown, it)
+    suspend fun subscribeToProfileUpdate() {
+        userGateway.subscribeToUserProfile()
+            .collect {
+                currentUserRepository.upsertCurrentUser(it)
             }
     }
 
-    fun getBookedSessions(userId: Long): Flow<List<Session>> {
-        return sessionDao.getSessions(BookingStatus.Confirmed, userId)
+    suspend fun subscribeToUserSession() {
+        sessionGateway.subscribeToUserSession()
+            .collect {
+                updateDatabase(it)
+            }
+    }
+
+    suspend fun subscribeToAvailableSession() {
+        sessionGateway.subscribeToAvailableSession()
+            .collect {
+                updateDatabase(it)
+            }
     }
 
     private suspend fun updateDatabase(session: UserSession) {

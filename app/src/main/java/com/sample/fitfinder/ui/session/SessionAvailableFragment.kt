@@ -21,11 +21,6 @@ class SessionAvailableFragment : Fragment() {
     private val viewModel: SessionAvailableViewModel by viewModels()
     private lateinit var binding: FragmentSessionAvailableBinding
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        viewModel.subscribeToUserSession()
-    }
-
     @ExperimentalCoroutinesApi
     override fun onCreateView(
         inflater: LayoutInflater,

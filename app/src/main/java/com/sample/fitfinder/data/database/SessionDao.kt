@@ -12,7 +12,8 @@ abstract class SessionDao: BaseDao<SessionEntity>() {
         SELECT * 
         FROM Session
         WHERE BookingStatus = :type 
-            AND TrainerUserId = :trainerUserId""")
+            AND TrainerUserId = :trainerUserId
+        ORDER BY sessionDateTime""")
     abstract fun getSessions(type: BookingStatus, trainerUserId: Long): Flow<List<Session>>
 
     @Query("""

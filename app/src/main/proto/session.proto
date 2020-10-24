@@ -13,10 +13,15 @@ import "google/protobuf/wrappers.proto";
 import "google/protobuf/empty.proto";
 
 service SessionProtocol {
+    rpc GetAvailableSessionsByRegion(Region) returns (stream UserSessions);
+    rpc GetSession(SessionRequest) returns (UserSession);
     rpc AddSession(AddSessionRequest) returns (Response);
     rpc EditSession(EditSessionRequest) returns (Response);
     rpc SubscribeToUserSession(google.protobuf.Empty) returns (stream UserSession);
-    rpc SubscribeToAvailableSessions(google.protobuf.Empty) returns (stream UserSession);
+}
+
+message SessionRequest {
+    int64 sessionId = 1;
 }
 
 message AddSessionRequest {
@@ -29,6 +34,10 @@ message AddSessionRequest {
     bool isInPerson = 7;
     double price = 8;
     google.protobuf.Duration duration = 9;
+}
+
+message UserSessions {
+    repeated UserSession sessions = 1;
 }
 
 message UserSession {
@@ -60,6 +69,11 @@ message EditSessionRequest {
     double price = 9;
     google.protobuf.Duration duration = 10;
     int64 trainerUserId = 11;
+}
+
+message Region {
+    LatLng northEastBound = 1;
+    LatLng southWestBound = 2;
 }
 
 message LatLng {

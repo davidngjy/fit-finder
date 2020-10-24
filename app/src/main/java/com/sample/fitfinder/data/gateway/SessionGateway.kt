@@ -9,7 +9,9 @@ import com.sample.fitfinder.proto.*
 import io.grpc.ManagedChannel
 import io.grpc.Metadata
 import io.grpc.stub.MetadataUtils
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 class SessionGateway @Inject constructor() {
@@ -18,6 +20,18 @@ class SessionGateway @Inject constructor() {
     @Inject lateinit var googleTokenRepository: GoogleTokenRepository
 
     private val key = Metadata.Key.of("Authorization", Metadata.ASCII_STRING_MARSHALLER)
+
+    suspend fun getSessionsByRegion(region: Region): Flow<UserSessions> {
+        val stub = createCoroutineStub()
+        return stub.getAvailableSessionsByRegion(region)
+    }
+
+    suspend fun getSession(sessionId: Long): UserSession {
+        return withContext(Dispatchers.IO) {
+            createCoroutineStub().getSession(
+                SessionRequest.newBuilder().setSessionId(sessionId).build())
+        }
+    }
 
     suspend fun addSession(newSession: Session): Response {
         val stub = createCoroutineStub()
@@ -62,11 +76,6 @@ class SessionGateway @Inject constructor() {
     suspend fun subscribeToUserSession(): Flow<UserSession> {
         val stub = createCoroutineStub()
         return stub.subscribeToUserSession(Empty.getDefaultInstance())
-    }
-
-    suspend fun subscribeToAvailableSession(): Flow<UserSession> {
-        val stub = createCoroutineStub()
-        return stub.subscribeToAvailableSessions(Empty.getDefaultInstance())
     }
 
     private suspend fun createCoroutineStub(): SessionProtocolGrpcKt.SessionProtocolCoroutineStub {

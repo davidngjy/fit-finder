@@ -32,13 +32,6 @@ class SubscriptionRepository @Inject constructor() {
             }
     }
 
-    suspend fun subscribeToAvailableSession() {
-        sessionGateway.subscribeToAvailableSession()
-            .collect {
-                updateDatabase(it)
-            }
-    }
-
     private suspend fun updateDatabase(session: UserSession) {
         sessionDao.insertOrUpdate(SessionEntity(
             session.sessionId,

@@ -28,4 +28,10 @@ abstract class SessionDao: BaseDao<SessionEntity>() {
         FROM Session
         WHERE SessionId = :sessionId """)
     abstract fun getSession(sessionId: Long): Flow<Session>
+
+    @Query("SELECT EXISTS (SELECT 1 FROM Session WHERE sessionId = :sessionId)")
+    abstract suspend fun sessionExists(sessionId: Long): Boolean
+
+    @Query("DELETE FROM Session")
+    abstract suspend fun clearAllSession()
 }

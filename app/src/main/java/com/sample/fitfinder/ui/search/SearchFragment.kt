@@ -29,12 +29,16 @@ import com.sample.fitfinder.domain.Session
 import com.sample.fitfinder.ui.configureDayNightStyle
 import com.sample.fitfinder.ui.search.viewmodel.SearchViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.FlowPreview
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import kotlin.time.ExperimentalTime
 
 @AndroidEntryPoint
 @ExperimentalTime
+@FlowPreview
+@ExperimentalCoroutinesApi
 class SearchFragment : Fragment(),
     OnRequestPermissionsResultCallback, OnMapReadyCallback {
 
@@ -45,6 +49,7 @@ class SearchFragment : Fragment(),
     private lateinit var fusedLocationClient: FusedLocationProviderClient
 
     private var permissionDenied = false
+    private var userDraggedMap = false
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -86,6 +91,18 @@ class SearchFragment : Fragment(),
         googleMap.uiSettings.isMapToolbarEnabled = false
 
         enableMyLocation()
+
+        map.setOnCameraMoveStartedListener {
+            if (it == GoogleMap.OnCameraMoveStartedListener.REASON_GESTURE)
+                userDraggedMap = true
+        }
+
+        map.setOnCameraIdleListener {
+            if (userDraggedMap) {
+                searchViewModel.setBounds(map.projection.visibleRegion.latLngBounds)
+                userDraggedMap = false
+            }
+        }
 
         searchViewModel.availableSessions.observe(viewLifecycleOwner) { sessions ->
             map.clear()
@@ -150,7 +167,13 @@ class SearchFragment : Fragment(),
 
                     val cameraUpdate  = CameraUpdateFactory
                         .newLatLngZoom(LatLng(lastLocation.latitude, lastLocation.longitude), 14F)
-                    map.animateCamera(cameraUpdate)
+
+                    map.animateCamera(cameraUpdate, object: GoogleMap.CancelableCallback {
+                        override fun onFinish() {
+                            searchViewModel.setBounds(map.projection.visibleRegion.latLngBounds)
+                        }
+                        override fun onCancel() { }
+                    })
                 }
             }, Looper.getMainLooper())
         } else {

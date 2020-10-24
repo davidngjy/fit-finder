@@ -16,8 +16,10 @@ import androidx.navigation.ui.setupWithNavController
 import com.google.android.libraries.places.api.Places
 import com.sample.fitfinder.databinding.ActivityMainBinding
 import dagger.hilt.android.AndroidEntryPoint
+import kotlin.time.ExperimentalTime
 
 @AndroidEntryPoint
+@ExperimentalTime
 class MainActivity : AppCompatActivity() {
     private val viewModel: MainViewModel by viewModels()
 
@@ -44,6 +46,8 @@ class MainActivity : AppCompatActivity() {
         setupActionBarWithNavController(navController, appBarConfiguration)
         binding.navView.setupWithNavController(navController)
 
+        // Clear all session in local DB then subscribe to any updates
+        viewModel.clear()
         viewModel.subscribe()
     }
 

@@ -60,10 +60,14 @@ object ApplicationComponentModule {
         return if (BuildConfig.LOCAL_BACKEND) {
             ManagedChannelBuilder.forAddress(serviceUrl, 5001)
                 .usePlaintext()
+                .enableRetry()
+                .maxRetryAttempts(3)
                 .build()
         } else {
             ManagedChannelBuilder.forTarget(serviceUrl)
                 .useTransportSecurity()
+                .enableRetry()
+                .maxRetryAttempts(3)
                 .build()
         }
     }

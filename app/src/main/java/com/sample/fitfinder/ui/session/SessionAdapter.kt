@@ -8,8 +8,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.sample.fitfinder.databinding.ItemSessionListBinding
 import com.sample.fitfinder.domain.Session
 
-class SessionAvailableAdapter(private val clickListener: SessionListItemListener)
-    : ListAdapter<Session, SessionAvailableAdapter.ViewHolder>(SessionDiffCallBack()) {
+class SessionAdapter(private val clickListener: SessionListItemListener)
+    : ListAdapter<Session, SessionAdapter.ViewHolder>(SessionDiffCallBack()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder.from(parent)

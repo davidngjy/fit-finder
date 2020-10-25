@@ -18,9 +18,16 @@ service SessionProtocol {
     rpc AddSession(AddSessionRequest) returns (Response);
     rpc EditSession(EditSessionRequest) returns (Response);
     rpc SubscribeToUserSession(google.protobuf.Empty) returns (stream UserSession);
+
+    rpc BookSession(BookSessionRequest) returns (Response);
+    rpc SubscribeToSessionBooking(google.protobuf.Empty) returns (stream UserSession);
 }
 
 message SessionRequest {
+    int64 sessionId = 1;
+}
+
+message BookSessionRequest {
     int64 sessionId = 1;
 }
 

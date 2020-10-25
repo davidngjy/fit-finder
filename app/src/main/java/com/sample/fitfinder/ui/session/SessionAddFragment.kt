@@ -10,7 +10,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.activity.addCallback
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.ActivityCompat
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -19,7 +18,6 @@ import androidx.navigation.fragment.navArgs
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.SupportMapFragment
-import com.google.android.gms.maps.model.CircleOptions
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.libraries.places.api.model.Place
@@ -204,14 +202,6 @@ class SessionAddFragment : Fragment() {
             MarkerOptions()
                 .position(coordinate)
         )
-        map.addCircle(
-            CircleOptions()
-                .center(coordinate)
-                .radius(1000.0)
-                .fillColor(ActivityCompat.getColor(requireContext(), R.color.markerFillColor))
-                .strokeColor(ActivityCompat.getColor(requireContext(), R.color.markerStrokeColor))
-                .strokeWidth(1F)
-        )
 
         binding.mapCardView.visibility = View.VISIBLE
     }
@@ -261,7 +251,7 @@ class SessionAddFragment : Fragment() {
 
         // Start the autocomplete intent.
         val intent = Autocomplete.IntentBuilder(AutocompleteActivityMode.OVERLAY, fields)
-            .setTypeFilter(TypeFilter.REGIONS)
+            .setTypeFilter(TypeFilter.GEOCODE)
             .setCountries(listOf("AU"))
             .build(requireContext())
 

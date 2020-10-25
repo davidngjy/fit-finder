@@ -75,16 +75,20 @@ class SessionRepository @Inject constructor() {
     }
 
     @ExperimentalCoroutinesApi
-    fun getNonBookSessions(): Flow<List<Session>> {
+    fun getMyAvailableSessions(): Flow<List<Session>> {
         return currentUserRepository
             .userId
             .flatMapLatest {
-                sessionDao.getSessions(BookingStatus.Unknown, it)
+                sessionDao.getAvailableSessions(it)
             }
     }
 
-    fun getBookedSessions(userId: Long): Flow<List<Session>> {
-        return sessionDao.getSessions(BookingStatus.Confirmed, userId)
+    fun getUpcomingSessions(): Flow<List<Session>> {
+        return sessionDao.getUpcomingSessions()
+    }
+
+    fun getPastSessions(): Flow<List<Session>> {
+        return sessionDao.getPastSessions()
     }
 
     private suspend fun updateDatabase(session: UserSession) {
@@ -104,6 +108,10 @@ class SessionRepository @Inject constructor() {
             session.clientUserId.value,
             BookingStatus.fromInt(session.bookingStatus.number)
         ))
+    }
+
+    suspend fun addBooking(sessionId: Long): Response {
+        return sessionGateway.addBooking(sessionId)
     }
 
     suspend fun clearAllSession() {

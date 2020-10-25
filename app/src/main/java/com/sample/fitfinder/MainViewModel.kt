@@ -19,7 +19,8 @@ class MainViewModel @ViewModelInject constructor(
         viewModelScope.launch {
             awaitAll(
                 async { subscriptionRepository.subscribeToUserSession() },
-                async { subscriptionRepository.subscribeToProfileUpdate() }
+                async { subscriptionRepository.subscribeToProfileUpdate() },
+                async { subscriptionRepository.subscribeToBookingSession() }
             )
         }
     }

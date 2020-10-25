@@ -9,7 +9,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.app.ActivityCompat.OnRequestPermissionsResultCallback
-import androidx.core.app.ActivityCompat.getColor
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -19,7 +18,6 @@ import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
-import com.google.android.gms.maps.model.CircleOptions
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -166,7 +164,7 @@ class SearchFragment : Fragment(),
                     val lastLocation = locationResult.lastLocation
 
                     val cameraUpdate  = CameraUpdateFactory
-                        .newLatLngZoom(LatLng(lastLocation.latitude, lastLocation.longitude), 14F)
+                        .newLatLngZoom(LatLng(lastLocation.latitude, lastLocation.longitude), 13.5F)
 
                     map.animateCamera(cameraUpdate, object: GoogleMap.CancelableCallback {
                         override fun onFinish() {
@@ -193,15 +191,6 @@ class SearchFragment : Fragment(),
             MarkerOptions()
                 .position(session.location)
                 .title(Json.encodeToString(data))
-        )
-
-        map.addCircle(
-            CircleOptions()
-                .center(session.location)
-                .radius(1000.0)
-                .fillColor(getColor(requireContext(), R.color.markerFillColor))
-                .strokeColor(getColor(requireContext(), R.color.markerStrokeColor))
-                .strokeWidth(1F)
         )
     }
 

@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -13,7 +12,6 @@ import androidx.navigation.fragment.navArgs
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.SupportMapFragment
-import com.google.android.gms.maps.model.CircleOptions
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.sample.fitfinder.R
@@ -70,6 +68,17 @@ class SessionDetailFragment : Fragment() {
                 .actionSessionDetailFragmentToSessionAddFragment(sessionId))
         }
 
+        binding.bookingButton.setOnClickListener {
+            viewModel.addBooking(args.sessionId)
+        }
+
+        viewModel.navigateOnBooked.observe(viewLifecycleOwner) {
+            it?.let {
+                if(it)
+                    findNavController().popBackStack()
+            }
+        }
+
         binding.viewModel = viewModel
         binding.lifecycleOwner = this
         binding.executePendingBindings()
@@ -82,18 +91,10 @@ class SessionDetailFragment : Fragment() {
     }
 
     private fun setupMapFragment(coordinate: LatLng) {
-        map.animateCamera(CameraUpdateFactory.newLatLngZoom(coordinate, 13F))
+        map.moveCamera(CameraUpdateFactory.newLatLngZoom(coordinate, 15F))
         map.addMarker(
             MarkerOptions()
                 .position(coordinate)
-        )
-        map.addCircle(
-            CircleOptions()
-                .center(coordinate)
-                .radius(1000.0)
-                .fillColor(ActivityCompat.getColor(requireContext(), R.color.markerFillColor))
-                .strokeColor(ActivityCompat.getColor(requireContext(), R.color.markerStrokeColor))
-                .strokeWidth(1F)
         )
 
         binding.mapCardView.visibility = View.VISIBLE

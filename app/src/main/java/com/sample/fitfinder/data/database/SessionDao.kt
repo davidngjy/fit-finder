@@ -5,6 +5,7 @@ import androidx.room.Query
 import com.sample.fitfinder.domain.BookingStatus
 import com.sample.fitfinder.domain.Session
 import kotlinx.coroutines.flow.Flow
+import java.time.Instant
 
 @Dao
 abstract class SessionDao: BaseDao<SessionEntity>() {
@@ -19,9 +20,23 @@ abstract class SessionDao: BaseDao<SessionEntity>() {
     @Query("""
         SELECT *
         FROM Session
-        WHERE BookingId = 0
+        WHERE BookingId = 0 AND sessionDateTime >= :currentTime AND trainerUserId = :userId
     """)
-    abstract fun getAvailableSessions(): Flow<List<Session>>
+    abstract fun getAvailableSessions(userId:Long, currentTime: Instant = Instant.now()): Flow<List<Session>>
+
+    @Query("""
+        SELECT *
+        FROM Session
+        WHERE BookingId != 0 AND sessionDateTime >= :currentTime
+    """)
+    abstract fun getUpcomingSessions(currentTime: Instant = Instant.now()): Flow<List<Session>>
+
+    @Query("""
+        SELECT *
+        FROM Session
+        WHERE sessionDateTime <= :currentTime
+    """)
+    abstract fun getPastSessions(currentTime: Instant = Instant.now()): Flow<List<Session>>
 
     @Query("""
         SELECT * 

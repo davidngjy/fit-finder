@@ -21,6 +21,7 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import timber.log.Timber
 import javax.inject.Inject
+import kotlin.time.ExperimentalTime
 
 @AndroidEntryPoint
 @FlowPreview
@@ -33,6 +34,7 @@ class LoginActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityLoginBinding
 
+    @ExperimentalTime
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_login)
@@ -100,6 +102,7 @@ class LoginActivity : AppCompatActivity() {
         viewModel.setErrorMessage(getString(R.string.connection_error))
     }
 
+    @ExperimentalTime
     private fun navigateToMainActivity() {
         val intent = Intent(this, MainActivity::class.java)
         startActivity(intent)

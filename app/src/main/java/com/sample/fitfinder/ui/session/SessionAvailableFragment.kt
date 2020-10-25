@@ -29,12 +29,13 @@ class SessionAvailableFragment : Fragment() {
     ): View? {
         binding = FragmentSessionAvailableBinding.inflate(inflater, container, false)
 
-        val adapter = SessionAvailableAdapter(SessionListItemListener { sessionId ->
+        val adapter = SessionAdapter(SessionListItemListener { sessionId ->
             viewModel.onSessionClick(sessionId)
         })
 
         binding.sessionAvailableList.adapter = adapter
         binding.lifecycleOwner = this
+        binding.sessionAvailableList.layoutManager = LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
 
         viewModel.sessions.observe(viewLifecycleOwner, {
             it?.let {
@@ -49,9 +50,6 @@ class SessionAvailableFragment : Fragment() {
                 viewModel.onSessionDetailNavigated()
             }
         })
-
-        val manager = LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
-        binding.sessionAvailableList.layoutManager = manager
 
         return binding.root
     }

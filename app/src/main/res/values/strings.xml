@@ -37,6 +37,7 @@
     <string name="online_session">This session can be done online</string>
     <string name="in_person_session">This session can be done in person</string>
     <string name="edit_button">Edit</string>
+    <string name="book_button">Book</string>
     <string name="availability_icon">Availability Icon</string>
     <string name="new_value">New Value</string>
 

@@ -73,9 +73,22 @@ class SessionGateway @Inject constructor() {
         return stub.editSession(request)
     }
 
+    suspend fun addBooking(sessionId: Long): Response {
+        return createCoroutineStub()
+            .bookSession(BookSessionRequest
+                .newBuilder()
+                .setSessionId(sessionId)
+                .build())
+    }
+
     suspend fun subscribeToUserSession(): Flow<UserSession> {
         val stub = createCoroutineStub()
         return stub.subscribeToUserSession(Empty.getDefaultInstance())
+    }
+
+    suspend fun subscribeToBookingSession(): Flow<UserSession> {
+        return createCoroutineStub()
+            .subscribeToSessionBooking(Empty.getDefaultInstance())
     }
 
     private suspend fun createCoroutineStub(): SessionProtocolGrpcKt.SessionProtocolCoroutineStub {

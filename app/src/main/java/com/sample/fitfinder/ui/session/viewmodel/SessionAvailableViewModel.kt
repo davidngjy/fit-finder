@@ -18,7 +18,7 @@ class SessionAvailableViewModel @ViewModelInject constructor(
 
     @ExperimentalCoroutinesApi
     val sessions = sessionRepository
-        .getNonBookSessions()
+        .getMyAvailableSessions()
         .asLiveData()
 
     private val _navigateToSessionDetail = MutableLiveData<Long>()

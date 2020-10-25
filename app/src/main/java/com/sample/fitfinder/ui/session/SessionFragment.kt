@@ -56,6 +56,7 @@ class SessionFragment : Fragment() {
                     0 -> tab.setupTab(R.string.session_upcoming, R.drawable.ic_session_upcoming_24)
                     1 -> tab.setupTab(R.string.session_past, R.drawable.ic_session_past_24)
                 }
+                binding.sessionAddFab.hide()
             }
         }.attach()
 

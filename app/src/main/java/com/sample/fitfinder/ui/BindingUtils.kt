@@ -15,20 +15,12 @@ import java.util.*
 fun TextView.setSessionHeading(item: Session?) {
     item?.let {
         val dateTime = item.sessionDateTime
-        val isOnline = item.isOnline
-        val isInPerson = item.isInPerson
 
         val dateTimeString = dateTimeConverter(dateTime)
 
         val res = context.resources
 
-        text = if (isOnline && isInPerson) {
-            res.getString(R.string.session_heading, dateTimeString, "Online | In-Person")
-        } else if (isOnline) {
-            res.getString(R.string.session_heading, dateTimeString, "Online")
-        } else {
-            res.getString(R.string.session_heading, dateTimeString, "In-Person")
-        }
+        text = res.getString(R.string.session_datetime, dateTimeString)
     }
 }
 
@@ -36,7 +28,25 @@ fun TextView.setSessionHeading(item: Session?) {
 fun TextView.setSessionDuration(item: Session?) {
     item?.let {
         val res = context.resources
-        text = res.getString(R.string.session_duration, item.duration)
+        val isOnline = item.isOnline
+        val isInPerson = item.isInPerson
+
+        text = if (isOnline && isInPerson) res.getString(R.string.session_duration, item.duration)
+        else if (isOnline) res.getString(R.string.session_duration, item.duration)
+        else res.getString(R.string.session_duration, item.duration)
+    }
+}
+
+@BindingAdapter("sessionDurationAndTypeFormatted")
+fun TextView.setSessionAndTypeDuration(item: Session?) {
+    item?.let {
+        val res = context.resources
+        val isOnline = item.isOnline
+        val isInPerson = item.isInPerson
+
+        text = if (isOnline && isInPerson) res.getString(R.string.session_duration, item.duration) + " - Online | In-Person"
+        else if (isOnline) res.getString(R.string.session_duration, item.duration) + " - Online"
+        else res.getString(R.string.session_duration, item.duration) + " - In-Person"
     }
 }
 
@@ -56,7 +66,7 @@ fun TextView.setDateTime(item: Instant?) {
 
 private fun dateTimeConverter(dateTime: Instant) : String {
     val formatter: DateTimeFormatter = DateTimeFormatter
-        .ofPattern("dd/MMM hh:mm a")
+        .ofPattern("dd MMM yyyy - hh:mm a")
         .withLocale(Locale.UK)
         .withZone(ZoneId.systemDefault())
     return formatter.format(dateTime)

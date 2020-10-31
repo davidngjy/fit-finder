@@ -12,6 +12,7 @@ import com.sample.fitfinder.databinding.FragmentSessionAvailableBinding
 import com.sample.fitfinder.ui.session.viewmodel.SessionAvailableViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import javax.inject.Inject
 import kotlin.time.ExperimentalTime
 
 @AndroidEntryPoint
@@ -20,6 +21,7 @@ class SessionAvailableFragment : Fragment() {
 
     private val viewModel: SessionAvailableViewModel by viewModels()
     private lateinit var binding: FragmentSessionAvailableBinding
+    @Inject lateinit var adapter: SessionAdapter
 
     @ExperimentalCoroutinesApi
     override fun onCreateView(
@@ -29,7 +31,7 @@ class SessionAvailableFragment : Fragment() {
     ): View? {
         binding = FragmentSessionAvailableBinding.inflate(inflater, container, false)
 
-        val adapter = SessionAdapter(SessionListItemListener { sessionId ->
+        adapter.setClickListener(SessionListItemListener { sessionId ->
             viewModel.onSessionClick(sessionId)
         })
 

@@ -266,7 +266,7 @@
                 android:id="@+id/duration_slider"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:stepSize="15"
+                android:stepSize="10"
                 android:valueFrom="30"
                 android:valueTo="120"
                 app:layout_constraintEnd_toEndOf="parent"

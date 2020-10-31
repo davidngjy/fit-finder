@@ -8,6 +8,10 @@
         <variable
             name="session"
             type="com.sample.fitfinder.domain.Session" />
+
+        <variable
+            name="trainerProfile"
+            type="com.sample.fitfinder.domain.User" />
         
         <variable
             name="clickListener"
@@ -27,68 +31,76 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:clickable="true"
+            android:focusable="true"
             android:onClick="@{() -> clickListener.onClick(session.sessionId)}">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="14dp">
+                android:padding="10dp">
 
                 <TextView
-                    android:id="@+id/session_heading"
+                    android:id="@+id/session_title"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:paddingHorizontal="6dp"
+                    android:text="@{session.title}"
+                    android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:text="My first session" />
+
+                <ImageView
+                    android:id="@+id/session_datetime_icon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="0dp"
+                    android:src="@drawable/ic_session_calendar_24"
+                    android:contentDescription="@string/datetime_icon_desc"
+                    app:layout_constraintTop_toTopOf="@id/session_datetime"
+                    app:layout_constraintBottom_toBottomOf="@id/session_datetime"
+                    app:layout_constraintStart_toStartOf="parent" />
+
+                <TextView
+                    android:id="@+id/session_datetime"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textAppearance="@style/TextAppearance.MaterialComponents.Caption"
+                    android:layout_marginVertical="4dp"
+                    app:layout_constraintStart_toEndOf="@id/session_datetime_icon"
+                    app:layout_constraintTop_toBottomOf="@id/session_title"
                     app:sessionHeadingFormatted="@{session}"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    tools:text="19/Aug - Online | In-Person"/>
+                    tools:text="1 Jan 2020 - 01:00 AM" />
+
+                <ImageView
+                    android:id="@+id/session_duration_icon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="0dp"
+                    android:src="@drawable/ic_session_time_24"
+                    android:contentDescription="@string/duration_icon_desc"
+                    app:layout_constraintTop_toTopOf="@id/session_duration"
+                    app:layout_constraintBottom_toBottomOf="@id/session_duration"
+                    app:layout_constraintStart_toStartOf="parent" />
 
                 <TextView
                     android:id="@+id/session_duration"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textAppearance="@style/TextAppearance.MaterialComponents.Caption"
-                    app:sessionDurationFormatted="@{session}"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    tools:text="30 min"/>
-
-                <TextView
-                    android:id="@+id/session_title"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:text="@{session.title}"
-                    android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
-                    android:paddingVertical="6dp"
-                    app:layout_constraintTop_toBottomOf="@+id/session_heading"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    tools:text="My first session"/>
-
-                <TextView
-                    android:id="@+id/session_description"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:text="@{session.description}"
-                    android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle1"
-                    android:paddingBottom="10dp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/session_title"
-                    tools:text="Please join me on my first training session online!" />
+                    android:layout_marginVertical="4dp"
+                    app:layout_constraintStart_toEndOf="@id/session_duration_icon"
+                    app:layout_constraintTop_toBottomOf="@id/session_datetime"
+                    app:sessionDurationAndTypeFormatted="@{session}"
+                    tools:text="30 min - Online | In-Person" />
 
                 <ImageView
                     android:id="@+id/session_location_icon"
                     android:layout_width="wrap_content"
                     android:layout_height="0dp"
-                    android:paddingStart="-6dp"
-                    android:src="@drawable/ic_session_location_24"
                     android:contentDescription="@string/location_icon_desc"
+                    android:src="@drawable/ic_session_location_24"
                     app:layout_constraintBottom_toBottomOf="@id/session_location"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="@id/session_location"
-                    tools:ignore="RtlSymmetry" />
+                    app:layout_constraintTop_toTopOf="@id/session_location" />
 
                 <TextView
                     android:id="@+id/session_location"
@@ -96,30 +108,42 @@
                     android:layout_height="wrap_content"
                     android:text="@{session.locationString}"
                     android:textAppearance="@style/TextAppearance.MaterialComponents.Caption"
+                    android:layout_marginVertical="4dp"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/session_description"
                     app:layout_constraintStart_toEndOf="@id/session_location_icon"
-                    tools:text="Melbourne, 3000"/>
+                    app:layout_constraintTop_toBottomOf="@id/session_duration"
+                    tools:text="Melbourne, 3000" />
 
                 <ImageView
                     android:id="@+id/session_cost_icon"
                     android:layout_width="wrap_content"
                     android:layout_height="0dp"
-                    android:src="@drawable/ic_session_money_24"
                     android:contentDescription="@string/cost_icon_desc"
+                    android:src="@drawable/ic_session_money_24"
                     app:layout_constraintBottom_toBottomOf="@id/session_cost"
                     app:layout_constraintEnd_toStartOf="@id/session_cost"
-                    app:layout_constraintTop_toTopOf="@id/session_cost"/>
+                    app:layout_constraintTop_toTopOf="@id/session_cost" />
 
                 <TextView
                     android:id="@+id/session_cost"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textAppearance="@style/TextAppearance.MaterialComponents.Caption"
+                    android:layout_marginVertical="4dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
                     app:sessionCostFormatted="@{session}"
+                    tools:text="30.00" />
+
+                <ImageView
+                    android:id="@+id/image_view"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:contentDescription="@string/profile_image_desc"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    tools:text="30.00"/>
+                    app:loadImageFromUrl="@{trainerProfile.profilePictureUri}"
+                    tools:srcCompat="@drawable/ic_default_profile_24" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
         </com.google.android.material.card.MaterialCardView>

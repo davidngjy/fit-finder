@@ -13,6 +13,7 @@ service UserProtocol {
     rpc ConnectUser(ConnectUserRequest) returns (stream ConnectUserResponse);
     rpc SubscribeToUserProfile(google.protobuf.Empty) returns (stream UserProfile);
     rpc UpdateUserProfile(UpdateUserProfileRequest) returns (Response);
+    rpc GetUserProfile(UserProfileRequest) returns (LimitedUserProfile);
 }
 
 message ConnectUserRequest {
@@ -37,6 +38,10 @@ message UpdateUserProfileRequest {
     string profilePictureUri = 3;
 }
 
+message UserProfileRequest {
+    int64 userId = 1;
+}
+
 message UserProfile {
     int64 id = 1;
     string googleId = 2;
@@ -51,4 +56,11 @@ message UserProfile {
         Trainer = 2;
         User = 3;
     }
+}
+
+message LimitedUserProfile {
+    int64 userId = 1;
+    string displayName = 2;
+    string email = 3;
+    string profilePictureUri = 4;
 }

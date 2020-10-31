@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.sample.fitfinder.databinding.FragmentSessionPastBinding
 import com.sample.fitfinder.ui.session.viewmodel.SessionPastViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 import kotlin.time.ExperimentalTime
 
 @AndroidEntryPoint
@@ -18,16 +19,13 @@ class SessionPastFragment : Fragment() {
 
     private val viewModel: SessionPastViewModel by viewModels()
     private lateinit var binding: FragmentSessionPastBinding
+    @Inject lateinit var adapter: SessionAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentSessionPastBinding.inflate(inflater, container, false)
-
-        val adapter = SessionAdapter(SessionListItemListener { sessionId ->
-            // TODO implement click event
-        })
 
         binding.sessionPastList.adapter = adapter
         binding.lifecycleOwner = this

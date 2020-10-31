@@ -47,6 +47,15 @@ class UserGateway @Inject constructor() {
         return stub.updateUserProfile(request)
     }
 
+    suspend fun getUserProfile(userId: Long): LimitedUserProfile {
+        return createCoroutineStub()
+            .getUserProfile(UserProfileRequest
+                .newBuilder()
+                .setUserId(userId)
+                .build()
+            )
+    }
+
     suspend fun subscribeToUserProfile(): Flow<UserProfile> {
         val stub = createCoroutineStub()
 

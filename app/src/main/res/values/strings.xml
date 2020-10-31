@@ -18,12 +18,14 @@
     <string name="duration">Duration</string>
 
     // Format string
-    <string name="session_heading">%s - %s</string>
+    <string name="session_datetime">%s</string>
     <string name="session_duration">%d min</string>
     <string name="session_suburb">%s, %s, %s</string>
 
     // Content Description
     <string name="location_icon_desc">Location icon</string>
+    <string name="duration_icon_desc">Duration icon</string>
+    <string name="datetime_icon_desc">DateTime icon</string>
     <string name="cost_icon_desc">Cost icon</string>
     <string name="add_session">Add Session</string>
 

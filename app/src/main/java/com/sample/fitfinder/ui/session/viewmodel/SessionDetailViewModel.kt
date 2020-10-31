@@ -4,16 +4,14 @@ import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.*
 import com.sample.fitfinder.data.repository.CurrentUserRepository
 import com.sample.fitfinder.data.repository.SessionRepository
+import com.sample.fitfinder.data.repository.UserRepository
 import com.sample.fitfinder.proto.Response
 import dagger.hilt.android.scopes.FragmentScoped
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.channels.BroadcastChannel
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.flow.asFlow
-import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.flatMapLatest
-import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import kotlin.time.ExperimentalTime
 
@@ -23,6 +21,7 @@ import kotlin.time.ExperimentalTime
 @ExperimentalCoroutinesApi
 class SessionDetailViewModel @ViewModelInject constructor(
     private val sessionRepository: SessionRepository,
+    private val userRepository: UserRepository,
     currentUserRepository: CurrentUserRepository)
     : ViewModel() {
 
@@ -43,6 +42,20 @@ class SessionDetailViewModel @ViewModelInject constructor(
         .userId
         .combine(sessionFlow) { userId, session ->
             userId == session.trainerUserId
+        }
+        .asLiveData()
+
+    val trainerProfile = sessionFlow
+        .flatMapLatest {
+            userRepository.getUserProfile(it.trainerUserId)
+        }
+        .asLiveData()
+
+    val clientProfile = sessionFlow
+        .map {
+            if (it.clientUserId != null)
+                userRepository.getUserProfile(it.clientUserId).first()
+            else null
         }
         .asLiveData()
 

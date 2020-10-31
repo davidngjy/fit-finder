@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.sample.fitfinder.databinding.FragmentSessionUpcomingBinding
 import com.sample.fitfinder.ui.session.viewmodel.SessionUpcomingViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 import kotlin.time.ExperimentalTime
 
 @AndroidEntryPoint
@@ -18,16 +19,13 @@ class SessionUpcomingFragment : Fragment() {
 
     private val viewModel: SessionUpcomingViewModel by viewModels()
     private lateinit var binding: FragmentSessionUpcomingBinding
+    @Inject lateinit var adapter: SessionAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentSessionUpcomingBinding.inflate(inflater, container, false)
-
-        val adapter = SessionAdapter(SessionListItemListener {
-            // TODO add click listener
-        })
 
         binding.sessionUpcomingList.adapter = adapter
         binding.lifecycleOwner = this

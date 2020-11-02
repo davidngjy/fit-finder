@@ -5,6 +5,8 @@ import androidx.datastore.DataStore
 import androidx.datastore.createDataStore
 import com.sample.fitfinder.data.UserProfileSerializer
 import com.sample.fitfinder.data.gateway.UserGateway
+import com.sample.fitfinder.domain.CurrentUserProfile
+import com.sample.fitfinder.domain.UserRole
 import com.sample.fitfinder.proto.ConnectUserResponse.Status
 import com.sample.fitfinder.proto.UserProfile
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -33,6 +35,16 @@ class CurrentUserRepository @Inject constructor(@ApplicationContext context: Con
                 emit(UserProfile.getDefaultInstance())
             }
         }
+        .map {
+            CurrentUserProfile(
+                it.id,
+                it.googleId,
+                it.displayName,
+                it.email,
+                it.profilePicture.toByteArray(),
+                UserRole.fromInt(it.userRole.number)
+            )
+        }
 
     val userId = userProfileDataStore.data.map {
         it.id
@@ -54,7 +66,7 @@ class CurrentUserRepository @Inject constructor(@ApplicationContext context: Con
         userGateway.updateUserProfile(
             newDisplayName,
             currentUser.email,
-            currentUser.profilePictureUri
+            currentUser.profilePicture
         )
     }
 
@@ -63,7 +75,16 @@ class CurrentUserRepository @Inject constructor(@ApplicationContext context: Con
         userGateway.updateUserProfile(
             currentUser.displayName,
             newEmail,
-            currentUser.profilePictureUri
+            currentUser.profilePicture
+        )
+    }
+
+    suspend fun updateProfilePicture(newProfilePicture: ByteArray) {
+        val currentUser = currentUser.first()
+        userGateway.updateUserProfile(
+            currentUser.displayName,
+            currentUser.email,
+            newProfilePicture
         )
     }
 
@@ -75,7 +96,7 @@ class CurrentUserRepository @Inject constructor(@ApplicationContext context: Con
                 .setDisplayName(user.displayName)
                 .setEmail(user.email)
                 .setUserRole(user.userRole)
-                .setProfilePictureUri(user.profilePictureUri)
+                .setProfilePicture(user.profilePicture)
                 .build()
         }
     }

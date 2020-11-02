@@ -35,7 +35,7 @@ message ConnectUserResponse {
 message UpdateUserProfileRequest {
     string displayName = 1;
     string email = 2;
-    string profilePictureUri = 3;
+    bytes profilePicture = 3;
 }
 
 message UserProfileRequest {
@@ -47,7 +47,7 @@ message UserProfile {
     string googleId = 2;
     string displayName = 3;
     string email = 4;
-    string profilePictureUri = 5;
+    bytes profilePicture = 5;
     UserRole userRole = 6;
 
     enum UserRole {
@@ -62,5 +62,5 @@ message LimitedUserProfile {
     int64 userId = 1;
     string displayName = 2;
     string email = 3;
-    string profilePictureUri = 4;
+    bytes profilePicture = 4;
 }

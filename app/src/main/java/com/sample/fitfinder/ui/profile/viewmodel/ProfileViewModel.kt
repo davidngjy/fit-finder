@@ -18,6 +18,12 @@ class ProfileViewModel @ViewModelInject constructor(
     val logOutSuccessful: LiveData<Boolean>
         get() = _logOutSuccessful
 
+    fun updateProfilePicture(newProfilePicture: ByteArray) {
+        viewModelScope.launch {
+            currentUserRepository.updateProfilePicture(newProfilePicture)
+        }
+    }
+
     fun logOut() {
         viewModelScope.launch {
             currentUserRepository.clearCurrentUser()

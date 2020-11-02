@@ -20,16 +20,29 @@
 
             <ImageView
                 android:id="@+id/image_view"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
+                android:layout_width="150dp"
+                android:layout_height="150dp"
                 android:layout_margin="20dp"
                 android:contentDescription="@string/profile_image_desc"
                 app:layout_constraintBottom_toTopOf="@id/display_name"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:loadImageFromUrl="@{viewModel.currentUser.profilePictureUri}"
+                app:loadImageFromUrl="@{viewModel.currentUser.profilePicture}"
                 tools:srcCompat="@drawable/ic_default_profile_24" />
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/take_new_photo"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:clickable="true"
+                android:focusable="true"
+                android:contentDescription="@string/take_photo_desc"
+                app:srcCompat="@drawable/ic_button_camera_24"
+                app:layout_constraintBottom_toBottomOf="@id/image_view"
+                app:layout_constraintEnd_toEndOf="@id/image_view"
+                app:fabSize="mini" />
+
 
             <TextView
                 android:id="@+id/display_name"

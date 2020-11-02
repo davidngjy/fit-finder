@@ -12,7 +12,8 @@ import com.google.android.material.tabs.TabLayoutMediator
 import com.sample.fitfinder.R
 import com.sample.fitfinder.data.repository.CurrentUserRepository
 import com.sample.fitfinder.databinding.FragmentSessionBinding
-import com.sample.fitfinder.proto.UserProfile
+import com.sample.fitfinder.domain.CurrentUserProfile
+import com.sample.fitfinder.domain.UserRole
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
@@ -24,7 +25,7 @@ class SessionFragment : Fragment() {
     @Inject lateinit var currentUserRepository: CurrentUserRepository
 
     private lateinit var binding: FragmentSessionBinding
-    private lateinit var currentUser: UserProfile
+    private lateinit var currentUser: CurrentUserProfile
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -45,7 +46,7 @@ class SessionFragment : Fragment() {
 
         binding.viewPager.adapter = sessionCollectionAdapter
         TabLayoutMediator(binding.tabLayout, binding.viewPager) { tab, position ->
-            if (currentUser.userRole == UserProfile.UserRole.Admin || currentUser.userRole == UserProfile.UserRole.Trainer) {
+            if (currentUser.userRole == UserRole.ADMIN || currentUser.userRole == UserRole.TRAINER) {
                 when (position) {
                     0 -> tab.setupTab(R.string.session_available, R.drawable.ic_session_available_24)
                     1 -> tab.setupTab(R.string.session_upcoming, R.drawable.ic_session_upcoming_24)

@@ -88,7 +88,7 @@ fun ImageView.setSessionTypeAvailableIcon(isAvailable: Boolean?) {
 }
 
 @BindingAdapter("loadImageFromUrl")
-fun ImageView.loadImageFromUrl(url: String?) {
+fun ImageView.loadImageFromUrl(url: ByteArray?) {
     url?.let {
         Glide.with(this)
             .load(url)

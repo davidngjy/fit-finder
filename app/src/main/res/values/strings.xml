@@ -28,6 +28,7 @@
     <string name="datetime_icon_desc">DateTime icon</string>
     <string name="cost_icon_desc">Cost icon</string>
     <string name="add_session">Add Session</string>
+    <string name="take_photo_desc">Take new photo</string>
 
     // Form hint
     <string name="title_form">Title</string>

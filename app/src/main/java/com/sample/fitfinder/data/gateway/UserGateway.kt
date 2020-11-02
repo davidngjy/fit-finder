@@ -1,5 +1,6 @@
 package com.sample.fitfinder.data.gateway
 
+import com.google.protobuf.ByteString
 import com.google.protobuf.Empty
 import com.sample.fitfinder.data.repository.GoogleTokenRepository
 import com.sample.fitfinder.proto.*
@@ -33,7 +34,7 @@ class UserGateway @Inject constructor() {
             }
     }
 
-    suspend fun updateUserProfile(displayName: String, email: String, profilePictureUrl: String)
+    suspend fun updateUserProfile(displayName: String, email: String, profilePicture: ByteArray?)
         : Response{
         val stub = createCoroutineStub()
 
@@ -41,7 +42,7 @@ class UserGateway @Inject constructor() {
             .newBuilder()
             .setDisplayName(displayName)
             .setEmail(email)
-            .setProfilePictureUri(profilePictureUrl)
+            .setProfilePicture(ByteString.copyFrom(profilePicture))
             .build()
 
         return stub.updateUserProfile(request)

@@ -32,23 +32,7 @@ class UserRepository @Inject constructor() {
             userProfile.userId,
             userProfile.displayName,
             userProfile.email,
-            userProfile.profilePictureUri
+            userProfile.profilePicture.toByteArray()
         ))
     }
-
-//    fun getUsers() : LiveData<List<User>> {
-//        val users = arrayListOf<User>(
-//            User(1, "David", "David", "", UserRole.ADMIN, ""),
-//            User(2, "Gareth", "Gareth", "", UserRole.ADMIN, "")
-//            )
-//        val data = MutableLiveData<List<User>>()
-//        data.value = users
-//        return data
-//    }
-//
-//    fun getCurrentUser() : LiveData<User> {
-//        val data = MutableLiveData<User>()
-//        data.value = User(1, "David", "David", "david.ng@gmail.com", UserRole.ADMIN, "")
-//        return data
-//    }
 }

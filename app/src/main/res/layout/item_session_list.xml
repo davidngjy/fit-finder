@@ -142,7 +142,7 @@
                     android:contentDescription="@string/profile_image_desc"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:loadImageFromUrl="@{trainerProfile.profilePictureUri}"
+                    app:loadImageFromUrl="@{trainerProfile.profilePicture}"
                     tools:srcCompat="@drawable/ic_default_profile_24" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>

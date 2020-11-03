@@ -1,9 +1,12 @@
 package com.sample.fitfinder.ui.profile
 
+import android.Manifest
 import android.app.Activity
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.graphics.ImageDecoder
 import android.graphics.Matrix
 import android.net.Uri
 import android.os.Bundle
@@ -12,18 +15,19 @@ import android.provider.MediaStore
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.exifinterface.media.ExifInterface
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.sample.fitfinder.LoginActivity
 import com.sample.fitfinder.databinding.FragmentProfileBinding
 import com.sample.fitfinder.ui.profile.viewmodel.ProfileViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
-import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.IOException
 
@@ -36,6 +40,8 @@ class ProfileFragment : Fragment() {
 
     private lateinit var binding: FragmentProfileBinding
     private lateinit var currentPhotoPath: String
+
+    private var permissionDenied = false
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -61,23 +67,32 @@ class ProfileFragment : Fragment() {
         binding.editEmailButton.setOnClickListener {
             findNavController()
                 .navigate(
-                    ProfileFragmentDirections.actionProfileFragmentToProfileEditDialogFragment(
-                        EditAction.Email
-                    )
+                    ProfileFragmentDirections.actionProfileFragmentToProfileEditDialogFragment(EditAction.Email)
                 )
         }
 
         binding.editNameButton.setOnClickListener {
             findNavController()
                 .navigate(
-                    ProfileFragmentDirections.actionProfileFragmentToProfileEditDialogFragment(
-                        EditAction.DisplayName
-                    )
+                    ProfileFragmentDirections.actionProfileFragmentToProfileEditDialogFragment(EditAction.DisplayName)
                 )
         }
 
         binding.takeNewPhoto.setOnClickListener {
-            dispatchTakePictureIntent()
+            MaterialAlertDialogBuilder(requireContext())
+                .setTitle("Update Profile Picture")
+                .setItems(arrayOf("Take from camera", "Choose from gallery")) { dialog, which ->
+                    when(which) {
+                        0 -> {
+                            dispatchTakePictureIntent()
+                            dialog.dismiss()
+                        }
+                        1 -> {
+                            chooseFromGallery()
+                        }
+                    }
+                }
+                .show()
         }
 
         return binding.root
@@ -117,13 +132,34 @@ class ProfileFragment : Fragment() {
         }
     }
 
+    private fun chooseFromGallery() {
+        if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED){
+            val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+            startActivityForResult(intent, REQUEST_IMAGE_GALLERY)
+        }
+        else {
+            requestPermissions(arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE), REQUEST_EXTERNAL_STORAGE_PERMISSION)
+        }
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        if (requestCode != REQUEST_EXTERNAL_STORAGE_PERMISSION) return
+
+        if (grantResults.isNotEmpty() && grantResults.first() == PackageManager.PERMISSION_GRANTED)
+            chooseFromGallery()
+        else
+            permissionDenied = true
+    }
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == Activity.RESULT_OK) {
-
             val bitmap = BitmapFactory.decodeFile(currentPhotoPath)
 
             val ei = ExifInterface(currentPhotoPath)
-
             val orientation = ei.getAttributeInt(
                 ExifInterface.TAG_ORIENTATION,
                 ExifInterface.ORIENTATION_UNDEFINED
@@ -135,13 +171,21 @@ class ProfileFragment : Fragment() {
                 else -> bitmap
             }
 
-            val stream = ByteArrayOutputStream()
-            rotatedBitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream)
-
-            viewModel.updateProfilePicture(stream.toByteArray())
+            viewModel.updateProfilePicture(rotatedBitmap)
 
             val file = File(currentPhotoPath)
             file.delete()
+        }
+
+        if (requestCode == REQUEST_IMAGE_GALLERY && resultCode == Activity.RESULT_OK) {
+            val bitmap = if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.P) {
+                val source = ImageDecoder.createSource(requireContext().contentResolver, data!!.data!!)
+                ImageDecoder.decodeBitmap(source)
+            } else {
+                MediaStore.Images.Media.getBitmap(requireContext().contentResolver, data!!.data!!)
+            }
+
+            viewModel.updateProfilePicture(bitmap)
         }
     }
 
@@ -160,7 +204,23 @@ class ProfileFragment : Fragment() {
         requireActivity().finish()
     }
 
+    override fun onResume() {
+        super.onResume()
+        if (permissionDenied) {
+            MaterialAlertDialogBuilder(requireContext())
+                .setTitle("Storage Permission Denied")
+                .setMessage("Storage permission is required for choosing an image from gallery")
+                .setPositiveButton("Dismiss") { dialog, _ ->
+                    dialog.dismiss()
+                }
+                .show()
+            permissionDenied = false
+        }
+    }
+
     companion object {
         private const val REQUEST_IMAGE_CAPTURE = 101
+        private const val REQUEST_IMAGE_GALLERY = 102
+        private const val REQUEST_EXTERNAL_STORAGE_PERMISSION = 103
     }
 }

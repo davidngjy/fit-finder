@@ -32,7 +32,8 @@ class SessionAvailableFragment : Fragment() {
         binding = FragmentSessionAvailableBinding.inflate(inflater, container, false)
 
         adapter.setClickListener(SessionListItemListener { sessionId ->
-            viewModel.onSessionClick(sessionId)
+            findNavController()
+                .navigate(SessionFragmentDirections.actionSessionFragmentToSessionDetailFragment(sessionId))
         })
 
         binding.sessionAvailableList.adapter = adapter
@@ -42,14 +43,6 @@ class SessionAvailableFragment : Fragment() {
         viewModel.sessions.observe(viewLifecycleOwner, {
             it?.let {
                 adapter.submitList(it)
-            }
-        })
-
-        viewModel.navigateToSessionDetail.observe(viewLifecycleOwner, {
-            it?.let {
-                findNavController()
-                    .navigate(SessionFragmentDirections.actionSessionFragmentToSessionDetailFragment(it))
-                viewModel.onSessionDetailNavigated()
             }
         })
 

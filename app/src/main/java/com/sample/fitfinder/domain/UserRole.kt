@@ -1,6 +1,7 @@
 package com.sample.fitfinder.domain
 
 enum class UserRole(val value: Int) {
+    UNDEFINED(0),
     ADMIN(1),
     TRAINER(2),
     USER(3);

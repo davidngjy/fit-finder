@@ -29,6 +29,7 @@
     <string name="cost_icon_desc">Cost icon</string>
     <string name="add_session">Add Session</string>
     <string name="take_photo_desc">Take new photo</string>
+    <string name="my_location_desc">My Location</string>
 
     // Form hint
     <string name="title_form">Title</string>

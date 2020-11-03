@@ -7,12 +7,13 @@ import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
+import android.widget.LinearLayout
 import androidx.core.app.ActivityCompat.OnRequestPermissionsResultCallback
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.gms.location.*
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
@@ -20,17 +21,21 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.sample.fitfinder.R
 import com.sample.fitfinder.databinding.FragmentSearchBinding
 import com.sample.fitfinder.domain.Session
 import com.sample.fitfinder.ui.configureDayNightStyle
 import com.sample.fitfinder.ui.search.viewmodel.SearchViewModel
+import com.sample.fitfinder.ui.session.SessionAdapter
+import com.sample.fitfinder.ui.session.SessionListItemListener
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
+import javax.inject.Inject
 import kotlin.time.ExperimentalTime
 
 @AndroidEntryPoint
@@ -40,11 +45,14 @@ import kotlin.time.ExperimentalTime
 class SearchFragment : Fragment(),
     OnRequestPermissionsResultCallback, OnMapReadyCallback {
 
-    private val searchViewModel: SearchViewModel by viewModels()
+    private val viewModel: SearchViewModel by viewModels()
 
     private lateinit var binding: FragmentSearchBinding
     private lateinit var map: GoogleMap
     private lateinit var fusedLocationClient: FusedLocationProviderClient
+    private lateinit var bottomSheetBehavior: BottomSheetBehavior<LinearLayout>
+
+    @Inject lateinit var adapter: SessionAdapter
 
     private var permissionDenied = false
     private var userDraggedMap = false
@@ -56,12 +64,38 @@ class SearchFragment : Fragment(),
     ): View? {
         binding = FragmentSearchBinding.inflate(inflater, container, false)
 
+        binding.lifecycleOwner = this
+        binding.listView.adapter = adapter
+        binding.listView.layoutManager = LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
+
+        adapter.setClickListener(SessionListItemListener { sessionId ->
+            findNavController().navigate(SearchFragmentDirections
+                .actionSearchFragmentToSessionDetailFragment(sessionId))
+        })
+
         val mapFragment = childFragmentManager
             .findFragmentById(R.id.map) as SupportMapFragment
 
         mapFragment.getMapAsync(this)
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity())
+        bottomSheetBehavior = BottomSheetBehavior.from(binding.bottomSheet)
+
+        binding.myLocationFab.setOnClickListener {
+            moveCameraToMyLocation()
+        }
+
+        viewModel.availableSessions.observe(viewLifecycleOwner) {
+            binding.bottomSheet.visibility = View.VISIBLE
+            if (it.isEmpty())
+                bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
+            else
+                bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
+
+            it?.let {
+                adapter.submitList(it)
+            }
+        }
 
         return binding.root
     }
@@ -77,18 +111,10 @@ class SearchFragment : Fragment(),
                 .actionSearchFragmentToSessionDetailFragment(sessionId))
         }
 
-        googleMap.setOnMyLocationButtonClickListener {
-            Toast.makeText(requireContext(), "MyLocation button clicked", Toast.LENGTH_SHORT).show()
-            // Return false so that we don't consume the event and the default behavior still occurs
-            // (the camera animates to the user's current position).
-            false
-        }
-        googleMap.setOnMyLocationClickListener { location ->
-            Toast.makeText(requireContext(), "Current location:\n$location", Toast.LENGTH_LONG).show()
-        }
         googleMap.uiSettings.isMapToolbarEnabled = false
+        googleMap.uiSettings.isMyLocationButtonEnabled = false
 
-        enableMyLocation()
+        moveCameraToMyLocation()
 
         map.setOnCameraMoveStartedListener {
             if (it == GoogleMap.OnCameraMoveStartedListener.REASON_GESTURE)
@@ -97,12 +123,12 @@ class SearchFragment : Fragment(),
 
         map.setOnCameraIdleListener {
             if (userDraggedMap) {
-                searchViewModel.setBounds(map.projection.visibleRegion.latLngBounds)
+                viewModel.setBounds(map.projection.visibleRegion.latLngBounds)
                 userDraggedMap = false
             }
         }
 
-        searchViewModel.availableSessions.observe(viewLifecycleOwner) { sessions ->
+        viewModel.availableSessions.observe(viewLifecycleOwner) { sessions ->
             map.clear()
             sessions.forEach { session ->
                 markSessionOnMap(session)
@@ -117,7 +143,7 @@ class SearchFragment : Fragment(),
         if (grantResults.isNotEmpty() &&
             grantResults.first() == PackageManager.PERMISSION_GRANTED) {
             // Enable the my location layer if the permission has been granted.
-            enableMyLocation()
+            moveCameraToMyLocation()
         } else {
             // Permission was denied. Display an error message
             // Display the missing permission error dialog when the fragments resume.
@@ -150,7 +176,7 @@ class SearchFragment : Fragment(),
     /**
      * Enables the My Location layer if the fine location permission has been granted.
      */
-    private fun enableMyLocation() {
+    private fun moveCameraToMyLocation() {
         if (!::map.isInitialized) return
         if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION)
             == PackageManager.PERMISSION_GRANTED) {
@@ -168,7 +194,7 @@ class SearchFragment : Fragment(),
 
                     map.animateCamera(cameraUpdate, object: GoogleMap.CancelableCallback {
                         override fun onFinish() {
-                            searchViewModel.setBounds(map.projection.visibleRegion.latLngBounds)
+                            viewModel.setBounds(map.projection.visibleRegion.latLngBounds)
                         }
                         override fun onCancel() { }
                     })

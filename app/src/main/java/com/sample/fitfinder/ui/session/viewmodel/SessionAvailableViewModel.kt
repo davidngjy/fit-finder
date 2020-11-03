@@ -1,8 +1,6 @@
 package com.sample.fitfinder.ui.session.viewmodel
 
 import androidx.hilt.lifecycle.ViewModelInject
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import com.sample.fitfinder.data.repository.SessionRepository
@@ -20,16 +18,4 @@ class SessionAvailableViewModel @ViewModelInject constructor(
     val sessions = sessionRepository
         .getMyAvailableSessions()
         .asLiveData()
-
-    private val _navigateToSessionDetail = MutableLiveData<Long>()
-    val navigateToSessionDetail: LiveData<Long>
-        get() = _navigateToSessionDetail
-
-    fun onSessionClick(sessionId: Long) {
-        _navigateToSessionDetail.value = sessionId
-    }
-
-    fun onSessionDetailNavigated() {
-        _navigateToSessionDetail.value = null
-    }
 }

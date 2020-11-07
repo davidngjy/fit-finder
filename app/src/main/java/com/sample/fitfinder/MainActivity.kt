@@ -70,7 +70,8 @@ class MainActivity : AppCompatActivity() {
                     R.id.searchFragment,
                     R.id.sessionFragment,
                     R.id.messageFragment,
-                    R.id.profileFragment
+                    R.id.profileFragment,
+                    R.id.searchFilterDialog
                 )){
                 binding.navView.visibility = View.VISIBLE
             } else {

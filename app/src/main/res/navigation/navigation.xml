@@ -13,6 +13,9 @@
         <action
             android:id="@+id/action_searchFragment_to_sessionDetailFragment"
             app:destination="@id/sessionDetailFragment" />
+        <action
+            android:id="@+id/action_searchFragment_to_searchFilterDialog"
+            app:destination="@id/searchFilterDialog" />
     </fragment>
 
     <fragment
@@ -96,4 +99,8 @@
             android:name="editAction"
             app:argType="com.sample.fitfinder.ui.profile.EditAction" />
     </dialog>
+    <dialog
+        android:id="@+id/searchFilterDialog"
+        android:name="com.sample.fitfinder.ui.search.SearchFilterDialog"
+        android:label="SearchFilterDialog" />
 </navigation>

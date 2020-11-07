@@ -4,15 +4,14 @@ import android.Manifest
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.os.Looper
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.LinearLayout
 import androidx.core.app.ActivityCompat.OnRequestPermissionsResultCallback
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.ui.NavigationUI
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.gms.location.*
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -89,15 +88,31 @@ class SearchFragment : Fragment(),
             binding.bottomSheet.visibility = View.VISIBLE
             if (it.isEmpty())
                 bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
-            else
-                bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
-
-            it?.let {
+            else {
+                if (bottomSheetBehavior.state == BottomSheetBehavior.STATE_HIDDEN)
+                    bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
                 adapter.submitList(it)
             }
         }
 
         return binding.root
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setHasOptionsMenu(true)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.search_menu, menu)
+        super.onCreateOptionsMenu(menu, inflater)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        // NavigationUI will figure out which item to navigate to
+        // Provided the id is the same in both navigation.xml and search_menu.xml
+        return NavigationUI.onNavDestinationSelected(item, findNavController())
+                || super.onOptionsItemSelected(item)
     }
 
     override fun onMapReady(googleMap: GoogleMap) {

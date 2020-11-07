@@ -228,10 +228,13 @@ class SessionAddFragment : Fragment() {
     }
 
     private fun setupDatePicker() {
-        val builder = MaterialDatePicker.Builder.datePicker()
-        val constraintBuilder = CalendarConstraints.Builder().apply {
-            setValidator(DateValidatorPointForward.now())
-        }.build()
+        val builder = MaterialDatePicker
+            .Builder
+            .datePicker()
+        val constraintBuilder = CalendarConstraints
+            .Builder()
+            .setValidator(DateValidatorPointForward.now())
+            .build()
 
         datePicker = builder.setCalendarConstraints(constraintBuilder).build()
     }

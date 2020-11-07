@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <import type="com.sample.fitfinder.ui.DataBindingConverter" />
+
+        <variable
+            name="viewModel"
+            type="com.sample.fitfinder.ui.search.viewmodel.SearchFilterViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="?attr/colorOnPrimary"
+        android:padding="20dp">
+
+        <TextView
+            android:id="@+id/to_be_done"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/to_be_done"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <com.google.android.material.chip.ChipGroup
+            android:id="@+id/chip_group"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:selectionRequired="true"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/to_be_done">
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/online_chip"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="@={viewModel.isOnline()}"
+                android:text="@string/online"
+                style="@style/Widget.MaterialComponents.Chip.Filter"/>
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/in_person_chip"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="@={viewModel.isInPerson()}"
+                android:text="@string/in_person"
+                style="@style/Widget.MaterialComponents.Chip.Filter"/>
+        </com.google.android.material.chip.ChipGroup>
+
+        <ImageView
+            android:id="@+id/max_price_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:src="@drawable/ic_session_money_24"
+            style="@style/Widget.FitFinder.Form.Icon"
+            android:contentDescription="@string/cost_form"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/max_price_field"
+            app:layout_constraintBottom_toBottomOf="@id/max_price_field"/>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/max_price_field"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            style="@style/Widget.FitFinder.TextInput.OutlinedBox"
+            android:hint="@string/max_price"
+            app:layout_constraintTop_toBottomOf="@id/chip_group"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/max_price_icon">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="number"
+                android:text="@={DataBindingConverter.convertIntToString(viewModel.maxPrice)}"/>
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <ImageView
+            android:id="@+id/date_range_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:src="@drawable/ic_session_calendar_24"
+            style="@style/Widget.FitFinder.Form.Icon"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/date_range_field"
+            app:layout_constraintBottom_toBottomOf="@id/date_range_field"
+            android:contentDescription="@string/date_range_for_filter" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/date_range_field"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:hint="@string/date_range"
+            style="@style/Widget.FitFinder.TextInput.OutlinedBox"
+            app:layout_constraintTop_toBottomOf="@id/max_price_field"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/date_range_icon">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:focusable="false"
+                android:inputType="date"
+                android:text="@{viewModel.dateRangeString}"/>
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <LinearLayout
+            android:id="@+id/duration_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/date_range_field"
+            android:padding="5dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="start"
+                android:text="@string/duration"
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle2"/>
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_weight="1" />
+
+            <TextView
+                android:id="@+id/duration_string"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{viewModel.durationString}"
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle2"/>
+
+        </LinearLayout>
+
+        <com.google.android.material.slider.RangeSlider
+            android:id="@+id/duration"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:stepSize="10"
+            android:valueFrom="30"
+            android:valueTo="120"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/duration_layout"/>
+
+        <Button
+            android:id="@+id/close_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/close_button"
+            android:layout_margin="10dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/duration"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

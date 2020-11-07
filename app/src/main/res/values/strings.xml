@@ -15,7 +15,12 @@
     <string name="session_past">Past</string>
     <string name="confirm_button">Confirm</string>
     <string name="cancel_button">Cancel</string>
+    <string name="close_button">Close</string>
     <string name="duration">Duration</string>
+    <string name="search_filter">Search Filter</string>
+    <string name="to_be_done">To be done</string>
+    <string name="online">Online</string>
+    <string name="in_person">In Person</string>
 
     // Format string
     <string name="session_datetime">%s</string>
@@ -30,6 +35,7 @@
     <string name="add_session">Add Session</string>
     <string name="take_photo_desc">Take new photo</string>
     <string name="my_location_desc">My Location</string>
+    <string name="date_range_for_filter">Date Range for filter</string>
 
     // Form hint
     <string name="title_form">Title</string>
@@ -44,6 +50,8 @@
     <string name="book_button">Book</string>
     <string name="availability_icon">Availability Icon</string>
     <string name="new_value">New Value</string>
+    <string name="max_price">Max Price</string>
+    <string name="date_range">Date Range</string>
 
     // Error Message
     <string name="connection_error">Network problem, please try again.</string>

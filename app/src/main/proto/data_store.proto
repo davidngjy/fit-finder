@@ -1,0 +1,22 @@
+syntax = "proto3";
+
+option java_package = "com.sample.fitfinder.proto";
+option java_multiple_files = true;
+
+import "google/protobuf/duration.proto";
+import "google/protobuf/timestamp.proto";
+
+message GoogleToken {
+    string tokenId = 1;
+    int64 expiredDateTime = 2;
+}
+
+message SearchFilter {
+    int32 maxPrice = 1;
+    bool online = 2;
+    bool inPerson = 3;
+    google.protobuf.Duration UpperDuration = 4;
+    google.protobuf.Duration LowerDuration = 5;
+    google.protobuf.Timestamp UpperDate = 6;
+    google.protobuf.Timestamp LowerDate = 7;
+}

@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.sample.fitfinder.data.repository.SessionRepository
 import com.sample.fitfinder.data.repository.SettingRepository
 import com.sample.fitfinder.data.repository.SubscriptionRepository
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.launch
@@ -18,7 +19,7 @@ class MainViewModel @ViewModelInject constructor(
     private val settingRepository: SettingRepository
 ) : ViewModel() {
     fun subscribe() {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             awaitAll(
                 async { subscriptionRepository.subscribeToUserSession() },
                 async { subscriptionRepository.subscribeToProfileUpdate() },
@@ -28,7 +29,7 @@ class MainViewModel @ViewModelInject constructor(
     }
 
     fun clear() {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             sessionRepository.clearAllSession()
             settingRepository.resetDefaultSearchFilter()
         }

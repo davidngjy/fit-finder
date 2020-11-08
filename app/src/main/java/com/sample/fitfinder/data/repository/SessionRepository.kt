@@ -17,10 +17,8 @@ import kotlinx.coroutines.flow.map
 import java.time.Instant
 import javax.inject.Inject
 import javax.inject.Singleton
-import kotlin.time.ExperimentalTime
 
 @Singleton
-@ExperimentalTime
 class SessionRepository @Inject constructor() {
 
     @Inject lateinit var sessionGateway: SessionGateway

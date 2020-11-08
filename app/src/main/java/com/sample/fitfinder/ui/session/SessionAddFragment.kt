@@ -36,12 +36,13 @@ import com.sample.fitfinder.databinding.FragmentSessionAddBinding
 import com.sample.fitfinder.ui.configureDayNightStyle
 import com.sample.fitfinder.ui.session.viewmodel.SessionAddViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import java.text.SimpleDateFormat
-import java.util.*
-import kotlin.time.ExperimentalTime
+import java.time.Instant
+import java.time.LocalTime
+import java.time.ZoneId
+import java.time.format.DateTimeFormatter
+import java.time.format.FormatStyle
 
 @AndroidEntryPoint
-@ExperimentalTime
 class SessionAddFragment : Fragment() {
 
     private val viewModel: SessionAddViewModel by viewModels()
@@ -51,8 +52,6 @@ class SessionAddFragment : Fragment() {
     private lateinit var datePicker: MaterialDatePicker<Long>
     private lateinit var geoCoder: Geocoder
     private lateinit var map: GoogleMap
-
-    private val formatter: SimpleDateFormat = SimpleDateFormat("hh:mm a", Locale.getDefault())
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -149,7 +148,7 @@ class SessionAddFragment : Fragment() {
         }
 
         binding.timeTextField.editText!!.addTextChangedListener {
-            viewModel.validateDateTime(binding.timeTextField)
+            viewModel.validateDateTime()
         }
 
         binding.confirmButton.setOnClickListener { onConfirmButton() }
@@ -220,10 +219,11 @@ class SessionAddFragment : Fragment() {
         timePicker.show(parentFragmentManager, timePicker.toString())
 
         timePicker.addOnPositiveButtonClickListener {
-            viewModel.time.value!!.set(Calendar.HOUR_OF_DAY, timePicker.hour)
-            viewModel.time.value!!.set(Calendar.MINUTE, timePicker.minute)
-
-            viewModel.timeString.value = formatter.format(viewModel.time.value!!.time)
+            LocalTime.of(timePicker.hour, timePicker.minute)
+                .let {
+                    viewModel.localTime.value = it
+                    viewModel.timeString.value = it.format(DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT))
+                }
         }
     }
 
@@ -242,7 +242,8 @@ class SessionAddFragment : Fragment() {
     private fun showMaterialDatePicker() {
         datePicker.show(childFragmentManager, datePicker.toString())
         datePicker.addOnPositiveButtonClickListener {
-            viewModel.date.value!!.time = Date(it)
+            val zonedDateTime = Instant.ofEpochMilli(it).atZone(ZoneId.systemDefault())
+            viewModel.localDate.value = zonedDateTime.toLocalDate()
             viewModel.dateString.value = datePicker.headerText
         }
     }
@@ -263,7 +264,13 @@ class SessionAddFragment : Fragment() {
 
     private fun onConfirmButton() {
         if (!validateAllInput()) { return }
-        if (!viewModel.validateDateTime(binding.timeTextField)) { return }
+
+        if (!viewModel.validateDateTime()) {
+            showDateTimeError()
+            return
+        } else {
+            hideDateTimeError()
+        }
 
         showProgress()
         viewModel.saveSession()
@@ -315,6 +322,20 @@ class SessionAddFragment : Fragment() {
                 dialog.cancel()
             }
             .show()
+    }
+
+    private fun showDateTimeError() {
+        binding.timeTextField.let { layout ->
+            layout.isErrorEnabled = true
+            layout.error = "Time cannot be in the past"
+        }
+    }
+
+    private fun hideDateTimeError() {
+        binding.timeTextField.let { layout ->
+            layout.isErrorEnabled = false
+            layout.error = null
+        }
     }
 
     private fun checkForEdit() {

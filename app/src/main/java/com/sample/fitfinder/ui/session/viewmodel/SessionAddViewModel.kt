@@ -15,23 +15,17 @@ import dagger.hilt.android.scopes.FragmentScoped
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
-import java.text.SimpleDateFormat
-import java.time.Instant
-import java.time.ZonedDateTime
-import java.util.*
-import kotlin.time.ExperimentalTime
+import java.time.*
+import java.time.format.DateTimeFormatter
+import java.time.format.FormatStyle
 
 @FragmentScoped
-@ExperimentalTime
 class SessionAddViewModel @ViewModelInject constructor(
     val sessionRepository: SessionRepository,
     val currentUserRepository: CurrentUserRepository)
     : ViewModel() {
 
     var sessionId: Long = 0
-
-    private val timeFormatter = SimpleDateFormat("hh:mm a", Locale.getDefault())
-    private val dateFormatter = SimpleDateFormat("d MMM yyyy", Locale.getDefault())
 
     // Two-way binding
     val title = MutableLiveData<String>()
@@ -45,8 +39,8 @@ class SessionAddViewModel @ViewModelInject constructor(
     val isInPerson = MutableLiveData(false)
 
     // DateTime
-    val date = MutableLiveData(Calendar.getInstance())
-    val time = MutableLiveData(Calendar.getInstance())
+    val localDate = MutableLiveData<LocalDate>()
+    val localTime = MutableLiveData<LocalTime>()
 
     // Location
     private val _locationCoordinate = MutableLiveData<LatLng>()
@@ -73,31 +67,14 @@ class SessionAddViewModel @ViewModelInject constructor(
         return true
     }
 
-    fun validateDateTime(timeLayout: TextInputLayout): Boolean {
-        val calendar = Calendar.getInstance()
-        calendar.time = date.value!!.time
-        calendar.set(Calendar.HOUR_OF_DAY, time.value!!.get(Calendar.HOUR_OF_DAY))
-        calendar.set(Calendar.MINUTE, time.value!!.get(Calendar.MINUTE))
-        if (calendar.toInstant() < ZonedDateTime.now().toInstant()) {
-            timeLayout.isErrorEnabled = true
-            timeLayout.error = "Time cannot be in the past"
+    fun validateDateTime(): Boolean {
+        if (localDate.value == null || localTime.value == null)
             return false
-        }
 
-        timeLayout.error = null
-        timeLayout.isErrorEnabled = false
-        return true
+        return LocalDateTime.of(localDate.value, localTime.value)
+            .atZone(ZoneId.systemDefault()).toInstant() >= Instant.now()
     }
 
-    private fun getConvertedDateTime(): Instant {
-        val calendar = Calendar.getInstance()
-        calendar.time = date.value!!.time
-        calendar.set(Calendar.HOUR_OF_DAY, time.value!!.get(Calendar.HOUR_OF_DAY))
-        calendar.set(Calendar.MINUTE, time.value!!.get(Calendar.MINUTE))
-        return calendar.toInstant()
-    }
-
-    @ExperimentalTime
     fun loadSessionDetail(sessionId: Long) {
         if (sessionId == this.sessionId) return
 
@@ -119,16 +96,15 @@ class SessionAddViewModel @ViewModelInject constructor(
     }
 
     private fun setDateTimeFromSession(dateTimeInstant: Instant) {
-        val calendar = Calendar.getInstance()
-        calendar.time = Date(dateTimeInstant.toEpochMilli())
-        date.value = calendar
-        time.value = calendar
-
-        timeString.value = timeFormatter.format(calendar.time)
-        dateString.value = dateFormatter.format(calendar.time)
+        LocalDateTime.ofInstant(dateTimeInstant, ZoneId.systemDefault())
+            .let {
+                localDate.value = it.toLocalDate()
+                localTime.value = it.toLocalTime()
+                dateString.value = it.toLocalDate().format(DateTimeFormatter.ofPattern("d MMM yyyy"))
+                timeString.value = it.toLocalTime().format(DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT))
+            }
     }
 
-    @ExperimentalTime
     fun saveSession() {
         viewModelScope.launch {
             val session = Session(
@@ -136,7 +112,7 @@ class SessionAddViewModel @ViewModelInject constructor(
                 currentUserRepository.userId.first(),
                 title.value!!,
                 description.value!!,
-                getConvertedDateTime(),
+                LocalDateTime.of(localDate.value, localTime.value).atZone(ZoneId.systemDefault()).toInstant(),
                 locationCoordinate.value!!,
                 locationString.value!!,
                 isOnline.value!!,

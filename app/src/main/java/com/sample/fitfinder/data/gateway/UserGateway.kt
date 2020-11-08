@@ -4,12 +4,15 @@ import com.google.protobuf.ByteString
 import com.google.protobuf.Empty
 import com.sample.fitfinder.data.repository.GoogleTokenRepository
 import com.sample.fitfinder.proto.*
+import io.grpc.CallCredentials
 import io.grpc.ManagedChannel
 import io.grpc.Metadata
-import io.grpc.stub.MetadataUtils
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.retryWhen
 import timber.log.Timber
+import java.util.concurrent.Executor
 import javax.inject.Inject
 
 class UserGateway @Inject constructor() {
@@ -58,22 +61,42 @@ class UserGateway @Inject constructor() {
     }
 
     suspend fun subscribeToUserProfile(): Flow<UserProfile> {
-        val stub = createCoroutineStub()
-
-        return stub.subscribeToUserProfile(Empty.getDefaultInstance())
-            .catch { ex ->
-                Timber.e(ex, "Exception thrown on subscribe to user profile.")
+        var currentDelay = 100L
+        val delayFactor = 2
+        return createCoroutineStub()
+            .subscribeToUserProfile(Empty.getDefaultInstance())
+            .retryWhen { _, attempt ->
+                Timber.e("Connection lost on subscribeToUserProfile attempt: $attempt")
+                delay(currentDelay)
+                currentDelay *= delayFactor
+                attempt < 10
             }
     }
 
     private suspend fun createCoroutineStub(withToken: Boolean = true): UserProtocolGrpcKt.UserProtocolCoroutineStub {
         return if (withToken) {
-            val header = Metadata()
-            header.put(key, "Bearer ${googleTokenRepository.getGoogleTokenId()}")
-            val stub = UserProtocolGrpcKt.UserProtocolCoroutineStub(channel)
-            MetadataUtils.attachHeaders(stub, header)
+            UserProtocolGrpcKt.UserProtocolCoroutineStub(channel)
+                .withCallCredentials(createCallCredentials(googleTokenRepository.getGoogleTokenId()))
         } else {
             UserProtocolGrpcKt.UserProtocolCoroutineStub(channel)
+        }
+    }
+
+    private fun createCallCredentials(token: String): CallCredentials {
+        return object: CallCredentials() {
+            override fun applyRequestMetadata(
+                requestInfo: RequestInfo?,
+                appExecutor: Executor,
+                applier: MetadataApplier
+            ) {
+                appExecutor.execute {
+                    val header = Metadata()
+                    header.put(key, "Bearer $token")
+                    applier.apply(header)
+                }
+            }
+
+            override fun thisUsesUnstableApi() { }
         }
     }
 }

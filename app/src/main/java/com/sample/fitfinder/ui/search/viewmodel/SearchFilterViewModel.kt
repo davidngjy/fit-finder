@@ -8,7 +8,8 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.launch
-import java.util.*
+import java.time.LocalDateTime
+import java.time.ZoneOffset
 import kotlin.time.ExperimentalTime
 import kotlin.time.milliseconds
 
@@ -22,8 +23,8 @@ class SearchFilterViewModel @ViewModelInject constructor(
     val isInPerson = MutableLiveData<Boolean>()
     val upperDuration = MutableLiveData<Int>()
     val lowerDuration = MutableLiveData<Int>()
-    val upperDateTime = MutableLiveData<Calendar>()
-    val lowerDateTime = MutableLiveData<Calendar>()
+    val upperDateTime = MutableLiveData<LocalDateTime>()
+    val lowerDateTime = MutableLiveData<LocalDateTime>()
 
     @FlowPreview
     @ExperimentalTime
@@ -32,7 +33,7 @@ class SearchFilterViewModel @ViewModelInject constructor(
         .combine(upperDuration.asFlow()) { lower, upper ->
             "$lower min - $upper min"
         }
-        .debounce(50.milliseconds)
+        .debounce(10.milliseconds)
         .asLiveData()
 
     val dateRangeString = MutableLiveData<String>()
@@ -46,13 +47,15 @@ class SearchFilterViewModel @ViewModelInject constructor(
                 upperDuration.value = it.upperDuration
                 lowerDuration.value = it.lowerDuration
 
-                val upperDateCalendar = Calendar.getInstance()
-                upperDateCalendar.time = Date(it.upperDateTime.toEpochMilli())
-                upperDateTime.value = upperDateCalendar
+                upperDateTime.value = LocalDateTime.ofEpochSecond(it.upperDateTime.epochSecond, it.upperDateTime.nano, ZoneOffset.UTC)
 
-                val lowerDateCalendar = Calendar.getInstance()
-                lowerDateCalendar.time = Date(it.lowerDateTime.toEpochMilli())
-                lowerDateTime.value = lowerDateCalendar
+//                val upperDateCalendar = Calendar.getInstance()
+//                upperDateCalendar.time = Date(it.upperDateTime.toEpochMilli())
+//                upperDateTime.value = upperDateCalendar
+//
+//                val lowerDateCalendar = Calendar.getInstance()
+//                lowerDateCalendar.time = Date(it.lowerDateTime.toEpochMilli())
+//                lowerDateTime.value = lowerDateCalendar
             }
         }
     }
@@ -81,12 +84,12 @@ class SearchFilterViewModel @ViewModelInject constructor(
         }
     }
 
-    fun updateDateTime() {
-        viewModelScope.launch {
-            settingRepository.setDateTime(
-                upperDateTime.value!!.toInstant(),
-                lowerDateTime.value!!.toInstant()
-            )
-        }
-    }
+//    fun updateDateTime() {
+//        viewModelScope.launch {
+//            settingRepository.setDateTime(
+//                upperDateTime.value!!.toInstant(),
+//                lowerDateTime.value!!.toInstant()
+//            )
+//        }
+//    }
 }

@@ -11,7 +11,8 @@ import com.sample.fitfinder.proto.SearchFilter
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.map
 import java.time.Instant
-import java.util.*
+import java.time.LocalDateTime
+import java.time.ZoneId
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -38,8 +39,8 @@ class SettingRepository @Inject constructor(@ApplicationContext context: Context
         }
 
     suspend fun resetDefaultSearchFilter() {
-        val dateTimeAMonthAhead = Calendar.getInstance()
-        dateTimeAMonthAhead.add(Calendar.DAY_OF_YEAR, 30)
+        val dateTimeNow = LocalDateTime.now()
+        val dateTimeAMonthAhead = dateTimeNow.plusMonths(1)
 
         searchFilterDataStore.updateData {
             it.toBuilder()
@@ -48,8 +49,8 @@ class SettingRepository @Inject constructor(@ApplicationContext context: Context
                 .setInPerson(true)
                 .setUpperDuration(Duration.newBuilder().setSeconds((MIN_IN_SECOND * 120).toLong()).build())
                 .setLowerDuration(Duration.newBuilder().setSeconds((MIN_IN_SECOND * 30).toLong()).build())
-                .setUpperDate(Timestamp.newBuilder().setSeconds(dateTimeAMonthAhead.toInstant().epochSecond).build())
-                .setLowerDate(Timestamp.newBuilder().setSeconds(Instant.now().epochSecond).build())
+                .setUpperDate(Timestamp.newBuilder().setSeconds(dateTimeAMonthAhead.atZone(ZoneId.systemDefault()).toEpochSecond()).build())
+                .setLowerDate(Timestamp.newBuilder().setSeconds(dateTimeNow.atZone(ZoneId.systemDefault()).toEpochSecond()).build())
                 .build()
         }
     }

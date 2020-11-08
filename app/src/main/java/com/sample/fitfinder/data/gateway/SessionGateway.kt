@@ -6,12 +6,16 @@ import com.google.protobuf.Timestamp
 import com.sample.fitfinder.data.repository.GoogleTokenRepository
 import com.sample.fitfinder.domain.Session
 import com.sample.fitfinder.proto.*
+import io.grpc.CallCredentials
 import io.grpc.ManagedChannel
 import io.grpc.Metadata
-import io.grpc.stub.MetadataUtils
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.retryWhen
 import kotlinx.coroutines.withContext
+import timber.log.Timber
+import java.util.concurrent.Executor
 import javax.inject.Inject
 
 class SessionGateway @Inject constructor() {
@@ -82,19 +86,51 @@ class SessionGateway @Inject constructor() {
     }
 
     suspend fun subscribeToUserSession(): Flow<UserSession> {
-        val stub = createCoroutineStub()
-        return stub.subscribeToUserSession(Empty.getDefaultInstance())
+        var currentDelay = 100L
+        val delayFactor = 2
+        return createCoroutineStub()
+            .subscribeToUserSession(Empty.getDefaultInstance())
+            .retryWhen { _, attempt ->
+                Timber.e("Connection lost on subscribeToUserSession attempt: $attempt")
+                delay(currentDelay)
+                currentDelay *= delayFactor
+                attempt < 10
+            }
     }
 
     suspend fun subscribeToBookingSession(): Flow<UserSession> {
+        var currentDelay = 100L
+        val delayFactor = 2
         return createCoroutineStub()
             .subscribeToSessionBooking(Empty.getDefaultInstance())
+            .retryWhen { _, attempt ->
+                Timber.e("Connection lost on subscribeToBookingSession attempt: $attempt")
+                delay(currentDelay)
+                currentDelay *= delayFactor
+                attempt < 10
+            }
     }
 
     private suspend fun createCoroutineStub(): SessionProtocolGrpcKt.SessionProtocolCoroutineStub {
-        val header = Metadata()
-        header.put(key, "Bearer ${googleTokenRepository.getGoogleTokenId()}")
-        val stub = SessionProtocolGrpcKt.SessionProtocolCoroutineStub(channel)
-        return MetadataUtils.attachHeaders(stub, header)
+        return SessionProtocolGrpcKt.SessionProtocolCoroutineStub(channel)
+            .withCallCredentials(createCallCredentials(googleTokenRepository.getGoogleTokenId()))
+    }
+
+    private fun createCallCredentials(token: String): CallCredentials {
+        return object: CallCredentials() {
+            override fun applyRequestMetadata(
+                requestInfo: RequestInfo?,
+                appExecutor: Executor,
+                applier: MetadataApplier
+            ) {
+                appExecutor.execute {
+                    val header = Metadata()
+                    header.put(key, "Bearer $token")
+                    applier.apply(header)
+                }
+            }
+
+            override fun thisUsesUnstableApi() { }
+        }
     }
 }

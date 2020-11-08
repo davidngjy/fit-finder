@@ -48,7 +48,7 @@ class GoogleTokenRepository @Inject constructor(@ApplicationContext context: Con
         }
     }
 
-    suspend fun getGoogleTokenId(): String? {
+    suspend fun getGoogleTokenId(): String {
         return withContext(Dispatchers.IO) {
             if (isTokenExpired()) {
                 refreshGoogleToken()
@@ -61,7 +61,7 @@ class GoogleTokenRepository @Inject constructor(@ApplicationContext context: Con
         return Instant.now().toEpochMilli() > googleToken.first().expiredDateTime
     }
 
-    suspend fun refreshGoogleToken() {
+    private suspend fun refreshGoogleToken() {
         withContext(Dispatchers.IO) {
             googleSignInClient.silentSignIn().addOnCompleteListener {
                 launch(Dispatchers.Default) {

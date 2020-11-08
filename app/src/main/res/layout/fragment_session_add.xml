@@ -269,6 +269,7 @@
                 android:stepSize="10"
                 android:valueFrom="30"
                 android:valueTo="120"
+                android:value="@{viewModel.duration}"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/duration_layout" />

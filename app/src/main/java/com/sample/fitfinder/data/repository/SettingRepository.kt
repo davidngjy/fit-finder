@@ -11,8 +11,8 @@ import com.sample.fitfinder.proto.SearchFilter
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.map
 import java.time.Instant
-import java.time.LocalDateTime
-import java.time.ZoneId
+import java.time.ZonedDateTime
+import java.time.temporal.ChronoUnit
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -33,14 +33,14 @@ class SettingRepository @Inject constructor(@ApplicationContext context: Context
                 it.inPerson,
                 (it.upperDuration.seconds/MIN_IN_SECOND).toInt(),
                 (it.lowerDuration.seconds/MIN_IN_SECOND).toInt(),
-                Instant.ofEpochSecond(it.upperDate.seconds),
-                Instant.ofEpochSecond(it.lowerDate.seconds)
+                Instant.ofEpochSecond(it.upperDateTime.seconds),
+                Instant.ofEpochSecond(it.lowerDateTime.seconds)
             )
         }
 
     suspend fun resetDefaultSearchFilter() {
-        val dateTimeNow = LocalDateTime.now()
-        val dateTimeAMonthAhead = dateTimeNow.plusMonths(1)
+        val dateTimeNow = ZonedDateTime.now().truncatedTo(ChronoUnit.DAYS)
+        val dateTimeAMonthAhead = dateTimeNow.plusMonths(1).minusMinutes(1)
 
         searchFilterDataStore.updateData {
             it.toBuilder()
@@ -49,8 +49,8 @@ class SettingRepository @Inject constructor(@ApplicationContext context: Context
                 .setInPerson(true)
                 .setUpperDuration(Duration.newBuilder().setSeconds((MIN_IN_SECOND * 120).toLong()).build())
                 .setLowerDuration(Duration.newBuilder().setSeconds((MIN_IN_SECOND * 30).toLong()).build())
-                .setUpperDate(Timestamp.newBuilder().setSeconds(dateTimeAMonthAhead.atZone(ZoneId.systemDefault()).toEpochSecond()).build())
-                .setLowerDate(Timestamp.newBuilder().setSeconds(dateTimeNow.atZone(ZoneId.systemDefault()).toEpochSecond()).build())
+                .setUpperDateTime(Timestamp.newBuilder().setSeconds(dateTimeAMonthAhead.toEpochSecond()).build())
+                .setLowerDateTime(Timestamp.newBuilder().setSeconds(dateTimeNow.toEpochSecond()).build())
                 .build()
         }
     }
@@ -81,11 +81,11 @@ class SettingRepository @Inject constructor(@ApplicationContext context: Context
         }
     }
 
-    suspend fun setDateTime(upperDate: Instant, lowerDate: Instant) {
+    suspend fun setDateTime(lowerDateTimeEpochSecond: Long, upperDateTimeEpochSecond: Long) {
         searchFilterDataStore.updateData {
             it.toBuilder()
-                .setUpperDate(Timestamp.newBuilder().setSeconds(upperDate.epochSecond).build())
-                .setLowerDate(Timestamp.newBuilder().setSeconds(lowerDate.epochSecond).build())
+                .setLowerDateTime(Timestamp.newBuilder().setSeconds(lowerDateTimeEpochSecond).build())
+                .setUpperDateTime(Timestamp.newBuilder().setSeconds(upperDateTimeEpochSecond).build())
                 .build()
         }
     }

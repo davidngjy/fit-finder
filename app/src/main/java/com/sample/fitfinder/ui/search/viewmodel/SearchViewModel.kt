@@ -14,6 +14,7 @@ import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flatMapLatest
+import java.time.ZoneId
 import kotlin.time.ExperimentalTime
 
 @FragmentScoped
@@ -32,13 +33,25 @@ class SearchViewModel @ViewModelInject constructor(
             sessionRepository.getAvailableSessionByMapBound(it)
         }
         .combine(settingRepository.sessionFilter) { sessions, setting ->
-            val initialFilteredSessions = sessions.filter { session ->
-                session.price <= setting.maxPrice
-                && session.duration >= setting.lowerDuration
-                && session.duration <= setting.upperDuration
-                && session.sessionDateTime >= setting.lowerDateTime
-                && session.sessionDateTime <= setting.upperDateTime
-            }
+            val initialFilteredSessions =
+                sessions.filter { session ->
+                    val sessionDate = session.sessionDateTime.atZone(ZoneId.systemDefault()).toLocalDate()
+                    val sessionTime = session.sessionDateTime.atZone(ZoneId.systemDefault()).toLocalTime()
+
+                    val upperDate = setting.upperDateTime.atZone(ZoneId.systemDefault()).toLocalDate()
+                    val upperTime = setting.upperDateTime.atZone(ZoneId.systemDefault()).toLocalTime()
+
+                    val lowerDate = setting.lowerDateTime.atZone(ZoneId.systemDefault()).toLocalDate()
+                    val lowerTime = setting.lowerDateTime.atZone(ZoneId.systemDefault()).toLocalTime()
+
+                    session.price <= setting.maxPrice
+                    && session.duration >= setting.lowerDuration
+                    && session.duration <= setting.upperDuration
+                    && sessionDate >= lowerDate
+                    && sessionDate <= upperDate
+                    && sessionTime >= lowerTime
+                    && sessionTime <= upperTime
+                }
 
             return@combine if (setting.online && setting.inPerson) {
                 initialFilteredSessions

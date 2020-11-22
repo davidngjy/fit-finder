@@ -10,9 +10,12 @@ import androidx.fragment.app.viewModels
 import com.google.android.material.datepicker.CalendarConstraints
 import com.google.android.material.datepicker.DateValidatorPointForward
 import com.google.android.material.datepicker.MaterialDatePicker
+import com.google.android.material.timepicker.MaterialTimePicker
+import com.google.android.material.timepicker.TimeFormat
 import com.sample.fitfinder.databinding.DialogSearchFilterBinding
 import com.sample.fitfinder.ui.search.viewmodel.SearchFilterViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import java.time.LocalTime
 
 @AndroidEntryPoint
 class SearchFilterDialog : DialogFragment() {
@@ -38,18 +41,6 @@ class SearchFilterDialog : DialogFragment() {
             viewModel.upperDuration.value = slider.values[1].toInt()
         }
 
-//        viewModel.upperDuration.observe(viewLifecycleOwner) {
-//            binding.duration.values = arrayListOf(
-//                viewModel.lowerDuration.value!!.toFloat(),
-//                viewModel.upperDuration.value!!.toFloat())
-//        }
-//
-//        viewModel.lowerDuration.observe(viewLifecycleOwner) {
-//            binding.duration.values = arrayListOf(
-//                viewModel.lowerDuration.value!!.toFloat(),
-//                viewModel.upperDuration.value!!.toFloat())
-//        }
-
         viewModel.maxPrice.observe(viewLifecycleOwner) {
             viewModel.updateMaxPrice()
         }
@@ -72,6 +63,14 @@ class SearchFilterDialog : DialogFragment() {
 
         binding.dateRangeField.editText!!.setOnClickListener {
             showDateRangePicker()
+        }
+
+        binding.lowerTimeTextField.editText!!.setOnClickListener {
+            showTimePicker(LOWER_TIME_SELECTION)
+        }
+
+        binding.upperTimeTextField.editText!!.setOnClickListener {
+            showTimePicker(UPPER_TIME_SELECTION)
         }
 
         binding.closeButton.setOnClickListener {
@@ -102,10 +101,30 @@ class SearchFilterDialog : DialogFragment() {
         dateRangePicker = builder.setCalendarConstraints(constraintBuilder).build()
     }
 
+    private fun showTimePicker(tag: String) {
+        val timePicker = MaterialTimePicker
+            .Builder()
+            .setTimeFormat(TimeFormat.CLOCK_12H)
+            .build()
+
+        timePicker.addOnPositiveButtonClickListener {
+            val localTime = LocalTime.of(timePicker.hour, timePicker.minute)
+            if (tag == UPPER_TIME_SELECTION) viewModel.updateUpperTime(localTime)
+            else viewModel.updateLowerTime(localTime)
+        }
+
+        timePicker.show(parentFragmentManager, tag)
+    }
+
     private fun showDateRangePicker() {
         dateRangePicker.show(childFragmentManager, dateRangePicker.toString())
         dateRangePicker.addOnPositiveButtonClickListener {
-
+            viewModel.updateDate(it.first!!, it.second!!)
         }
+    }
+
+    companion object {
+        const val UPPER_TIME_SELECTION = "UPPER"
+        const val LOWER_TIME_SELECTION = "LOWER"
     }
 }

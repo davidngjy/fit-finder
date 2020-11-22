@@ -17,6 +17,6 @@ message SearchFilter {
     bool inPerson = 3;
     google.protobuf.Duration UpperDuration = 4;
     google.protobuf.Duration LowerDuration = 5;
-    google.protobuf.Timestamp UpperDate = 6;
-    google.protobuf.Timestamp LowerDate = 7;
+    google.protobuf.Timestamp UpperDateTime = 6;
+    google.protobuf.Timestamp LowerDateTime = 7;
 }

@@ -21,6 +21,7 @@
     <string name="to_be_done">To be done</string>
     <string name="online">Online</string>
     <string name="in_person">In Person</string>
+    <string name="hypen">-</string>
 
     // Format string
     <string name="session_datetime">%s</string>
@@ -52,6 +53,8 @@
     <string name="new_value">New Value</string>
     <string name="max_price">Max Price</string>
     <string name="date_range">Date Range</string>
+    <string name="start">Start</string>
+    <string name="end">End</string>
 
     // Error Message
     <string name="connection_error">Network problem, please try again.</string>
